@@ -32,11 +32,11 @@ client.on('message', async (msg: Discord.Message) => {
   switch (msg.content) {
     case '/cal':
       return calStatus(msg, status)
-    case '/cal=up':
+    case '/cal.up':
       return (status.Volume = volumeUp(msg, status.Volume))
-    case '/cal=down':
+    case '/cal.down':
       return (status.Volume = volumeDown(msg, status.Volume))
-    case '/cal=mode':
+    case '/cal.mode':
       return (status.Mode = switchMode(msg, status.Mode))
   }
 

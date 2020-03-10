@@ -80,15 +80,4 @@ client.on('voiceStateUpdate', function (_, state) {
         timezone: 'Asia/Tokyo'
     });
 });
-client.on('message', function (msg) { return __awaiter(void 0, void 0, void 0, function () {
-    var url;
-    return __generator(this, function (_a) {
-        if (msg.content !== '/almage')
-            return [2];
-        url = 'https://owncloud.s4m0r1.me/index.php/s/Qm7r7qdZXJEDbsy/download';
-        soundPlay(msg.member, url, 0.3);
-        console.log('almage');
-        return [2];
-    });
-}); });
 client.login(process.env.DISCORD_TOKEN);

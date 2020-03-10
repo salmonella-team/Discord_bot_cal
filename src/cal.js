@@ -73,11 +73,11 @@ client.on('message', function (msg) { return __awaiter(void 0, void 0, void 0, f
         switch (msg.content) {
             case '/cal':
                 return [2, status_1.calStatus(msg, status)];
-            case '/cal=up':
+            case '/cal.up':
                 return [2, (status.Volume = status_1.volumeUp(msg, status.Volume))];
-            case '/cal=down':
+            case '/cal.down':
                 return [2, (status.Volume = status_1.volumeDown(msg, status.Volume))];
-            case '/cal=mode':
+            case '/cal.mode':
                 return [2, (status.Mode = status_1.switchMode(msg, status.Mode))];
         }
         switch (msg.content) {
