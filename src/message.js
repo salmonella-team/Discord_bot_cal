@@ -43,41 +43,75 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 exports.__esModule = true;
-var Discord = __importStar(require("discord.js"));
 var dotenv = __importStar(require("dotenv"));
-var cron = __importStar(require("node-cron"));
-var client = new Discord.Client();
 dotenv.config();
 var soundPlay = function (member, url, volume) { return __awaiter(void 0, void 0, void 0, function () {
-    var connect, dispatcher;
+    var connect;
     var _a;
     return __generator(this, function (_b) {
         switch (_b.label) {
             case 0: return [4, ((_a = member === null || member === void 0 ? void 0 : member.voice.channel) === null || _a === void 0 ? void 0 : _a.join())];
             case 1:
                 connect = _b.sent();
-                dispatcher = connect === null || connect === void 0 ? void 0 : connect.play(url, { volume: volume });
-                dispatcher === null || dispatcher === void 0 ? void 0 : dispatcher.on('finish', function () { return connect === null || connect === void 0 ? void 0 : connect.disconnect(); });
+                connect === null || connect === void 0 ? void 0 : connect.play(url, { volume: volume });
                 return [2];
         }
     });
 }); };
-client.on('ready', function () { var _a; return console.log("Logged in as " + ((_a = client.user) === null || _a === void 0 ? void 0 : _a.tag) + "!"); });
-client.on('voiceStateUpdate', function (_, state) {
+var reply = 'あんたがボイスチャンネルに入ってないと喋れないじゃないの！';
+exports.yabai = function (msg, volume) {
     var _a;
-    if (!((_a = state.member) === null || _a === void 0 ? void 0 : _a.joinedAt))
-        return;
-    cron.schedule('0 0 * * * ', function () { return __awaiter(void 0, void 0, void 0, function () {
-        var url;
-        return __generator(this, function (_a) {
-            url = 'http://owncloud.s4m0r1.me/index.php/s/mB5RDpXdE9CaHey/download';
-            soundPlay(state.member, url, 0.2);
-            console.log('TimeSignal at 24');
-            return [2];
-        });
-    }); }, {
-        scheduled: true,
-        timezone: 'Asia/Tokyo'
-    });
-});
-client.login(process.env.DISCORD_TOKEN);
+    if (!((_a = msg.member) === null || _a === void 0 ? void 0 : _a.voice.channel))
+        return msg.reply(reply);
+    soundPlay(msg.member, process.env.URL_YABAI, volume);
+    console.log('sound yabai');
+};
+exports.yabaiwayo = function (msg, volume) {
+    var _a;
+    if (!((_a = msg.member) === null || _a === void 0 ? void 0 : _a.voice.channel))
+        return msg.reply(reply);
+    soundPlay(msg.member, process.env.URL_YABAIWAYO, volume);
+    console.log('sound yabaiwayo');
+};
+exports.yabaidesu = function (msg, volume) {
+    var _a;
+    if (!((_a = msg.member) === null || _a === void 0 ? void 0 : _a.voice.channel))
+        return msg.reply(reply);
+    soundPlay(msg.member, process.env.URL_YABAIDESU, volume);
+    console.log('sound yabaidesu');
+};
+exports.yabayaba = function (msg, volume) {
+    var _a;
+    if (!((_a = msg.member) === null || _a === void 0 ? void 0 : _a.voice.channel))
+        return msg.reply(reply);
+    soundPlay(msg.member, process.env.URL_YABAYABA, volume);
+    console.log('sound yabayabai');
+};
+exports.yabayabai = function (msg, volume) {
+    var _a;
+    if (!((_a = msg.member) === null || _a === void 0 ? void 0 : _a.voice.channel))
+        return msg.reply(reply);
+    soundPlay(msg.member, process.env.URL_YABAYABAI, volume);
+    console.log('sound yabayabai');
+};
+exports.yabaislow = function (msg, volume) {
+    var _a;
+    if (!((_a = msg.member) === null || _a === void 0 ? void 0 : _a.voice.channel))
+        return msg.reply(reply);
+    soundPlay(msg.member, process.env.URL_YABAISLOW, volume);
+    console.log('sound yabayabai');
+};
+exports.yabaiotwr = function (msg, volume) {
+    var _a;
+    if (!((_a = msg.member) === null || _a === void 0 ? void 0 : _a.voice.channel))
+        return msg.reply(reply);
+    soundPlay(msg.member, process.env.URL_YABAIOTWR, volume);
+    console.log('sound yabayabai');
+};
+exports.almage = function (msg, volume) {
+    var _a;
+    if (!((_a = msg.member) === null || _a === void 0 ? void 0 : _a.voice.channel))
+        return msg.reply(reply);
+    soundPlay(msg.member, process.env.URL_ALMAGE, volume);
+    console.log('sound almage');
+};
