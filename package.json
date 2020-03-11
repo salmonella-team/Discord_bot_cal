@@ -3,7 +3,7 @@
   "description": "Cloud Functions for Firebase",
   "scripts": {
     "build": "tsc -p ./tsconfig.json",
-    "start": "node ./src/cal.js"
+    "start": "node ./dist/cal.js"
   },
   "engines": {
     "node": "8"

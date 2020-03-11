@@ -1,17 +1,8 @@
 import * as Discord from 'discord.js'
 import * as dotenv from 'dotenv'
 import {Status} from './type'
-import {calStatus, volumeUp, volumeDown, switchMode} from './status'
-import {
-  yabai,
-  yabaiwayo,
-  yabaidesu,
-  yabayaba,
-  yabayabai,
-  yabaislow,
-  yabaiotwr,
-  almage,
-} from './message'
+import {calHelp, calStatus, calJoin, calDisconnect, volumeUp, volumeDown, switchMode} from './status'
+import {yabai, yabaiwayo, yabaidesu, yabayaba, yabayabai, yabaislow, yabaiotwr, almage} from './message'
 
 const status: Status = {
   Mode: false,
@@ -21,17 +12,34 @@ const status: Status = {
 const client: Discord.Client = new Discord.Client()
 dotenv.config()
 
-client.on('ready', () => console.log(`Logged in as ${client.user?.tag}!`))
+client.on('ready', () => console.log(`Logged in as ${client.user?.username}!`))
 
-client.on('voiceStateUpdate', async (_: Discord.VoiceState, state: Discord.VoiceState) => {
-  if (!state.member?.joinedAt) return
-  await state.member?.voice.channel?.join()
+client.on('voiceStateUpdate', async (oldState: Discord.VoiceState, newState: Discord.VoiceState) => {
+  if (oldState.channel) {
+    const users = oldState.channel?.members.map(m => m.user.username).toString()
+    if (users === 'キャル') {
+      const connect = await oldState.channel?.join()
+      connect?.disconnect()
+    }
+  }
+
+  if (newState.channel) {
+    await newState.channel?.join()
+  }
 })
 
 client.on('message', async (msg: Discord.Message) => {
-  switch (msg.content) {
-    case '/cal':
-      return calStatus(msg, status)
+  const content = msg.content.replace(' ', '.')
+  // prettier-ignore
+  switch (content) {
+    case '/cal': case '/cal.status':
+      return calStatus(client.voice, msg, status)
+    case '/cal.help':
+      return calHelp(msg)
+    case '/cal.in':
+      return calJoin(msg)
+    case '/cal.out':
+      return calDisconnect(msg)
     case '/cal.up':
       return (status.Volume = volumeUp(msg, status.Volume))
     case '/cal.down':
@@ -41,7 +49,7 @@ client.on('message', async (msg: Discord.Message) => {
   }
 
   // prettier-ignore
-  switch (msg.content) {
+  switch (content) {
     case '/yabai': case '/yab':
       return yabai(msg, status.Volume)
     case '/yabaiwayo': case '/yabw':
@@ -55,7 +63,7 @@ client.on('message', async (msg: Discord.Message) => {
   if (!status.Mode) return
 
   // prettier-ignore
-  switch (msg.content) {
+  switch (content) {
     case '/yabayabai': case '/yabaiyabai':
       return yabayabai(msg, status.Volume)
     case '/yabaislow':
