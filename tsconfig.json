@@ -12,6 +12,7 @@
     "esModuleInterop": true,
     "downlevelIteration": true,
     "allowJs": true,
+    "outDir": "./dist/"
   },
-  "files": ["index.ts", "src/cal.ts", "src/type.ts", "src/message.ts", "src/status.ts"]
+  "files": ["src/cal.ts", "src/type.ts", "src/message.ts", "src/status.ts"]
 }
