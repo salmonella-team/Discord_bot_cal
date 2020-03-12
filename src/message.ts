@@ -56,7 +56,7 @@ export const Message = (msg: Discord.Message, client: Discord.Client): Option<st
 
     case '/yabai.desu': case '/yabd':
       speak.Play(msg, process.env.YABAIDESU_URL, volume)
-      return 'speak desu'
+      return 'speak yabai.desu'
 
     case '/yabai.yaba': case '/yaby':
       speak.Play(msg, process.env.YABAYABA_URL, volume)
