@@ -1,78 +1,73 @@
 import * as Discord from 'discord.js'
-import * as dotenv from 'dotenv'
 import {Status} from './type'
-import {calHelp, calStatus, calJoin, calDisconnect, volumeUp, volumeDown, switchMode} from './status'
-import {yabai, yabaiwayo, yabaidesu, yabayaba, yabayabai, yabaislow, yabaiotwr, almage} from './message'
 
-const status: Status = {
-  Mode: false,
-  Volume: 0.3,
+const round = (v: number): number => Math.round(v * 10) / 10
+
+export const ShowStatus = (
+  voice: Discord.ClientVoiceManager | null,
+  msg: Discord.Message,
+  status: Status
+) => {
+  const channel = voice?.connections.map(v => v.channel.name).toString()
+  const join = channel ? `${channel}に接続しているわ` : 'どこのボイスチャンネルにも接続してないわ'
+  msg.reply(`${join}\n音量は${round(status.Volume)}よ！${status.Mode ? '(DevMode)' : ''}`)
 }
 
-const client: Discord.Client = new Discord.Client()
-dotenv.config()
+const getChannel = (msg: Discord.Message) => msg.member?.voice.channel
 
-client.on('ready', () => console.log(`Logged in as ${client.user?.username}!`))
+export const JoinChannel = async (msg: Discord.Message) => {
+  const channel = getChannel(msg)
+  await channel?.join()
+  msg.reply(`${channel?.name}に接続したわよ！`)
+}
 
-client.on('voiceStateUpdate', async (oldState: Discord.VoiceState, newState: Discord.VoiceState) => {
-  if (oldState.channel) {
-    const users = oldState.channel?.members.map(m => m.user.username).toString()
-    if (users === 'キャル') {
-      const connect = await oldState.channel?.join()
-      connect?.disconnect()
-    }
+export const Disconnect = async (msg: Discord.Message) => {
+  const channel = getChannel(msg)
+  const connect = await channel?.join()
+  connect?.disconnect()
+  msg.reply(`${channel?.name}から切断したわ`)
+}
+
+export const VolumeUp = (msg: Discord.Message, volume: number): number => {
+  if (round(volume) >= 1) {
+    msg.reply('これ以上音量を上げられないわ')
+  } else {
+    volume += 0.1
+    msg.reply(`音量を上げたわよ！(${round(volume)})`)
   }
+  return volume
+}
 
-  if (newState.channel) {
-    await newState.channel?.join()
+export const VolumeDown = (msg: Discord.Message, volume: number): number => {
+  if (round(volume) <= 0.1) {
+    msg.reply('これ以上音量を下げられないわ')
+  } else {
+    volume -= 0.1
+    msg.reply(`音量を下げたわよ！(${round(volume)})`)
   }
-})
+  return volume
+}
 
-client.on('message', async (msg: Discord.Message) => {
-  const content = msg.content.replace(' ', '.')
-  // prettier-ignore
-  switch (content) {
-    case '/cal': case '/cal.status':
-      return calStatus(client.voice, msg, status)
-    case '/cal.help':
-      return calHelp(msg)
-    case '/cal.in':
-      return calJoin(msg)
-    case '/cal.out':
-      return calDisconnect(msg)
-    case '/cal.up':
-      return (status.Volume = volumeUp(msg, status.Volume))
-    case '/cal.down':
-      return (status.Volume = volumeDown(msg, status.Volume))
-    case '/cal.mode':
-      return (status.Mode = switchMode(msg, status.Mode))
-  }
+export const Help = (msg: Discord.Message) => {
+  const help = `魔法一覧よ！\`\`\`
+/cal       キャルの状態を表示
+/cal.in    キャルをボイスチャンネルに接続
+/cal.out   キャルをボイスチャンネルから切断
+/cal.up    キャルの声量を上げる
+/cal.down  キャルの声量を下げる
+/cal.help  キャルのコマンド一覧
 
-  // prettier-ignore
-  switch (content) {
-    case '/yabai': case '/yab':
-      return yabai(msg, status.Volume)
-    case '/yabaiwayo': case '/yabw':
-      return yabaiwayo(msg, status.Volume)
-    case '/yabaidesu': case '/yabd':
-      return yabaidesu(msg, status.Volume)
-    case '/yabayaba': case '/yaby':
-      return yabayaba(msg, status.Volume)
-  }
+/yabai       ヤバいわよ！
+/yabai.wayo  プリコネの年末年始はヤバいわよ！
+/yabai.desu  ヤバいですね☆
+/yabai.yaba  ヤバいヤバいヤバいヤバいヤバいヤバいですね☆
+\`\`\`※\`.\`は\` \`で代用可能　例:\`/cal help\`
+`
+  msg.reply(help)
+}
 
-  if (!status.Mode) return
-
-  // prettier-ignore
-  switch (content) {
-    case '/yabayabai': case '/yabaiyabai':
-      return yabayabai(msg, status.Volume)
-    case '/yabaislow':
-      return yabaislow(msg, status.Volume)
-    case '/yabaiotwr':
-      return yabaiotwr(msg, status.Volume)
-    case '/almage':
-      return almage(msg, status.Volume)
-  }
-})
-
-client.login(process.env.CAL_TOKEN)
+export const SwitchMode = (msg: Discord.Message, mode: boolean): boolean => {
+  mode = !mode
+  msg.reply(mode ? 'DevModeになったわよ！' : 'DevModeを解除したわ')
+  return mode
+}

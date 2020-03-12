@@ -14,5 +14,5 @@
     "allowJs": true,
     "outDir": "./dist/"
   },
-  "files": ["src/cal.ts", "src/type.ts", "src/message.ts", "src/status.ts"]
+  "files": ["src/index.ts", "src/type.ts", "src/message.ts", "src/cal.ts", "src/speak.ts"]
 }

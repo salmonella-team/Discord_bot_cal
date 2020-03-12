@@ -1,60 +1,95 @@
 import * as Discord from 'discord.js'
-import * as dotenv from 'dotenv'
-dotenv.config()
+import * as cal from './cal'
+import * as speak from './speak'
+import {Status} from './type'
 
-const soundPlay = async (member: Discord.GuildMember | null, url: string, volume: number) => {
-  const connect = await member?.voice.channel?.join()
-  connect?.play(url, {volume: volume})
-  // const dispatcher = connect?.play(url, {volume: volume})
-  // dispatcher?.on('finish', () => connect?.disconnect())
+const env = process.env
+
+const status: Status = {
+  Mode: false,
+  Volume: 0.3,
 }
 
-const reply = 'あんたがボイスチャンネルに入ってないと喋れないじゃないの！'
+export const Message = (msg: Discord.Message, client: Discord.Client): string => {
+  const command = msg.content.replace(' ', '.')
 
-export const yabai = (msg: Discord.Message, volume: number) => {
-  if (!msg.member?.voice.channel) return msg.reply(reply)
-  soundPlay(msg.member, process.env.URL_YABAI as string, volume)
-  console.log('sound yabai')
-}
+  // prettier-ignore
+  switch (command) {
+    case '/cal': case '/cal.status':
+      cal.ShowStatus(client.voice, msg, status)
+      return 'cal show status'
 
-export const yabaiwayo = (msg: Discord.Message, volume: number) => {
-  if (!msg.member?.voice.channel) return msg.reply(reply)
-  soundPlay(msg.member, process.env.URL_YABAIWAYO as string, volume)
-  console.log('sound yabaiwayo')
-}
+    case '/cal.in': case '/cal.join':
+      cal.JoinChannel(msg)
+      return 'cal join channel'
 
-export const yabaidesu = (msg: Discord.Message, volume: number) => {
-  if (!msg.member?.voice.channel) return msg.reply(reply)
-  soundPlay(msg.member, process.env.URL_YABAIDESU as string, volume)
-  console.log('sound yabaidesu')
-}
+    case '/cal.out': case '/cal.disconnect':
+      cal.Disconnect(msg)
+      return 'cal disconnect channel'
 
-export const yabayaba = (msg: Discord.Message, volume: number) => {
-  if (!msg.member?.voice.channel) return msg.reply(reply)
-  soundPlay(msg.member, process.env.URL_YABAYABA as string, volume)
-  console.log('sound yabayabai')
-}
+    case '/cal.up':
+      status.Volume = cal.VolumeUp(msg, status.Volume)
+      return 'cal volume up'
 
-export const yabayabai = (msg: Discord.Message, volume: number) => {
-  if (!msg.member?.voice.channel) return msg.reply(reply)
-  soundPlay(msg.member, process.env.URL_YABAYABAI as string, volume)
-  console.log('sound yabayabai')
-}
+    case '/cal.down':
+      status.Volume = cal.VolumeDown(msg, status.Volume)
+      return 'cal volume down'
 
-export const yabaislow = (msg: Discord.Message, volume: number) => {
-  if (!msg.member?.voice.channel) return msg.reply(reply)
-  soundPlay(msg.member, process.env.URL_YABAISLOW as string, volume)
-  console.log('sound yabayabai')
-}
+    case '/cal.help':
+      cal.Help(msg)
+      return 'cal help'
 
-export const yabaiotwr = (msg: Discord.Message, volume: number) => {
-  if (!msg.member?.voice.channel) return msg.reply(reply)
-  soundPlay(msg.member, process.env.URL_YABAIOTWR as string, volume)
-  console.log('sound yabayabai')
-}
+    case '/cal.mode':
+      status.Mode = cal.SwitchMode(msg, status.Mode)
+      return 'switch devMode'
+  }
 
-export const almage = (msg: Discord.Message, volume: number) => {
-  if (!msg.member?.voice.channel) return msg.reply(reply)
-  soundPlay(msg.member, process.env.URL_ALMAGE as string, volume)
-  console.log('sound almage')
+  const volume = status.Volume
+
+  // prettier-ignore
+  switch (command) {
+    case '/yabai': case '/yab':
+      speak.Play(msg, env.URL_YABAI, volume)
+      return 'speak yabai'
+
+    case '/yabai.wayo': case '/yabw':
+      speak.Play(msg, env.URL_YABAIWAYO, volume)
+      return 'speak yabai.wayo'
+
+    case '/yabai.desu': case '/yabd':
+      speak.Play(msg, env.URL_YABAIDESU, volume)
+      return 'speak desu'
+
+    case '/yabai.yaba': case '/yaby':
+      speak.Play(msg, env.URL_YABAYABA, volume)
+      return 'speak yabai.yaba'
+  }
+
+  if (status.Mode) {
+    // prettier-ignore
+    switch (command) {
+      case '/yabai.yabai':
+        speak.Play(msg, env.URL_YABAYABAI, volume)
+        return 'speak yabai.yabai'
+
+      case '/yabai.slow':
+        speak.Play(msg, env.URL_YABAISLOW, volume)
+        return 'speak yabai.slow'
+
+      case '/yabai.otwr':
+        speak.Play(msg, env.URL_YABAIOTWR, volume)
+        return 'speak yabai.otwr'
+
+      case '/almage':
+        speak.Play(msg, env.URL_ALMAGE, volume)
+        return 'speak almage'
+    }
+  }
+
+  if (command.charAt(0) === '/') {
+    msg.reply('そんなコマンドないんだけど！')
+    return 'missing command'
+  }
+
+  return 'no action'
 }
