@@ -1,34 +1,31 @@
 import * as Discord from 'discord.js'
-import {Status} from './type'
+import {Message} from 'discord.js'
+import {Option, Mode, Status} from './type'
 
-const round = (v: number): number => Math.round(v * 10) / 10
+const round = (n: number): number => Math.round(n * 10) / 10
 
-export const ShowStatus = (
-  voice: Discord.ClientVoiceManager | null,
-  msg: Discord.Message,
-  status: Status
-) => {
+export const ShowStatus = (voice: Option<Discord.ClientVoiceManager>, msg: Message, status: Status) => {
   const channel = voice?.connections.map(v => v.channel.name).toString()
   const join = channel ? `${channel}に接続しているわ` : 'どこのボイスチャンネルにも接続してないわ'
   msg.reply(`${join}\n音量は${round(status.Volume)}よ！${status.Mode ? '(DevMode)' : ''}`)
 }
 
-const getChannel = (msg: Discord.Message) => msg.member?.voice.channel
+const getChannel = (msg: Message) => msg.member?.voice.channel
 
-export const JoinChannel = async (msg: Discord.Message) => {
+export const JoinChannel = async (msg: Message) => {
   const channel = getChannel(msg)
   await channel?.join()
   msg.reply(`${channel?.name}に接続したわよ！`)
 }
 
-export const Disconnect = async (msg: Discord.Message) => {
+export const Disconnect = async (msg: Message) => {
   const channel = getChannel(msg)
   const connect = await channel?.join()
   connect?.disconnect()
   msg.reply(`${channel?.name}から切断したわ`)
 }
 
-export const VolumeUp = (msg: Discord.Message, volume: number): number => {
+export const VolumeUp = (msg: Message, volume: number): number => {
   if (round(volume) >= 1) {
     msg.reply('これ以上音量を上げられないわ')
   } else {
@@ -38,7 +35,7 @@ export const VolumeUp = (msg: Discord.Message, volume: number): number => {
   return volume
 }
 
-export const VolumeDown = (msg: Discord.Message, volume: number): number => {
+export const VolumeDown = (msg: Message, volume: number): number => {
   if (round(volume) <= 0.1) {
     msg.reply('これ以上音量を下げられないわ')
   } else {
@@ -48,7 +45,7 @@ export const VolumeDown = (msg: Discord.Message, volume: number): number => {
   return volume
 }
 
-export const Help = (msg: Discord.Message) => {
+export const Help = (msg: Message) => {
   const help = `魔法一覧よ！\`\`\`
 /cal       キャルの状態を表示
 /cal.in    キャルをボイスチャンネルに接続
@@ -66,8 +63,8 @@ export const Help = (msg: Discord.Message) => {
   msg.reply(help)
 }
 
-export const SwitchMode = (msg: Discord.Message, mode: boolean): boolean => {
-  mode = !mode
+export const SwitchMode = (msg: Message, mode: Mode): Mode => {
+  mode = ~mode
   msg.reply(mode ? 'DevModeになったわよ！' : 'DevModeを解除したわ')
   return mode
 }

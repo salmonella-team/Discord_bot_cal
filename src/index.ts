@@ -21,6 +21,8 @@ client.on('voiceStateUpdate', async (oldState: Discord.VoiceState, newState: Dis
   }
 })
 
-client.on('message', async (msg: Discord.Message) => console.log(Message(msg, client)))
+client.on('message', async (msg: Discord.Message) =>
+  (text => text && console.log(text))(Message(msg, client))
+)
 
 client.login(process.env.CAL_TOKEN)

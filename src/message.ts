@@ -1,16 +1,14 @@
 import * as Discord from 'discord.js'
 import * as cal from './cal'
 import * as speak from './speak'
-import {Status} from './type'
-
-const env = process.env
+import {Option, Mode, Status} from './type'
 
 const status: Status = {
-  Mode: false,
+  Mode: Mode.Off,
   Volume: 0.3,
 }
 
-export const Message = (msg: Discord.Message, client: Discord.Client): string => {
+export const Message = (msg: Discord.Message, client: Discord.Client): Option<string> => {
   const command = msg.content.replace(' ', '.')
 
   // prettier-ignore
@@ -49,19 +47,19 @@ export const Message = (msg: Discord.Message, client: Discord.Client): string =>
   // prettier-ignore
   switch (command) {
     case '/yabai': case '/yab':
-      speak.Play(msg, env.URL_YABAI, volume)
+      speak.Play(msg, process.env.YABAI_URL, volume)
       return 'speak yabai'
 
     case '/yabai.wayo': case '/yabw':
-      speak.Play(msg, env.URL_YABAIWAYO, volume)
+      speak.Play(msg, process.env.YABAIWAYO_URL, volume)
       return 'speak yabai.wayo'
 
     case '/yabai.desu': case '/yabd':
-      speak.Play(msg, env.URL_YABAIDESU, volume)
+      speak.Play(msg, process.env.YABAIDESU_URL, volume)
       return 'speak desu'
 
     case '/yabai.yaba': case '/yaby':
-      speak.Play(msg, env.URL_YABAYABA, volume)
+      speak.Play(msg, process.env.YABAYABA_URL, volume)
       return 'speak yabai.yaba'
   }
 
@@ -69,19 +67,19 @@ export const Message = (msg: Discord.Message, client: Discord.Client): string =>
     // prettier-ignore
     switch (command) {
       case '/yabai.yabai':
-        speak.Play(msg, env.URL_YABAYABAI, volume)
+        speak.Play(msg, process.env.YABAYABAI_URL, volume)
         return 'speak yabai.yabai'
 
       case '/yabai.slow':
-        speak.Play(msg, env.URL_YABAISLOW, volume)
+        speak.Play(msg, process.env.YABAISLOW_URL, volume)
         return 'speak yabai.slow'
 
       case '/yabai.otwr':
-        speak.Play(msg, env.URL_YABAIOTWR, volume)
+        speak.Play(msg, process.env.YABAIOTWR_URL, volume)
         return 'speak yabai.otwr'
 
       case '/almage':
-        speak.Play(msg, env.URL_ALMAGE, volume)
+        speak.Play(msg, process.env.ALMAGE_URL, volume)
         return 'speak almage'
     }
   }
@@ -90,6 +88,4 @@ export const Message = (msg: Discord.Message, client: Discord.Client): string =>
     msg.reply('そんなコマンドないんだけど！')
     return 'missing command'
   }
-
-  return 'no action'
 }
