@@ -1,28 +1,33 @@
-import * as Discord from 'discord.js'
-import {Message} from 'discord.js'
+import {ClientVoiceManager, Message} from 'discord.js'
 import {Option, Mode, Status} from './type'
 
 const round = (n: number): number => Math.round(n * 10) / 10
 
-export const ShowStatus = (voice: Option<Discord.ClientVoiceManager>, msg: Message, status: Status) => {
+const getVoiceConnection = (voice: Option<ClientVoiceManager>) => voice?.connections.map(v => v)[0]
+
+export const ShowStatus = (msg: Message, voice: Option<ClientVoiceManager>, status: Status) => {
   const channel = voice?.connections.map(v => v.channel.name).toString()
   const join = channel ? `${channel}に接続しているわ` : 'どこのボイスチャンネルにも接続してないわ'
   msg.reply(`${join}\n音量は${round(status.Volume)}よ！${status.Mode ? '(DevMode)' : ''}`)
 }
 
-const getChannel = (msg: Message) => msg.member?.voice.channel
+export const JoinChannel = async (msg: Message, voice: Option<ClientVoiceManager>) => {
+  const channel = msg.member?.voice.channel
+  if (!channel) return msg.reply('あんたがボイスチャンネルに居ないと入れないじゃないの！')
 
-export const JoinChannel = async (msg: Message) => {
-  const channel = getChannel(msg)
+  const connect = getVoiceConnection(voice)
+  if (channel?.name === connect?.channel?.name) return msg.reply(`もう${channel?.name}に接続してるわ`)
+
   await channel?.join()
   msg.reply(`${channel?.name}に接続したわよ！`)
 }
 
-export const Disconnect = async (msg: Message) => {
-  const channel = getChannel(msg)
-  const connect = await channel?.join()
+export const Disconnect = (msg: Message, voice: Option<ClientVoiceManager>) => {
+  const connect = getVoiceConnection(voice)
+  if (!connect) return msg.reply('あたしはどこのボイスチャンネルに入ってないわよ')
+
   connect?.disconnect()
-  msg.reply(`${channel?.name}から切断したわ`)
+  msg.reply(`${connect?.channel?.name}から切断したわ`)
 }
 
 export const VolumeUp = (msg: Message, volume: number): number => {

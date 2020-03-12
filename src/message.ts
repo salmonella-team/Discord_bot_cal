@@ -14,15 +14,15 @@ export const Message = (msg: Discord.Message, client: Discord.Client): Option<st
   // prettier-ignore
   switch (command) {
     case '/cal': case '/cal.status':
-      cal.ShowStatus(client.voice, msg, status)
+      cal.ShowStatus(msg, client.voice, status)
       return 'cal show status'
 
     case '/cal.in': case '/cal.join':
-      cal.JoinChannel(msg)
+      cal.JoinChannel(msg, client.voice)
       return 'cal join channel'
 
     case '/cal.out': case '/cal.disconnect':
-      cal.Disconnect(msg)
+      cal.Disconnect(msg, client.voice)
       return 'cal disconnect channel'
 
     case '/cal.up':
