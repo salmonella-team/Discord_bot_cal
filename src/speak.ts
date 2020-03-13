@@ -1,4 +1,4 @@
-glimport * as Discord from 'discord.js'
+import * as Discord from 'discord.js'
 import {Option} from './type'
 
 /**
