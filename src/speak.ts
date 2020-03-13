@@ -6,7 +6,7 @@ const sound = async (voice: Discord.VoiceState, url: string, volume: number) => 
   connect?.play(url, {volume: volume})
 }
 
-export const Play = (msg: Discord.Message, url: Option<string>, volume: number) => {
+export const Play = async (msg: Discord.Message, url: Option<string>, volume: number) => {
   if (!msg.member?.voice.channel)
     return msg.reply('あんたがボイスチャンネルに居ないと喋れないじゃないの！')
   if (!url) return msg.reply('音源のURLがないわ')
