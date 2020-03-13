@@ -117,7 +117,7 @@ export const Help = (msg: Message) => {
 }
 
 /**
- * キャルのDevModeを切り替える
+ * キャルのDevModeを切り替えて、Mode状態をDiscordのメッセージへ送信する
  * @param msg DiscordからのMessage
  * @param mode キャルのMode
  * @return 変更したMode
