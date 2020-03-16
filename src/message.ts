@@ -3,14 +3,27 @@ import * as cal from './cal'
 import * as speak from './speak'
 import {Option, Mode, Status} from './type'
 
+/**
+ * status calの状態を管理
+ * @property Volume: Number - キャルの音量
+ * @property Mode: Mode - キャルのDevMode
+ */
 const status: Status = {
-  Mode: Mode.Off,
   Volume: 0.3,
+  Mode: Mode.Off,
 }
 
+/**
+ * 入力されたコマンドに応じて適切なコマンドを実行する
+ * @param msg DiscordからのMessage
+ * @param client bot(キャル)のclient
+ * @return 実行したコマンドの結果
+ */
 export const Message = (msg: Discord.Message, client: Discord.Client): Option<string> => {
+  // スペースとカンマの両方に対応
   const command = msg.content.replace(' ', '.')
 
+  // キャルに関するコマンド
   // prettier-ignore
   switch (command) {
     case '/cal': case '/cal.status':
@@ -44,6 +57,7 @@ export const Message = (msg: Discord.Message, client: Discord.Client): Option<st
 
   const volume = status.Volume
 
+  // 音声再生のコマンド
   // prettier-ignore
   switch (command) {
     case '/yabai': case '/yab':
@@ -63,6 +77,7 @@ export const Message = (msg: Discord.Message, client: Discord.Client): Option<st
       return 'speak yabai.yaba'
   }
 
+  // DevModeの場合のみ実行
   if (status.Mode) {
     // prettier-ignore
     switch (command) {
@@ -84,6 +99,7 @@ export const Message = (msg: Discord.Message, client: Discord.Client): Option<st
     }
   }
 
+  // 存在しない場合の処理
   if (command.charAt(0) === '/') {
     msg.reply('そんなコマンドないんだけど！')
     return 'missing command'
