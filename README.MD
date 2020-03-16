@@ -22,3 +22,6 @@
 
 - start
 `npm start`
+
+### .env
+`.env.sample`を参考に作成してください。
