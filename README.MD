@@ -14,13 +14,13 @@
 
 ### npm
 
-- install
+- install  
 `npm i`
 
-- build
+- build  
 `npm run build`
 
-- start
+- start  
 `npm start`
 
 ### .env
