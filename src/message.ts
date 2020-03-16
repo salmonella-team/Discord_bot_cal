@@ -4,7 +4,7 @@ import * as speak from './speak'
 import {Option, Mode, Status} from './type'
 
 /**
- * status calの状態を管理
+ * キャルの音量とモードを管理
  * @property Volume: Number - キャルの音量
  * @property Mode: Mode - キャルのDevMode
  */
