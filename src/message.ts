@@ -47,6 +47,10 @@ export const Message = async (msg: Discord.Message, client: Discord.Client): Pro
       status.Volume = cal.VolumeDown(msg, status.Volume)
       return 'cal volume down'
 
+    case '/cal.reset':
+      status.Volume = cal.VolumeReset(msg)
+      return 'cal reset'
+
     case '/cal.help':
       cal.Help(msg)
       return 'cal help'
@@ -54,6 +58,14 @@ export const Message = async (msg: Discord.Message, client: Discord.Client): Pro
     case '/cal.mode':
       status.Mode = cal.SwitchMode(msg, status.Mode)
       return 'switch devMode'
+
+    default:
+      // /cal.volumeとの一致
+      if (~command.indexOf('/cal.volume')) {
+        const content = command.split('volume')[1].slice(1)
+        status.Volume = cal.VolumeChange(msg, status.Volume, content)
+        return 'cal volume change'
+      }
   }
 
   const volume = status.Volume
@@ -62,23 +74,19 @@ export const Message = async (msg: Discord.Message, client: Discord.Client): Pro
   // prettier-ignore
   switch (command) {
     case '/yabai': case '/yab':
-      speak.Play(msg, process.env.YABAI_URL, volume)
-      msg.reply('ヤバいわよ！')
+      speak.Play(msg, process.env.YABAI_URL, volume, 'ヤバいわよ！')
       return 'speak yabai'
 
     case '/yabai.desu': case '/yabd':
-      speak.Play(msg, process.env.YABAIDESU_URL, volume)
-      msg.reply('ヤバいですね☆')
+      speak.Play(msg, process.env.YABAIDESU_URL, volume, 'ヤバいですね☆')
       return 'speak yabai.desu'
 
     case '/yabai.wayo': case '/yabw':
-      speak.Play(msg, process.env.YABAIWAYO_URL, volume)
-      msg.reply('プリコネの年末年始はヤバいわよ！')
+      speak.Play(msg, process.env.YABAIWAYO_URL, volume, 'プリコネの年末年始はヤバいわよ！')
       return 'speak yabai.wayo'
 
     case '/yabai.yaba': case '/yaby':
-      speak.Play(msg, process.env.YABAYABA_URL, volume)
-      msg.reply('ヤバいヤバいヤバいヤバいヤバいヤバいですね☆')
+      speak.Play(msg, process.env.YABAYABA_URL, volume, 'ヤバいヤバいヤバいヤバいヤバいヤバいですね☆')
       return 'speak yabai.yaba'
   }
 
@@ -87,23 +95,19 @@ export const Message = async (msg: Discord.Message, client: Discord.Client): Pro
     // prettier-ignore
     switch (command) {
       case '/yabai.yabai':
-        speak.Play(msg, process.env.YABAYABAI_URL, volume)
-        msg.reply('ヤバいヤバいヤバいヤバいヤバいヤバい')
+        speak.Play(msg, process.env.YABAYABAI_URL, volume, 'ヤバいヤバいヤバいヤバいヤバいヤバい')
         return 'speak yabai.yabai'
 
       case '/yabai.slow':
-        speak.Play(msg, process.env.YABAISLOW_URL, volume)
-        msg.reply('ヤバいヤバいヤバいヤバいヤバいヤバいですね☆（slow）')
+        speak.Play(msg, process.env.YABAISLOW_URL, volume, 'ヤバいヤバいヤバいヤバいヤバいヤバいですね☆（slow）')
         return 'speak yabai.slow'
 
       case '/yabai.otwr':
-        speak.Play(msg, process.env.YABAIOTWR_URL, volume)
-        msg.reply('ヤバいヤバいヤバいヤバいヤバいヤバいですね☆（otwr）')
+        speak.Play(msg, process.env.YABAIOTWR_URL, volume, 'ヤバいヤバいヤバいヤバいヤバいヤバいですね☆（otwr）')
         return 'speak yabai.otwr'
 
       case '/almage':
-        speak.Play(msg, process.env.ALMAGE_URL, volume)
-        msg.reply('アルマゲのデケェロボット')
+        speak.Play(msg, process.env.ALMAGE_URL, volume, 'アルマゲのデケェロボット')
         return 'speak almage'
     }
   }
