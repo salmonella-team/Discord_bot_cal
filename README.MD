@@ -1,4 +1,4 @@
-## Discord_bot_cal
+## discord-bot-cal
 
 ボイスチャンネルにキャルを呼ぶことができるよ！
 
