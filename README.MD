@@ -12,6 +12,13 @@
 `/cal`系統で、キャルに関してのコマンドを実行できます。  
 `/yabai`系統で、ボイスチャンネルで喋らせることができます。  
 
+### .env
+`.env.sample`を参考に作成してください。
+
+### ホワイトリスト
+存在しないコマンドを打つとキャルが叱ってくれますが、他人の作ったコマンドも巻き込んでしまうのでホワイトリストを作りました。  
+[discord-bot-cal](https://docs.google.com/spreadsheets/d/1IbkSu3kGxhxy9_rI8p_stEWvqSDAYnEUcVUA02TaPfk/edit#gid=0)ここの`A列`にコマンドを追加してください。  
+
 ### npm
 
 - install  
@@ -22,6 +29,3 @@
 
 - start  
 `npm start`
-
-### .env
-`.env.sample`を参考に作成してください。

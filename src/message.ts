@@ -105,7 +105,7 @@ export const Message = async (msg: Discord.Message, client: Discord.Client): Pro
 
   // ホワイトリストにコマンドがある場合は終了
   const list = await spreadsheet.GetWhiteList()
-  if (list.find(l => l === command)) return
+  if (list.find(l => l === command.slice(1))) return
 
   msg.reply('そんなコマンドないんだけど！')
   return 'missing command'
