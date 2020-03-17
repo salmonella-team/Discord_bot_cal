@@ -79,8 +79,8 @@ export const Message = async (msg: Discord.Message, client: Discord.Client): Pro
   }
 
   // DevModeの場合のみ実行
-  // prettier-ignore
   if (status.Mode) {
+    // prettier-ignore
     switch (command) {
       case '/yabai.yabai':
         speak.Play(msg, process.env.YABAYABAI_URL, volume)
