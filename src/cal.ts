@@ -131,14 +131,14 @@ export const VolumeReset = (msg: Message): number => {
  */
 export const Help = (msg: Message) => {
   const help = `魔法一覧よ！\`\`\`
-/cal       キャルの状態を表示
-/cal.in    キャルをボイスチャンネルに接続
-/cal.out   キャルをボイスチャンネルから切断
-/cal.up    キャルの声量を上げる
-/cal.down  キャルの声量を下げる
-/cal.volume <0.1~1.0>  キャルの声量を指定の音量にする
-/cal.reset キャルの音量をリセットする
-/cal.help  キャルのコマンド一覧
+/cal        キャルの状態を表示
+/cal.in     キャルをボイスチャンネルに接続
+/cal.out    キャルをボイスチャンネルから切断
+/cal.up     キャルの声量を上げる
+/cal.down   キャルの声量を下げる
+/cal.volume <0.1~1.0> キャルの声量を指定の音量にする
+/cal.reset  キャルの音量をリセットする
+/cal.help   キャルのコマンド一覧
 
 /yabai       ヤバいわよ！
 /yabai.desu  ヤバいですね☆
