@@ -63,18 +63,22 @@ export const Message = async (msg: Discord.Message, client: Discord.Client): Pro
   switch (command) {
     case '/yabai': case '/yab':
       speak.Play(msg, process.env.YABAI_URL, volume)
+      msg.reply('ヤバいわよ！')
       return 'speak yabai'
-
-    case '/yabai.wayo': case '/yabw':
-      speak.Play(msg, process.env.YABAIWAYO_URL, volume)
-      return 'speak yabai.wayo'
 
     case '/yabai.desu': case '/yabd':
       speak.Play(msg, process.env.YABAIDESU_URL, volume)
+      msg.reply('ヤバいですね☆')
       return 'speak yabai.desu'
+
+    case '/yabai.wayo': case '/yabw':
+      speak.Play(msg, process.env.YABAIWAYO_URL, volume)
+      msg.reply('プリコネの年末年始はヤバいわよ！')
+      return 'speak yabai.wayo'
 
     case '/yabai.yaba': case '/yaby':
       speak.Play(msg, process.env.YABAYABA_URL, volume)
+      msg.reply('ヤバいヤバいヤバいヤバいヤバいヤバいですね☆')
       return 'speak yabai.yaba'
   }
 
@@ -84,18 +88,22 @@ export const Message = async (msg: Discord.Message, client: Discord.Client): Pro
     switch (command) {
       case '/yabai.yabai':
         speak.Play(msg, process.env.YABAYABAI_URL, volume)
+        msg.reply('ヤバいヤバいヤバいヤバいヤバいヤバい')
         return 'speak yabai.yabai'
 
       case '/yabai.slow':
         speak.Play(msg, process.env.YABAISLOW_URL, volume)
+        msg.reply('ヤバいヤバいヤバいヤバいヤバいヤバいですね☆（slow）')
         return 'speak yabai.slow'
 
       case '/yabai.otwr':
         speak.Play(msg, process.env.YABAIOTWR_URL, volume)
+        msg.reply('ヤバいヤバいヤバいヤバいヤバいヤバいですね☆（otwr）')
         return 'speak yabai.otwr'
 
       case '/almage':
         speak.Play(msg, process.env.ALMAGE_URL, volume)
+        msg.reply('アルマゲのデケェロボット')
         return 'speak almage'
     }
   }
