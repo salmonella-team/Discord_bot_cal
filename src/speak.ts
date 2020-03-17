@@ -13,13 +13,13 @@ const sound = async (voice: Discord.VoiceState, url: string, volume: number) => 
 }
 
 /**
- * 音源をボイスチャンネルに再生させる。
+ * 音源をボイスチャンネルに再生させ、フィードバックを返す。
  * 送信者がボイスチャンネルに入って居ない場合や音源のURLがない場合は、Discordのメッセージへ送信する
  * @param msg DiscordからのMessage
  * @param url 再生させる音源のURL
  * @param volume キャルの音量
  */
-export const Play = async (msg: Discord.Message, url: Option<string>, volume: number) => {
+export const Play = async (msg: Discord.Message, url: Option<string>, volume: number, text: string) => {
   // 送信者がボイスチャンネルに入って居ない場合終了
   if (!msg.member?.voice.channel)
     return msg.reply('あんたがボイスチャンネルに居ないと喋れないじゃないの！')
@@ -28,4 +28,5 @@ export const Play = async (msg: Discord.Message, url: Option<string>, volume: nu
   if (!url) return msg.reply('音源のURLがないわ')
 
   sound(msg.member?.voice, url, volume)
+  msg.reply(text)
 }
