@@ -151,6 +151,7 @@ temp/
 
 *.mp3
 *.wav
+*.mp4
 
 assets
 .vscode

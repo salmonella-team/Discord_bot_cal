@@ -1,6 +1,7 @@
 import * as Discord from 'discord.js'
 import * as cal from './cal'
 import * as speak from './speak'
+import * as spreadsheet from './spreadsheet'
 import {Option, Mode, Status} from './type'
 
 /**
@@ -14,14 +15,14 @@ const status: Status = {
 }
 
 /**
- * 入力されたコマンドに応じて適切なコマンドを実行する
+ * 入力されたメッセージに応じて適切なコマンドを実行する
  * @param msg DiscordからのMessage
  * @param client bot(キャル)のclient
  * @return 実行したコマンドの結果
  */
-export const Message = (msg: Discord.Message, client: Discord.Client): Option<string> => {
-  // スペースとカンマの両方に対応
-  const command = msg.content.replace(' ', '.')
+export const Message = async (msg: Discord.Message, client: Discord.Client): Promise<Option<string>> => {
+  // スペース、カンマ、コロン、イコールの場合でもコマンドが動くようにピリオドに変換する
+  const command = msg.content.replace(/ |,|:|=/g, '.')
 
   // キャルに関するコマンド
   // prettier-ignore
@@ -100,8 +101,12 @@ export const Message = (msg: Discord.Message, client: Discord.Client): Option<st
   }
 
   // 存在しない場合の処理
-  if (command.charAt(0) === '/') {
-    msg.reply('そんなコマンドないんだけど！')
-    return 'missing command'
-  }
+  if (command.charAt(0) !== '/') return
+
+  // ホワイトリストにコマンドがある場合は終了
+  const list = await spreadsheet.GetWhiteList()
+  if (list.find(l => l === command.slice(1))) return
+
+  msg.reply('そんなコマンドないんだけど！')
+  return 'missing command'
 }
