@@ -108,8 +108,8 @@ export const Help = (msg: Message) => {
 /cal.help  キャルのコマンド一覧
 
 /yabai       ヤバいわよ！
-/yabai.wayo  プリコネの年末年始はヤバいわよ！
 /yabai.desu  ヤバいですね☆
+/yabai.wayo  プリコネの年末年始はヤバいわよ！
 /yabai.yaba  ヤバいヤバいヤバいヤバいヤバいヤバいですね☆
 \`\`\`※\`.\`は\` \`で代用可能　例:\`/cal help\`
 `
