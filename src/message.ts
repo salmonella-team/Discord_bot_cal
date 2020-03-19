@@ -47,6 +47,10 @@ export const Message = async (msg: Discord.Message, client: Discord.Client): Pro
       status.Volume = cal.VolumeDown(msg, status.Volume)
       return 'cal volume down'
 
+    case '/cal.reset':
+      status.Volume = cal.VolumeReset(msg)
+      return 'cal reset'
+
     case '/cal.help':
       cal.Help(msg)
       return 'cal help'
@@ -54,6 +58,14 @@ export const Message = async (msg: Discord.Message, client: Discord.Client): Pro
     case '/cal.mode':
       status.Mode = cal.SwitchMode(msg, status.Mode)
       return 'switch devMode'
+
+    default:
+      // /cal.volumeとの一致
+      if (~command.indexOf('/cal.volume')) {
+        const content = command.split('volume')[1].slice(1)
+        status.Volume = cal.VolumeChange(msg, status.Volume, content)
+        return 'cal volume change'
+      }
   }
 
   const volume = status.Volume

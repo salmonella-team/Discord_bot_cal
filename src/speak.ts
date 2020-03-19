@@ -27,6 +27,5 @@ export const Play = async (msg: Discord.Message, url: Option<string>, volume: nu
   // URLの音源がない場合終了
   if (!url) return msg.reply('音源のURLがないわ')
 
-  sound(msg.member?.voice, url, volume)
-  msg.reply(text)
+  sound(msg.member?.voice, url, volume).then(_ => msg.reply(text))
 }

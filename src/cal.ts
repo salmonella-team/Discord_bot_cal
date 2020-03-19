@@ -95,17 +95,50 @@ export const VolumeDown = (msg: Message, volume: number): number => {
 }
 
 /**
+ * キャルの音量を指定した音量にする
+ * @param msg DiscordからのMessage
+ * @param volume キャルの音量
+ * @param content 指定する音量
+ * @return 変更した音量
+ */
+export const VolumeChange = (msg: Message, volume: number, content: string): number => {
+  // contentが有効な数値なのか判断する
+  const valid = [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1, 1.0]
+    .map(n => String(n))
+    .find(n => n === content)
+  if (!valid) {
+    msg.reply('その音量にはできないんだけど！')
+    return volume
+  }
+
+  msg.reply(`音量を${content}にしたわよ！`)
+  return Number(content)
+}
+
+/**
+ * キャルの音量をリセットする
+ * @param msg DiscordからのMessage
+ * @return 変更した音量
+ */
+export const VolumeReset = (msg: Message): number => {
+  msg.reply('音量をリセットしたわよ！(0.3)')
+  return 0.3
+}
+
+/**
  * キャルのコマンド一覧をDiscordのメッセージへ送信する
  * @param msg DiscordからのMessage
  */
 export const Help = (msg: Message) => {
   const help = `魔法一覧よ！\`\`\`
-/cal       キャルの状態を表示
-/cal.in    キャルをボイスチャンネルに接続
-/cal.out   キャルをボイスチャンネルから切断
-/cal.up    キャルの声量を上げる
-/cal.down  キャルの声量を下げる
-/cal.help  キャルのコマンド一覧
+/cal        キャルの状態を表示
+/cal.in     キャルをボイスチャンネルに接続
+/cal.out    キャルをボイスチャンネルから切断
+/cal.up     キャルの声量を上げる
+/cal.down   キャルの声量を下げる
+/cal.volume <0.1~1.0> キャルの声量を指定の音量にする
+/cal.reset  キャルの音量をリセットする
+/cal.help   キャルのコマンド一覧
 
 /yabai       ヤバいわよ！
 /yabai.desu  ヤバいですね☆
