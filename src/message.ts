@@ -62,6 +62,9 @@ export const Message = async (msg: Discord.Message, client: Discord.Client): Pro
     default:
       // /cal.volumeとの一致
       if (~command.indexOf('/cal.volume')) {
+        // helpの場合の例外処理
+        if (~command.indexOf('help')) return
+
         const content = command.split('volume')[1].slice(1)
         status.Volume = cal.VolumeChange(msg, status.Volume, content)
         return 'cal volume change'
