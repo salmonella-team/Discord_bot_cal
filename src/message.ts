@@ -21,12 +21,15 @@ const status: Status = {
  * @return 実行したコマンドの結果
  */
 export const Message = async (msg: Discord.Message, client: Discord.Client): Promise<Option<string>> => {
+  // キャルのメッセージはコマンド実行しない
+  if (msg.member?.user.username === 'キャル') return
+
   // スペース、カンマ、コロン、イコールの場合でもコマンドが動くようにピリオドに変換する
-  const command = msg.content.replace(/ |,|:|=/g, '.')
+  const command = msg.content.replace(/ |\.|,|:|=/, '.')
 
   // キャルに関するコマンド
   // prettier-ignore
-  switch (command) {
+  switch (command.split(' ')[0]) {
     case '/cal': case '/cal.status':
       cal.ShowStatus(msg, client.voice, status)
       return 'cal show status'
@@ -59,16 +62,10 @@ export const Message = async (msg: Discord.Message, client: Discord.Client): Pro
       status.Mode = cal.SwitchMode(msg, status.Mode)
       return 'switch devMode'
 
-    default:
-      // /cal.volumeとの一致
-      if (~command.indexOf('/cal.volume')) {
-        // helpの場合の例外処理
-        if (~command.indexOf('help')) return
-
-        const content = command.split('volume')[1].slice(1)
-        status.Volume = cal.VolumeChange(msg, status.Volume, content)
-        return 'cal volume change'
-      }
+    case '/cal.volume': case '/cal.vol':
+      const content = command.split(' ')[1]
+      status.Volume = cal.VolumeChange(msg, status.Volume, content)
+      return 'cal volume change'
   }
 
   const volume = status.Volume
