@@ -89,8 +89,12 @@ export const Message = async (msg: Discord.Message, client: Discord.Client): Pro
       return 'speak yabai.wayo'
 
     case '/yabai.yaba': case '/yaby':
-      speak.Play(msg, process.env.YABAYABA_URL, volume, 'ヤバいヤバいヤバいヤバいヤバいヤバいですね☆')
+      speak.Play(msg, process.env.YABAIYABA_URL, volume, 'ヤバいヤバいヤバいヤバいヤバいヤバいですね☆')
       return 'speak yabai.yaba'
+
+      case '/yabai.full': case '/yaby':
+        speak.Play(msg, process.env.YABAIFULL_URL, volume, 'プリコネの年末年始はヤバいわよ！(Full)')
+        return 'speak yabai.full'
   }
 
   // DevModeの場合のみ実行
