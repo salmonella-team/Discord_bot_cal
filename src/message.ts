@@ -64,7 +64,7 @@ export const Message = async (msg: Discord.Message, client: Discord.Client): Pro
       return 'cal help'
 
     case '/cal.mode':
-      status.Mode = await cal.SwitchMode(msg, status.Mode)
+      status.Mode = cal.SwitchMode(msg, status.Mode)
       return 'switch devMode'
   }
 
