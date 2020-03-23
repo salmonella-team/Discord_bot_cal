@@ -162,7 +162,7 @@ export const Help = (msg: Message) => {
  * @param mode キャルのMode
  * @return 変更したMode
  */
-export const SwitchMode = async (msg: Message, mode: Mode): Promise<Mode> => {
+export const SwitchMode = (msg: Message, mode: Mode): Mode => {
   // メッセージ送信者のロール一覧を取得
   const roles = msg.member?.roles.cache.map(r => r.name)
 
