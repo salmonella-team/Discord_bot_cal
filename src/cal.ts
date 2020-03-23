@@ -156,16 +156,6 @@ export const Help = (msg: Message) => {
 }
 
 /**
- * 指定されたIDのロールを持つユーザー一覧を取得する
- * @param msg DiscordからのMessage
- * @param id ロールのID
- */
-const getRoleUser = async (msg: Message, id: string): Promise<Option<string[]>> => {
-  const role = await msg.guild?.roles.fetch(id)
-  return role?.members.map(m => m.user.username) as Option<string[]>
-}
-
-/**
  * キャルのDevModeを切り替えて、Mode状態をDiscordのメッセージへ送信する。
  * ヤバいわよ！のロールが付与されていないユーザーの場合は切り替えない
  * @param msg DiscordからのMessage
@@ -173,12 +163,11 @@ const getRoleUser = async (msg: Message, id: string): Promise<Option<string[]>> 
  * @return 変更したMode
  */
 export const SwitchMode = async (msg: Message, mode: Mode): Promise<Mode> => {
-  // ヤバいわよ！のロールが付与されているユーザーの一覧を取得
-  const yabaiUser = await getRoleUser(msg, '691686379075141653')
+  // メッセージ送信者のロール一覧を取得
+  const roles = msg.member?.roles.cache.map(r => r.name)
 
-  // メッセージ送信者がヤバいわよ！のロールが付与されていない場合終了
-  const user = msg.author.username
-  if (!yabaiUser?.find(u => u === user)) {
+  // ヤバいわよ！のロールが付与されていない場合終了
+  if (!roles?.find(r => r === 'ヤバいわよ！')) {
     msg.reply('アンタにModeを切り替える権限ないわ')
     return mode
   }
