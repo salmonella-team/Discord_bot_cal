@@ -9,14 +9,6 @@ import {Option, Mode, Status} from './type'
 const roundFloat = (n: number): number => Math.round(n * 10) / 10
 
 /**
- * ClientVoiceManagerからVoiceConnectionを取得する
- * @param voice clientのClientVoiceManager
- * @return 取得したVoiceConnection
- */
-const getVoiceConnection = (voice: Option<ClientVoiceManager>): Option<VoiceConnection> =>
-  voice?.connections.map(v => v)[0]
-
-/**
  * キャルが接続しているボイスチャンネルと音量とModeをDiscordのメッセージへ送信する
  * @param msg DiscordからのMessage
  * @param voice clientのClientVoiceManager
@@ -27,6 +19,14 @@ export const ShowStatus = (msg: Message, voice: Option<ClientVoiceManager>, stat
   const join = channel ? `${channel}に接続しているわ` : 'どこのボイスチャンネルにも接続してないわ'
   msg.reply(`${join}\n音量は${roundFloat(status.Volume)}よ！${status.Mode ? '(DevMode)' : ''}`)
 }
+
+/**
+ * ClientVoiceManagerからVoiceConnectionを取得する
+ * @param voice clientのClientVoiceManager
+ * @return 取得したVoiceConnection
+ */
+const getVoiceConnection = (voice: Option<ClientVoiceManager>): Option<VoiceConnection> =>
+  voice?.connections.map(v => v)[0]
 
 /**
  * メッセージ送信者と同じボイスチャンネルにキャルを接続させ、接続状況をDiscordのメッセージへ送信する
@@ -157,18 +157,17 @@ export const Help = (msg: Message) => {
 
 /**
  * キャルのDevModeを切り替えて、Mode状態をDiscordのメッセージへ送信する。
- * 権限のないユーザーの場合は切り替えない
+ * ヤバいわよ！のロールが付与されていないユーザーの場合は切り替えない
  * @param msg DiscordからのMessage
  * @param mode キャルのMode
  * @return 変更したMode
  */
-export const SwitchMode = (msg: Message, mode: Mode): Mode => {
-  // 切り替え権限のあるユーザー一覧
-  const devUsers = ['smicle']
+export const SwitchMode = async (msg: Message, mode: Mode): Promise<Mode> => {
+  // メッセージ送信者のロール一覧を取得
+  const roles = msg.member?.roles.cache.map(r => r.name)
 
-  // メッセージ送信者が切り替え権限のない人だった場合終了
-  const user = msg.member?.user.username
-  if (!devUsers.find(u => u === user)) {
+  // ヤバいわよ！のロールが付与されていない場合終了
+  if (!roles?.find(r => r === 'ヤバいわよ！')) {
     msg.reply('アンタにModeを切り替える権限ないわ')
     return mode
   }
