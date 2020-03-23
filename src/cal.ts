@@ -157,11 +157,11 @@ export const Help = (msg: Message) => {
  * @return 変更したMode
  */
 export const SwitchMode = (msg: Message, mode: Mode): Mode => {
-  const user = msg.member?.user.username
   // 切り替え権限のあるユーザー一覧
   const devUsers = ['smicle']
 
   // メッセージ送信者が切り替え権限のない人だった場合終了
+  const user = msg.member?.user.username
   if (!devUsers.find(u => u === user)) {
     msg.reply('アンタにModeを切り替える権限ないわ')
     return mode
