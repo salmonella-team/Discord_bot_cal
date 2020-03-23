@@ -150,12 +150,23 @@ export const Help = (msg: Message) => {
 }
 
 /**
- * キャルのDevModeを切り替えて、Mode状態をDiscordのメッセージへ送信する
+ * キャルのDevModeを切り替えて、Mode状態をDiscordのメッセージへ送信する。
+ * 権限のないユーザーの場合は切り替えない
  * @param msg DiscordからのMessage
  * @param mode キャルのMode
  * @return 変更したMode
  */
 export const SwitchMode = (msg: Message, mode: Mode): Mode => {
+  const user = msg.member?.user.username
+  // 切り替え権限のあるユーザー一覧
+  const devUsers = ['smicle']
+
+  // メッセージ送信者が切り替え権限のない人だった場合終了
+  if (!devUsers.find(u => u === user)) {
+    msg.reply('アンタにModeを切り替える権限ないわ')
+    return mode
+  }
+
   // ModeのOn・Offを切り替える
   mode = ~mode
   msg.reply(mode ? 'DevModeになったわよ！' : 'DevModeを解除したわ')
