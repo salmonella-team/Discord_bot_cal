@@ -50,6 +50,11 @@ export const Message = async (msg: Discord.Message, client: Discord.Client): Pro
       status.Volume = cal.VolumeDown(msg, status.Volume)
       return 'cal volume down'
 
+    case '/cal.volume': case '/cal.vol':
+      const content = command.split(' ')[1]
+      status.Volume = cal.VolumeChange(msg, status.Volume, content)
+      return 'cal volume change'
+
     case '/cal.reset':
       status.Volume = cal.VolumeReset(msg)
       return 'cal reset'
@@ -61,11 +66,6 @@ export const Message = async (msg: Discord.Message, client: Discord.Client): Pro
     case '/cal.mode':
       status.Mode = cal.SwitchMode(msg, status.Mode)
       return 'switch devMode'
-
-    case '/cal.volume': case '/cal.vol':
-      const content = command.split(' ')[1]
-      status.Volume = cal.VolumeChange(msg, status.Volume, content)
-      return 'cal volume change'
   }
 
   const volume = status.Volume
@@ -89,7 +89,7 @@ export const Message = async (msg: Discord.Message, client: Discord.Client): Pro
       speak.Play(msg, process.env.YABAIYABA_URL, volume, 'ヤバいヤバいヤバいヤバいヤバいヤバいですね☆')
       return 'speak yabai.yaba'
 
-      case '/yabai.full': case '/yaby':
+      case '/yabai.full': case '/yabf':
         speak.Play(msg, process.env.YABAIFULL_URL, volume, 'プリコネの年末年始はヤバいわよ！(Full)')
         return 'speak yabai.full'
   }
