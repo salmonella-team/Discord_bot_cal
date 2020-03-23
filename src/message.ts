@@ -64,7 +64,6 @@ export const Message = async (msg: Discord.Message, client: Discord.Client): Pro
 
     case '/cal.volume': case '/cal.vol':
       const content = command.split(' ')[1]
-      console.log(content)
       status.Volume = cal.VolumeChange(msg, status.Volume, content)
       return 'cal volume change'
   }
