@@ -10,7 +10,8 @@
         "comment-format": false,
         "no-bitwise": false,
         "no-unused-expression": false,
-        "no-var-requires": false
+        "no-var-requires": false,
+        "no-shadowed-variable": false,
     },
     "rulesDirectory": []
 }

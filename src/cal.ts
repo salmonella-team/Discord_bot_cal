@@ -102,8 +102,14 @@ export const VolumeDown = (msg: Message, volume: number): number => {
  * @return 変更した音量
  */
 export const VolumeChange = (msg: Message, volume: number, content: string): number => {
+  // contentが空だった場合は終了
+  if (!content) {
+    msg.reply('音量が指定されていないんだけど！')
+    return volume
+  }
+
   // contentが有効な数値なのか判断する
-  const valid = [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1, 1.0]
+  const valid = [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1, '1.0']
     .map(n => String(n))
     .find(n => n === content)
   if (!valid) {
