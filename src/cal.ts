@@ -138,7 +138,7 @@ export const VolumeReset = (msg: Message): number => {
  */
 export const GetWhiteList = async (msg: Message) => {
   const whiteList = await spreadsheet.GetWhiteList()
-  msg.reply(`ホワイトリスト一覧よ！\n${whiteList.join('\n')}`)
+  msg.reply(`コマンド用のホワイトリスト一覧よ！\n${whiteList.join('\n')}`)
 }
 
 /**
