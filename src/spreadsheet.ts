@@ -29,7 +29,7 @@ export const GetWhiteList = async (): Promise<string[]> => {
 }
 
 /**
- * ホワイトリストに値を追加する
+ * コマンド用のホワイトリストに値を追加する
  * @param name 追加したい値
  */
 export const AddWhiteList = async (name: string) => {

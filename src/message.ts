@@ -59,7 +59,7 @@ export const Message = async (msg: Discord.Message, client: Discord.Client): Pro
       status.Volume = cal.VolumeReset(msg)
       return 'cal reset'
 
-    case '/cal.whitelist': case '/cal.wl':
+    case '/cal.list': case '/cal.wl':
       const name = command.split(' ')[1]
       if (!name) {
         cal.GetWhiteList(msg)

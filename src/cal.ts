@@ -148,7 +148,7 @@ export const GetWhiteList = async (msg: Message) => {
  */
 export const AddWhiteList = (msg: Message, name: string) => {
   spreadsheet.AddWhiteList(name)
-  msg.reply(`ホワイトリストに${name}を追加したわよ！`)
+  msg.reply(`コマンド用のホワイトリストに${name}を追加したわよ！`)
 }
 
 /**
@@ -164,12 +164,14 @@ export const Help = (msg: Message) => {
 /cal.down   キャルの声量を下げる
 /cal.volume <0.1~1.0> キャルの声量を指定の音量にする
 /cal.reset  キャルの音量をリセットする
+/cal.list   コマンド用のホワイトリストを表示
+/cal.list <name> ホワイトリストに値を追加
 /cal.help   キャルのコマンド一覧
 
-/yabai       ヤバいわよ！
-/yabai.desu  ヤバいですね☆
-/yabai.wayo  プリコネの年末年始はヤバいわよ！
-/yabai.yaba  ヤバいヤバいヤバいヤバいヤバいヤバいですね☆
+/yabai      ヤバいわよ！
+/yabai.desu ヤバいですね☆
+/yabai.wayo プリコネの年末年始はヤバいわよ！
+/yabai.yaba ヤバいヤバいヤバいヤバいヤバいヤバいですね☆
 \`\`\`※\`.\`は\` \`で代用可能　例:\`/cal help\`
 `
   msg.reply(help)
