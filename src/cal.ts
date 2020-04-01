@@ -1,5 +1,6 @@
 import {ClientVoiceManager, Message, VoiceConnection, VoiceChannel} from 'discord.js'
 import {Option, Mode, Status} from './type'
+import * as spreadsheet from './spreadsheet'
 
 /**
  * 小数第一位を四捨五入して返す
@@ -129,6 +130,16 @@ export const VolumeChange = (msg: Message, volume: number, content: string): num
 export const VolumeReset = (msg: Message): number => {
   msg.reply('音量をリセットしたわよ！(0.3)')
   return 0.3
+}
+
+export const GetWhiteList = async (msg: Message) => {
+  const whiteList = await spreadsheet.GetWhiteList()
+  msg.reply(`ホワイトリスト一覧よ！\n${whiteList.join('\n')}`)
+}
+
+export const AddWhiteList = (msg: Message, name: string) => {
+  spreadsheet.AddWhiteList(name)
+  msg.reply(`ホワイトリストに${name}を追加したわよ！`)
 }
 
 /**
