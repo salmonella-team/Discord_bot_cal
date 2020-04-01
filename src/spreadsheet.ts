@@ -18,6 +18,10 @@ const getWorksheet = async (name: string) => {
   return sheet.getWorksheetByName(name)
 }
 
+/**
+ * ホワイトリストを取得して返す
+ * @return ホワイトリストの配列
+ */
 export const GetWhiteList = async (): Promise<string[]> => {
   const worksheet = await getWorksheet('ホワイトリスト')
   const cells = await worksheet.getCells('A2:A100')
@@ -26,12 +30,12 @@ export const GetWhiteList = async (): Promise<string[]> => {
 
 /**
  * ホワイトリストに値を追加する
- * @return ホワイトリストの配列
+ * @param name 追加したい値
  */
 export const AddWhiteList = async (name: string) => {
   const worksheet = await getWorksheet('ホワイトリスト')
   const cells = await worksheet.getCells('A2:A100')
-  const len = cells.getAllValues().filter((v: string) => v).length
-  const cell = await worksheet.getCell(`A${len + 2}`)
+  const l = cells.getAllValues().filter((v: string) => v).length
+  const cell = await worksheet.getCell(`A${l + 2}`)
   await cell.setValue(name)
 }
