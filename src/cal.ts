@@ -132,11 +132,20 @@ export const VolumeReset = (msg: Message): number => {
   return 0.3
 }
 
+/**
+ * ホワイトリストの一覧をDiscordのメッセージへ送信する
+ * @param msg DiscordからのMessage
+ */
 export const GetWhiteList = async (msg: Message) => {
   const whiteList = await spreadsheet.GetWhiteList()
   msg.reply(`ホワイトリスト一覧よ！\n${whiteList.join('\n')}`)
 }
 
+/**
+ * スプレッドシートのホワイトリストに値を追加する
+ * @param msg DiscordからのMessage
+ * @param name 追加したい値
+ */
 export const AddWhiteList = (msg: Message, name: string) => {
   spreadsheet.AddWhiteList(name)
   msg.reply(`ホワイトリストに${name}を追加したわよ！`)
