@@ -59,16 +59,6 @@ export const Message = async (msg: Discord.Message, client: Discord.Client): Pro
       status.Volume = cal.VolumeReset(msg)
       return 'cal reset'
 
-    case '/cal.list': case '/cal.wl':
-      const name = command.split(' ')[1]
-      if (!name) {
-        cal.GetWhiteList(msg)
-        return 'get whitelist'
-      } else {
-        cal.AddWhiteList(msg, name)
-        return `add whitelist ${name}`
-      }
-
     case '/cal.help':
       cal.Help(msg)
       return 'cal help'
@@ -98,16 +88,29 @@ export const Message = async (msg: Discord.Message, client: Discord.Client): Pro
     case '/yabai.yaba': case '/yaby':
       speak.Play(msg, process.env.YABAIYABA_URL, volume, 'ヤバいヤバいヤバいヤバいヤバいヤバいですね☆')
       return 'speak yabai.yaba'
-
-      case '/yabai.full': case '/yabf':
-        speak.Play(msg, process.env.YABAIFULL_URL, volume, 'プリコネの年末年始はヤバいわよ！(Full)')
-        return 'speak yabai.full'
   }
 
   // DevModeの場合のみ実行
   if (status.Mode) {
     // prettier-ignore
+    switch (command.split(' ')[0]) {
+      case '/cal.list': case '/cal.wl':
+        const name = command.split(' ')[1]
+        if (!name) {
+          cal.GetWhiteList(msg)
+          return 'get whitelist'
+        } else {
+          cal.AddWhiteList(msg, name)
+          return `add whitelist ${name}`
+        }
+    }
+
+    // prettier-ignore
     switch (command) {
+      case '/yabai.full': case '/yabf':
+        speak.Play(msg, process.env.YABAIFULL_URL, volume, 'プリコネの年末年始はヤバいわよ！(Full)')
+        return 'speak yabai.full'
+
       case '/yabai.yabai':
         speak.Play(msg, process.env.YABAYABAI_URL, volume, 'ヤバいヤバいヤバいヤバいヤバいヤバい')
         return 'speak yabai.yabai'
