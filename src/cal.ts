@@ -155,8 +155,9 @@ export const AddWhiteList = (msg: Message, name: string) => {
  * キャルのコマンド一覧をDiscordのメッセージへ送信する
  * @param msg DiscordからのMessage
  */
-export const Help = (msg: Message) => {
-  const help = `魔法一覧よ！\`\`\`
+export const Help = (msg: Message, mode: Mode) => {
+  const help = mode
+    ? `高度な魔法一覧よ！\`\`\`
 /cal        キャルの状態を表示
 /cal.in     キャルをボイスチャンネルに接続
 /cal.out    キャルをボイスチャンネルから切断
@@ -164,8 +165,33 @@ export const Help = (msg: Message) => {
 /cal.down   キャルの声量を下げる
 /cal.volume <0.1~1.0> キャルの声量を指定の音量にする
 /cal.reset  キャルの音量をリセットする
-/cal.list   コマンド用のホワイトリストを表示
+/cal.help   キャルのコマンド一覧
+/cal.mode   キャルのモードを切り替える
+
+/cal.list コマンド用のホワイトリストを表示
 /cal.list <name> ホワイトリストに値を追加
+
+/yabai       ヤバいわよ！
+/yabai.desu  ヤバいですね☆
+/yabai.wayo  プリコネの年末年始はヤバいわよ！
+/yabai.yaba  ヤバいヤバいヤバいヤバいヤバいヤバいですね☆
+/yabai.full  プリコネの年末年始はヤバいわよ！(Full)
+/yabai.yabai ヤバいヤバいヤバいヤバいヤバいヤバい
+/yabai.slow  ヤバいヤバいヤバいヤバいヤバいヤバいですね☆(slow)
+/yabai.otwr  ヤバいヤバいヤバいヤバいヤバいヤバいですね☆(otwr)
+
+/almage アルマゲのデケェロボット
+
+\`\`\`※\`.\`は\` \`で代用可能　例:\`/cal help\`
+`
+    : `魔法一覧よ！\`\`\`
+/cal        キャルの状態を表示
+/cal.in     キャルをボイスチャンネルに接続
+/cal.out    キャルをボイスチャンネルから切断
+/cal.up     キャルの声量を上げる
+/cal.down   キャルの声量を下げる
+/cal.volume <0.1~1.0> キャルの声量を指定の音量にする
+/cal.reset  キャルの音量をリセットする
 /cal.help   キャルのコマンド一覧
 
 /yabai      ヤバいわよ！
@@ -174,6 +200,7 @@ export const Help = (msg: Message) => {
 /yabai.yaba ヤバいヤバいヤバいヤバいヤバいヤバいですね☆
 \`\`\`※\`.\`は\` \`で代用可能　例:\`/cal help\`
 `
+
   msg.reply(help)
 }
 

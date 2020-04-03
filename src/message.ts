@@ -60,7 +60,7 @@ export const Message = async (msg: Discord.Message, client: Discord.Client): Pro
       return 'cal reset'
 
     case '/cal.help':
-      cal.Help(msg)
+      cal.Help(msg, status.Mode)
       return 'cal help'
 
     case '/cal.mode':
