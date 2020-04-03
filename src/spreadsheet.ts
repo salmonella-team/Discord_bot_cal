@@ -29,13 +29,20 @@ export const GetWhiteList = async (): Promise<string[]> => {
 }
 
 /**
- * コマンド用のホワイトリストに値を追加する
+ * コマンド用のホワイトリストに値を追加する。
+ * 既にホワイトリストに値がある場合は追加しない
  * @param name 追加したい値
+ * @return 追加されたかどうかの結果
  */
-export const AddWhiteList = async (name: string) => {
+export const AddWhiteList = async (name: string): Promise<boolean> => {
   const worksheet = await getWorksheet('ホワイトリスト')
   const cells = await worksheet.getCells('A2:A100')
+
+  // 既に登録されていたら終了
+  if (cells.getAllValues().find((v: string) => v === name)) return false
+
   const l = cells.getAllValues().filter((v: string) => v).length
   const cell = await worksheet.getCell(`A${l + 2}`)
   await cell.setValue(name)
+  return true
 }

@@ -146,9 +146,12 @@ export const GetWhiteList = async (msg: Message) => {
  * @param msg DiscordからのMessage
  * @param name 追加したい値
  */
-export const AddWhiteList = (msg: Message, name: string) => {
-  spreadsheet.AddWhiteList(name)
-  msg.reply(`コマンド用のホワイトリストに${name}を追加したわよ！`)
+export const AddWhiteList = async (msg: Message, name: string) => {
+  if (await spreadsheet.AddWhiteList(name)) {
+    msg.reply(`コマンド用のホワイトリストに${name}を追加したわよ！`)
+  } else {
+    msg.reply(`そのコマンドは既に追加されているわ`)
+  }
 }
 
 /**
