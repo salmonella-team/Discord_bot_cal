@@ -17,7 +17,8 @@
 
 ### ホワイトリスト
 存在しないコマンドを打つとキャルが叱ってくれますが、他人の作ったコマンドも巻き込んでしまうのでホワイトリストを作りました。  
-[discord-bot-cal](https://docs.google.com/spreadsheets/d/1IbkSu3kGxhxy9_rI8p_stEWvqSDAYnEUcVUA02TaPfk/edit?usp=sharing)ここの`A列`にコマンドを追加してください。  
+`Develop`ロールが付与されているユーザーのみが管理ができます。詳しくは`/cal.help`を参照してください。  
+spreadsheet: [discord-bot-cal](https://docs.google.com/spreadsheets/d/1IbkSu3kGxhxy9_rI8p_stEWvqSDAYnEUcVUA02TaPfk/edit?usp=sharing)  
 
 ### npm
 
