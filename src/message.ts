@@ -116,11 +116,11 @@ export const Message = async (msg: Discord.Message, client: Discord.Client): Pro
         return 'speak yabai.yabai'
 
       case '/yabai.slow':
-        speak.Play(msg, process.env.YABAISLOW_URL, volume, 'ヤバいヤバいヤバいヤバいヤバいヤバいですね☆（slow）')
+        speak.Play(msg, process.env.YABAISLOW_URL, volume, 'ヤバいヤバいヤバいヤバいヤバいヤバいですね☆(slow)')
         return 'speak yabai.slow'
 
       case '/yabai.otwr':
-        speak.Play(msg, process.env.YABAIOTWR_URL, volume, 'ヤバいヤバいヤバいヤバいヤバいヤバいですね☆（otwr）')
+        speak.Play(msg, process.env.YABAIOTWR_URL, volume, 'ヤバいヤバいヤバいヤバいヤバいヤバいですね☆(otwr)')
         return 'speak yabai.otwr'
 
       case '/almage':
