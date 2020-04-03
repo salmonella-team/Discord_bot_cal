@@ -152,8 +152,10 @@ export const AddWhiteList = (msg: Message, name: string) => {
 }
 
 /**
- * キャルのコマンド一覧をDiscordのメッセージへ送信する
+ * キャルのコマンド一覧をDiscordのメッセージへ送信する。
+ * キャルの状態に応じて表示量も変化する
  * @param msg DiscordからのMessage
+ * @param mode キャルのMode
  */
 export const Help = (msg: Message, mode: Mode) => {
   const help = mode
