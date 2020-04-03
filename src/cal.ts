@@ -179,7 +179,7 @@ export const Help = (msg: Message) => {
 
 /**
  * キャルのDevModeを切り替えて、Mode状態をDiscordのメッセージへ送信する。
- * ヤバいわよ！のロールが付与されていないユーザーの場合は切り替えない
+ * Developのロールが付与されていないユーザーの場合は切り替えない
  * @param msg DiscordからのMessage
  * @param mode キャルのMode
  * @return 変更したMode
@@ -188,8 +188,8 @@ export const SwitchMode = (msg: Message, mode: Mode): Mode => {
   // メッセージ送信者のロール一覧を取得
   const roles = msg.member?.roles.cache.map(r => r.name)
 
-  // ヤバいわよ！のロールが付与されていない場合終了
-  if (!roles?.find(r => r === 'ヤバいわよ！')) {
+  // Developのロールが付与されていない場合終了
+  if (!roles?.find(r => r === 'Develop')) {
     msg.reply('アンタにModeを切り替える権限ないわ')
     return mode
   }
