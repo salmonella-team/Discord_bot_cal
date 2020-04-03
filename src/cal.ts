@@ -190,7 +190,7 @@ export const SwitchMode = (msg: Message, mode: Mode): Mode => {
 
   // Developのロールが付与されていない場合終了
   if (!roles?.find(r => r === 'Develop')) {
-    msg.reply('Developじゃないユーザーにモードを切り替える権限ないわ')
+    msg.reply('Developじゃないやつにモードを切り替える権限ないわ')
     return mode
   }
 
