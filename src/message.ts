@@ -59,16 +59,6 @@ export const Message = async (msg: Discord.Message, client: Discord.Client): Pro
       status.Volume = cal.VolumeReset(msg)
       return 'cal reset'
 
-    case '/cal.list': case '/cal.wl':
-      const name = command.split(' ')[1]
-      if (!name) {
-        cal.GetWhiteList(msg)
-        return 'get whitelist'
-      } else {
-        cal.AddWhiteList(msg, name)
-        return `add whitelist ${name}`
-      }
-
     case '/cal.help':
       cal.Help(msg)
       return 'cal help'
@@ -106,6 +96,19 @@ export const Message = async (msg: Discord.Message, client: Discord.Client): Pro
 
   // DevModeの場合のみ実行
   if (status.Mode) {
+    // prettier-ignore
+    switch (command.split(' ')[0]) {
+      case '/cal.list': case '/cal.wl':
+        const name = command.split(' ')[1]
+        if (!name) {
+          cal.GetWhiteList(msg)
+          return 'get whitelist'
+        } else {
+          cal.AddWhiteList(msg, name)
+          return `add whitelist ${name}`
+        }
+    }
+
     // prettier-ignore
     switch (command) {
       case '/yabai.yabai':
