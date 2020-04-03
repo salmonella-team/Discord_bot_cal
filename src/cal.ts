@@ -1,5 +1,6 @@
 import {ClientVoiceManager, Message, VoiceConnection, VoiceChannel} from 'discord.js'
 import {Option, Mode, Status} from './type'
+import * as spreadsheet from './spreadsheet'
 
 /**
  * 小数第一位を四捨五入して返す
@@ -132,6 +133,25 @@ export const VolumeReset = (msg: Message): number => {
 }
 
 /**
+ * ホワイトリストの一覧をDiscordのメッセージへ送信する
+ * @param msg DiscordからのMessage
+ */
+export const GetWhiteList = async (msg: Message) => {
+  const whiteList = await spreadsheet.GetWhiteList()
+  msg.reply(`コマンド用のホワイトリスト一覧よ！\n${whiteList.join('\n')}`)
+}
+
+/**
+ * スプレッドシートのホワイトリストに値を追加する
+ * @param msg DiscordからのMessage
+ * @param name 追加したい値
+ */
+export const AddWhiteList = (msg: Message, name: string) => {
+  spreadsheet.AddWhiteList(name)
+  msg.reply(`コマンド用のホワイトリストに${name}を追加したわよ！`)
+}
+
+/**
  * キャルのコマンド一覧をDiscordのメッセージへ送信する
  * @param msg DiscordからのMessage
  */
@@ -144,12 +164,14 @@ export const Help = (msg: Message) => {
 /cal.down   キャルの声量を下げる
 /cal.volume <0.1~1.0> キャルの声量を指定の音量にする
 /cal.reset  キャルの音量をリセットする
+/cal.list   コマンド用のホワイトリストを表示
+/cal.list <name> ホワイトリストに値を追加
 /cal.help   キャルのコマンド一覧
 
-/yabai       ヤバいわよ！
-/yabai.desu  ヤバいですね☆
-/yabai.wayo  プリコネの年末年始はヤバいわよ！
-/yabai.yaba  ヤバいヤバいヤバいヤバいヤバいヤバいですね☆
+/yabai      ヤバいわよ！
+/yabai.desu ヤバいですね☆
+/yabai.wayo プリコネの年末年始はヤバいわよ！
+/yabai.yaba ヤバいヤバいヤバいヤバいヤバいヤバいですね☆
 \`\`\`※\`.\`は\` \`で代用可能　例:\`/cal help\`
 `
   msg.reply(help)
