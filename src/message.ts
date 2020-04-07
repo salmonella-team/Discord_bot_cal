@@ -126,10 +126,6 @@ export const Message = async (msg: Discord.Message, client: Discord.Client): Pro
       case '/yabai.otwr':
         speak.Play(msg, process.env.YABAIOTWR_URL, volume, 'ヤバいヤバいヤバいヤバいヤバいヤバいですね☆(otwr)')
         return 'speak yabai.otwr'
-
-      case '/almage':
-        speak.Play(msg, process.env.ALMAGE_URL, volume, 'アルマゲのデケェロボット')
-        return 'speak almage'
     }
   }
 
