@@ -8,9 +8,13 @@ const client = new Discord.Client()
 dotenv.config()
 
 /**
- * キャルを立ち上げた際に実行
+ * キャルが起動した際に通知を送る
  */
-client.on('ready', () => console.log(`Logged in as ${client.user?.username}!`))
+client.on('ready', () => {
+  const channel = client.channels.cache.get(process.env.READY_CHANNEL || '') as Discord.TextChannel
+  channel?.send('キャルの参上よ！')
+  console.log(`Logged in as ${client.user?.username}!`)
+})
 
 /**
  * ボイスチャンネルの入退出、ミュートの解除等を行った際に実行
