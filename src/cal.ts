@@ -184,9 +184,6 @@ export const Help = (msg: Message, mode: Mode) => {
 /yabai.yabai ヤバいヤバいヤバいヤバいヤバいヤバい
 /yabai.slow  ヤバいヤバいヤバいヤバいヤバいヤバいですね☆(slow)
 /yabai.otwr  ヤバいヤバいヤバいヤバいヤバいヤバいですね☆(otwr)
-
-/almage アルマゲのデケェロボット
-
 \`\`\`※\`.\`は\` \`で代用可能　例:\`/cal help\`
 `
     : `魔法一覧よ！\`\`\`
