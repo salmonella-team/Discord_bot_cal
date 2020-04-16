@@ -10,7 +10,7 @@ const GoogleSpreadsheetAsPromised = require('google-spreadsheet-as-promised')
  */
 const getWorksheet = async (name: string) => {
   // GoogleSpreadSheetで使う定数を定義
-  const CREDS = require('../assets/google-generated-creds.json')
+  const CREDS = JSON.parse(process.env.CREDS!)
   const SHEET_ID = process.env.SHEET_ID
 
   const sheet = new GoogleSpreadsheetAsPromised()
