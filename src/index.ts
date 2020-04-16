@@ -17,7 +17,8 @@ client.on('ready', () => {
 })
 
 /**
- * ボイスチャンネルの入退出、ミュートの解除等を行った際に実行
+ * ボイスチャンネルの入退出、ミュートの解除等を行った際に実行。
+ * キャルの自動入退出を実装
  */
 client.on('voiceStateUpdate', async (oldState: Discord.VoiceState, newState: Discord.VoiceState) => {
   // 退出前の処理
