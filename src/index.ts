@@ -9,11 +9,8 @@ const client = new Discord.Client()
 // botの起動時に実行
 client.on('ready', () => Ready(client))
 
-/**
- * ボイスチャンネルの入退出、ミュートの解除等を行った際に実行。
- * キャルの自動入退出を実装
- */
-client.on('voiceStateUpdate', async (oldState: Discord.VoiceState, newState: Discord.VoiceState) =>
+// ボイスチャンネルの状態が変わったら実行
+client.on('voiceStateUpdate', (oldState: Discord.VoiceState, newState: Discord.VoiceState) =>
   VoiceStateUpdate(oldState, newState)
 )
 
