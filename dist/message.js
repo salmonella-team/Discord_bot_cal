@@ -52,7 +52,7 @@ var status = {
     Mode: 0
 };
 exports.Message = function (msg, client) { return __awaiter(void 0, void 0, void 0, function () {
-    var channel, command, content, volume, name_1, list;
+    var channel, command, comment;
     var _a;
     return __generator(this, function (_b) {
         switch (_b.label) {
@@ -63,94 +63,149 @@ exports.Message = function (msg, client) { return __awaiter(void 0, void 0, void
                 if ((channel === null || channel === void 0 ? void 0 : channel.name) !== '効果音-001' && (channel === null || channel === void 0 ? void 0 : channel.name) !== 'テスト用')
                     return [2];
                 command = msg.content.replace(/ |\.|,|:|=/, '.');
-                switch (command.split(' ')[0]) {
-                    case '/cal':
-                    case '/cal.status':
-                        cal.ShowStatus(msg, client.voice, status);
-                        return [2, 'cal show status'];
-                    case '/cal.in':
-                    case '/cal.join':
-                        cal.JoinChannel(msg, client.voice);
-                        return [2, 'cal join channel'];
-                    case '/cal.out':
-                    case '/cal.disconnect':
-                        cal.Disconnect(msg, client.voice);
-                        return [2, 'cal disconnect channel'];
-                    case '/cal.up':
-                        status.Volume = cal.VolumeUp(msg, status.Volume);
-                        return [2, 'cal volume up'];
-                    case '/cal.down':
-                        status.Volume = cal.VolumeDown(msg, status.Volume);
-                        return [2, 'cal volume down'];
-                    case '/cal.vol':
-                    case '/cal.volume':
-                        content = command.split(' ')[1];
-                        status.Volume = cal.VolumeChange(msg, status.Volume, content);
-                        return [2, 'cal volume change'];
-                    case '/cal.reset':
-                        status.Volume = cal.VolumeReset(msg);
-                        return [2, 'cal reset'];
-                    case '/cal.help':
-                        cal.Help(msg, status.Mode);
-                        return [2, 'cal help'];
-                    case '/cal.mode':
-                        status.Mode = cal.SwitchMode(msg, status.Mode);
-                        return [2, 'switch devMode'];
-                }
-                volume = status.Volume;
-                switch (command) {
-                    case '/yabai':
-                    case '/yab':
-                        speak.Play(msg, env.GetVal('YABAI_URL'), volume, 'ヤバいわよ！');
-                        return [2, 'speak yabai'];
-                    case '/yabai.desu':
-                    case '/yabd':
-                        speak.Play(msg, env.GetVal('YABAIDESU_URL'), volume, 'ヤバいですね☆');
-                        return [2, 'speak yabai.desu'];
-                    case '/yabai.wayo':
-                    case '/yabw':
-                        speak.Play(msg, env.GetVal('YABAIWAYO_URL'), volume, 'プリコネの年末年始はヤバいわよ！');
-                        return [2, 'speak yabai.wayo'];
-                    case '/yabai.yaba':
-                    case '/yaby':
-                        speak.Play(msg, env.GetVal('YABAIYABA_URL'), volume, 'ヤバいヤバいヤバいヤバいヤバいヤバいですね☆');
-                        return [2, 'speak yabai.yaba'];
-                }
-                if (status.Mode) {
-                    switch (command.split(' ')[0]) {
-                        case '/cal.list':
-                        case '/cal.wl':
-                            name_1 = command.split(' ')[1];
-                            if (!name_1) {
-                                cal.GetWhiteList(msg);
-                                return [2, 'get whitelist'];
-                            }
-                            else {
-                                cal.AddWhiteList(msg, name_1);
-                                return [2, "add whitelist " + name_1];
-                            }
-                    }
-                    switch (command) {
-                        case '/yabai.full':
-                        case '/yabf':
-                            speak.Play(msg, env.GetVal('YABAIFULL_URL'), volume, 'プリコネの年末年始はヤバいわよ！(Full)');
-                            return [2, 'speak yabai.full'];
-                        case '/yabai.yabai':
-                            speak.Play(msg, env.GetVal('YABAYABAI_URL'), volume, 'ヤバいヤバいヤバいヤバいヤバいヤバい');
-                            return [2, 'speak yabai.yabai'];
-                        case '/yabai.slow':
-                            speak.Play(msg, env.GetVal('YABAISLOW_URL'), volume, 'ヤバいヤバいヤバいヤバいヤバいヤバいですね☆(slow)');
-                            return [2, 'speak yabai.slow'];
-                        case '/yabai.otwr':
-                            speak.Play(msg, env.GetVal('YABAIOTWR_URL'), volume, 'ヤバいヤバいヤバいヤバいヤバいヤバいですね☆(otwr)');
-                            return [2, 'speak yabai.otwr'];
-                    }
-                }
+                comment = calCommands(command, msg, client);
+                if (comment)
+                    return [2, console.log(comment)];
+                comment = speakCommands(command, msg);
+                if (comment)
+                    return [2, console.log(comment)];
+                return [4, notExistCommands(command, msg)];
+            case 1:
+                comment = _b.sent();
+                if (comment)
+                    return [2, console.log(comment)];
+                return [2];
+        }
+    });
+}); };
+var calCommands = function (command, msg, client) {
+    switch (command.split(' ')[0]) {
+        case '/cal':
+        case '/cal.status':
+            cal.ShowStatus(msg, client.voice, status);
+            return 'cal show status';
+        case '/cal.in':
+        case '/cal.join':
+            cal.JoinChannel(msg, client.voice);
+            return 'cal join channel';
+        case '/cal.out':
+        case '/cal.disconnect':
+            cal.Disconnect(msg, client.voice);
+            return 'cal disconnect channel';
+        case '/cal.up':
+            status.Volume = cal.VolumeUp(msg, status.Volume);
+            return 'cal volume up';
+        case '/cal.down':
+            status.Volume = cal.VolumeDown(msg, status.Volume);
+            return 'cal volume down';
+        case '/cal.vol':
+        case '/cal.volume':
+            var content = command.split(' ')[1];
+            status.Volume = cal.VolumeChange(msg, status.Volume, content);
+            return 'cal volume change';
+        case '/cal.reset':
+            status.Volume = cal.VolumeReset(msg);
+            return 'cal reset';
+        case '/cal.help':
+            cal.Help(msg, status.Mode);
+            return 'cal help';
+        case '/cal.mode':
+            status.Mode = cal.SwitchMode(msg, status.Mode);
+            return 'switch devMode';
+    }
+    if (!status.Mode)
+        return;
+    switch (command.split(' ')[0]) {
+        case '/cal.list':
+        case '/cal.wl':
+            var name_1 = command.split(' ')[1];
+            if (!name_1) {
+                cal.GetWhiteList(msg);
+                return 'get whitelist';
+            }
+            else {
+                cal.AddWhiteList(msg, name_1);
+                return "add whitelist " + name_1;
+            }
+    }
+};
+var speakCommands = function (command, msg) {
+    var value = (function () {
+        switch (command) {
+            case '/yabai':
+            case '/yab':
+                return {
+                    env: env.GetVal('YABAI_URL'),
+                    text: 'ヤバいわよ！',
+                    comment: 'speak yabai'
+                };
+            case '/yabai.desu':
+            case '/yabd':
+                return {
+                    env: env.GetVal('YABAIDESU_URL'),
+                    text: 'ヤバいですね☆',
+                    comment: 'speak yabai.desu'
+                };
+            case '/yabai.wayo':
+            case '/yabw':
+                return {
+                    env: env.GetVal('YABAIWAYO_URL'),
+                    text: 'プリコネの年末年始はヤバいわよ！',
+                    comment: 'speak yabai.wayo'
+                };
+            case '/yabai.yaba':
+            case '/yaby':
+                return {
+                    env: env.GetVal('YABAIYABA_URL'),
+                    text: 'ヤバいヤバいヤバいヤバいヤバいヤバいですね☆',
+                    comment: 'speak yabai.yaba'
+                };
+        }
+        if (!status.Mode)
+            return;
+        switch (command) {
+            case '/yabai.full':
+            case '/yabf':
+                return {
+                    env: env.GetVal('YABAIFULL_URL'),
+                    text: 'プリコネの年末年始はヤバいわよ！(Full)',
+                    comment: 'speak yabai.full'
+                };
+            case '/yabai.yabai':
+                return {
+                    env: env.GetVal('YABAYABAI_URL'),
+                    text: 'ヤバいヤバいヤバいヤバいヤバいヤバい',
+                    comment: 'speak yabai.yabai'
+                };
+            case '/yabai.slow':
+                return {
+                    env: env.GetVal('YABAISLOW_URL'),
+                    text: 'ヤバいヤバいヤバいヤバいヤバいヤバいですね☆(slow)',
+                    comment: 'speak yabai.slow'
+                };
+            case '/yabai.otwr':
+                return {
+                    env: env.GetVal('YABAIOTWR_URL'),
+                    text: 'ヤバいヤバいヤバいヤバいヤバいヤバいですね☆(otwr)',
+                    comment: 'speak yabai.otwr'
+                };
+        }
+    })();
+    if (!value)
+        return;
+    speak.Play(msg, value.env, status.Volume, value.text);
+    return value.comment;
+};
+var notExistCommands = function (command, msg) { return __awaiter(void 0, void 0, void 0, function () {
+    var list;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0:
                 if (command.charAt(0) !== '/')
                     return [2];
                 return [4, spreadsheet.GetWhiteList()];
             case 1:
-                list = _b.sent();
+                list = _a.sent();
                 if (list.find(function (l) { return l === command.slice(1); }))
                     return [2];
                 msg.reply('そんなコマンドないんだけど！');

@@ -35,25 +35,39 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
-var __importStar = (this && this.__importStar) || function (mod) {
-    if (mod && mod.__esModule) return mod;
-    var result = {};
-    if (mod != null) for (var k in mod) if (Object.hasOwnProperty.call(mod, k)) result[k] = mod[k];
-    result["default"] = mod;
-    return result;
-};
 exports.__esModule = true;
-var Discord = __importStar(require("discord.js"));
-var env = __importStar(require("./env"));
-var ready_1 = require("./ready");
-var voiceStateUpdate_1 = require("./voiceStateUpdate");
-var message_1 = require("./message");
-var client = new Discord.Client();
-client.on('ready', function () { return ready_1.Ready(client); });
-client.on('voiceStateUpdate', function (oldState, newState) {
-    return voiceStateUpdate_1.VoiceStateUpdate(oldState, newState);
-});
-client.on('message', function (msg) { return __awaiter(void 0, void 0, void 0, function () { return __generator(this, function (_a) {
-    return [2, message_1.Message(msg, client)];
-}); }); });
-client.login(env.GetVal('CAL_TOKEN'));
+exports.VoiceStateUpdate = function (oldState, newState) {
+    if (oldState.channel)
+        oldStateChannel(oldState.channel);
+    if (newState.channel)
+        newStateChannel(newState.channel);
+};
+var oldStateChannel = function (channel) { return __awaiter(void 0, void 0, void 0, function () {
+    var users, connect;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0:
+                users = channel.members.map(function (m) { return m.user.username; }).toString();
+                if (!(users === 'キャル')) return [3, 2];
+                return [4, channel.join()];
+            case 1:
+                connect = _a.sent();
+                connect === null || connect === void 0 ? void 0 : connect.disconnect();
+                _a.label = 2;
+            case 2: return [2];
+        }
+    });
+}); };
+var newStateChannel = function (channel) { return __awaiter(void 0, void 0, void 0, function () {
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0:
+                if (channel.name === '宿屋')
+                    return [2];
+                return [4, channel.join()];
+            case 1:
+                _a.sent();
+                return [2];
+        }
+    });
+}); };
