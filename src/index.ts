@@ -1,6 +1,7 @@
 import * as Discord from 'discord.js'
 import * as env from './env'
 import {Ready} from './ready'
+import {VoiceStateUpdate} from './voiceStateUpdate'
 import {Message} from './message'
 
 const client = new Discord.Client()
@@ -12,26 +13,9 @@ client.on('ready', () => Ready(client))
  * ボイスチャンネルの入退出、ミュートの解除等を行った際に実行。
  * キャルの自動入退出を実装
  */
-client.on('voiceStateUpdate', async (oldState: Discord.VoiceState, newState: Discord.VoiceState) => {
-  // 退出前の処理
-  if (oldState.channel) {
-    const users = oldState.channel?.members.map(m => m.user.username).toString()
-    // ボイスチャンネルにキャルしか居ない場合は、キャルを切断する
-    if (users === 'キャル') {
-      const connect = await oldState.channel?.join()
-      connect?.disconnect()
-    }
-  }
-
-  // 退出後の処理
-  if (newState.channel) {
-    // 宿屋の場合は接続しない
-    if (newState.channel.name === '宿屋') return
-
-    // キャルをイベントがあったチャンネルに接続する
-    await newState.channel?.join()
-  }
-})
+client.on('voiceStateUpdate', async (oldState: Discord.VoiceState, newState: Discord.VoiceState) =>
+  VoiceStateUpdate(oldState, newState)
+)
 
 /**
  * メッセージが送信された際に実行
