@@ -11,7 +11,7 @@ dotenv.config()
  * キャルが起動した際に通知を送る
  */
 client.on('ready', () => {
-  const channel = client.channels.cache.get(process.env.READY_CHANNEL || '') as Discord.TextChannel
+  const channel = client.channels.cache.get(process.env.READY_CHANNEL!) as Discord.TextChannel
   channel?.send('キャルの参上よ！')
   console.log(`Logged in as ${client.user?.username}!`)
 })
