@@ -38,11 +38,11 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 exports.__esModule = true;
 exports.VoiceStateUpdate = function (oldState, newState) {
     if (oldState.channel)
-        proccesOldState(oldState.channel);
+        oldStateChannel(oldState.channel);
     if (newState.channel)
-        proccesNewState(newState.channel);
+        newStateChannel(newState.channel);
 };
-var proccesOldState = function (channel) { return __awaiter(void 0, void 0, void 0, function () {
+var oldStateChannel = function (channel) { return __awaiter(void 0, void 0, void 0, function () {
     var users, connect;
     return __generator(this, function (_a) {
         switch (_a.label) {
@@ -58,7 +58,7 @@ var proccesOldState = function (channel) { return __awaiter(void 0, void 0, void
         }
     });
 }); };
-var proccesNewState = function (channel) { return __awaiter(void 0, void 0, void 0, function () {
+var newStateChannel = function (channel) { return __awaiter(void 0, void 0, void 0, function () {
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:

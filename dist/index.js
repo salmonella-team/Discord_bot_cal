@@ -50,15 +50,10 @@ var voiceStateUpdate_1 = require("./voiceStateUpdate");
 var message_1 = require("./message");
 var client = new Discord.Client();
 client.on('ready', function () { return ready_1.Ready(client); });
-client.on('voiceStateUpdate', function (oldState, newState) { return __awaiter(void 0, void 0, void 0, function () { return __generator(this, function (_a) {
-    return [2, voiceStateUpdate_1.VoiceStateUpdate(oldState, newState)];
-}); }); });
-client.on('message', function (msg) { return __awaiter(void 0, void 0, void 0, function () { var _a; return __generator(this, function (_b) {
-    switch (_b.label) {
-        case 0:
-            _a = (function (text) { return text && console.log(text); });
-            return [4, message_1.Message(msg, client)];
-        case 1: return [2, _a.apply(void 0, [_b.sent()])];
-    }
+client.on('voiceStateUpdate', function (oldState, newState) {
+    return voiceStateUpdate_1.VoiceStateUpdate(oldState, newState);
+});
+client.on('message', function (msg) { return __awaiter(void 0, void 0, void 0, function () { return __generator(this, function (_a) {
+    return [2, message_1.Message(msg, client)];
 }); }); });
 client.login(env.GetVal('CAL_TOKEN'));
