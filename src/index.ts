@@ -1,17 +1,14 @@
 import * as Discord from 'discord.js'
-import * as dotenv from 'dotenv'
+import * as env from './env'
 import {Message} from './message'
 
 const client = new Discord.Client()
-
-// .envを有効にする
-dotenv.config()
 
 /**
  * キャルが起動した際に通知を送る
  */
 client.on('ready', () => {
-  const channel = client.channels.cache.get(process.env.READY_CHANNEL!) as Discord.TextChannel
+  const channel = client.channels.cache.get(env.GetVal('READY_CHANNEL')) as Discord.TextChannel
   channel?.send('キャルの参上よ！')
   console.log(`Logged in as ${client.user?.username}!`)
 })
@@ -52,4 +49,4 @@ client.on('message', async (msg: Discord.Message) =>
   (text => text && console.log(text))(await Message(msg, client))
 )
 
-client.login(process.env.CAL_TOKEN)
+client.login(env.GetVal('CAL_TOKEN'))

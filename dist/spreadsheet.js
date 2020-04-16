@@ -43,16 +43,15 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 exports.__esModule = true;
-var dotenv = __importStar(require("dotenv"));
-dotenv.config();
+var env = __importStar(require("./env"));
 var GoogleSpreadsheetAsPromised = require('google-spreadsheet-as-promised');
 var getWorksheet = function (name) { return __awaiter(void 0, void 0, void 0, function () {
     var CREDS, SHEET_ID, sheet;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
-                CREDS = JSON.parse(process.env.CREDS);
-                SHEET_ID = process.env.SHEET_ID;
+                CREDS = JSON.parse(env.GetVal('CREDS'));
+                SHEET_ID = env.GetVal('SHEET_ID');
                 sheet = new GoogleSpreadsheetAsPromised();
                 return [4, sheet.load(SHEET_ID, CREDS)];
             case 1:

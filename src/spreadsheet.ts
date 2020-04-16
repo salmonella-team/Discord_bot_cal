@@ -1,5 +1,4 @@
-import * as dotenv from 'dotenv'
-dotenv.config()
+import * as env from './env'
 
 const GoogleSpreadsheetAsPromised = require('google-spreadsheet-as-promised')
 
@@ -8,10 +7,10 @@ const GoogleSpreadsheetAsPromised = require('google-spreadsheet-as-promised')
  * @param name シートの名前
  * @return 取得したシート
  */
-const getWorksheet = async (name: string) => {
+const getWorksheet = async (name: string): Promise<any> => {
   // GoogleSpreadSheetで使う定数を定義
-  const CREDS = JSON.parse(process.env.CREDS!)
-  const SHEET_ID = process.env.SHEET_ID
+  const CREDS = JSON.parse(env.GetVal('CREDS'))
+  const SHEET_ID = env.GetVal('SHEET_ID')
 
   const sheet = new GoogleSpreadsheetAsPromised()
   await sheet.load(SHEET_ID, CREDS)

@@ -2,6 +2,7 @@ import * as Discord from 'discord.js'
 import * as cal from './cal'
 import * as speak from './speak'
 import * as spreadsheet from './spreadsheet'
+import * as env from './env'
 import {Option, Mode, Status} from './type'
 
 /**
@@ -54,7 +55,7 @@ export const Message = async (msg: Discord.Message, client: Discord.Client): Pro
       status.Volume = cal.VolumeDown(msg, status.Volume)
       return 'cal volume down'
 
-    case '/cal.volume': case '/cal.vol':
+    case '/cal.vol': case '/cal.volume':
       const content = command.split(' ')[1]
       status.Volume = cal.VolumeChange(msg, status.Volume, content)
       return 'cal volume change'
@@ -78,19 +79,19 @@ export const Message = async (msg: Discord.Message, client: Discord.Client): Pro
   // prettier-ignore
   switch (command) {
     case '/yabai': case '/yab':
-      speak.Play(msg, process.env.YABAI_URL, volume, 'ヤバいわよ！')
+      speak.Play(msg, env.GetVal('YABAI_URL'), volume, 'ヤバいわよ！')
       return 'speak yabai'
 
     case '/yabai.desu': case '/yabd':
-      speak.Play(msg, process.env.YABAIDESU_URL, volume, 'ヤバいですね☆')
+      speak.Play(msg, env.GetVal('YABAIDESU_URL'), volume, 'ヤバいですね☆')
       return 'speak yabai.desu'
 
     case '/yabai.wayo': case '/yabw':
-      speak.Play(msg, process.env.YABAIWAYO_URL, volume, 'プリコネの年末年始はヤバいわよ！')
+      speak.Play(msg, env.GetVal('YABAIWAYO_URL'), volume, 'プリコネの年末年始はヤバいわよ！')
       return 'speak yabai.wayo'
 
     case '/yabai.yaba': case '/yaby':
-      speak.Play(msg, process.env.YABAIYABA_URL, volume, 'ヤバいヤバいヤバいヤバいヤバいヤバいですね☆')
+      speak.Play(msg, env.GetVal('YABAIYABA_URL'), volume, 'ヤバいヤバいヤバいヤバいヤバいヤバいですね☆')
       return 'speak yabai.yaba'
   }
 
@@ -112,19 +113,19 @@ export const Message = async (msg: Discord.Message, client: Discord.Client): Pro
     // prettier-ignore
     switch (command) {
       case '/yabai.full': case '/yabf':
-        speak.Play(msg, process.env.YABAIFULL_URL, volume, 'プリコネの年末年始はヤバいわよ！(Full)')
+        speak.Play(msg, env.GetVal('YABAIFULL_URL'), volume, 'プリコネの年末年始はヤバいわよ！(Full)')
         return 'speak yabai.full'
 
       case '/yabai.yabai':
-        speak.Play(msg, process.env.YABAYABAI_URL, volume, 'ヤバいヤバいヤバいヤバいヤバいヤバい')
+        speak.Play(msg, env.GetVal('YABAYABAI_URL'), volume, 'ヤバいヤバいヤバいヤバいヤバいヤバい')
         return 'speak yabai.yabai'
 
       case '/yabai.slow':
-        speak.Play(msg, process.env.YABAISLOW_URL, volume, 'ヤバいヤバいヤバいヤバいヤバいヤバいですね☆(slow)')
+        speak.Play(msg, env.GetVal('YABAISLOW_URL'), volume, 'ヤバいヤバいヤバいヤバいヤバいヤバいですね☆(slow)')
         return 'speak yabai.slow'
 
       case '/yabai.otwr':
-        speak.Play(msg, process.env.YABAIOTWR_URL, volume, 'ヤバいヤバいヤバいヤバいヤバいヤバいですね☆(otwr)')
+        speak.Play(msg, env.GetVal('YABAIOTWR_URL'), volume, 'ヤバいヤバいヤバいヤバいヤバいヤバいですね☆(otwr)')
         return 'speak yabai.otwr'
     }
   }
