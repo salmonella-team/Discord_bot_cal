@@ -32,6 +32,9 @@ client.on('voiceStateUpdate', async (oldState: Discord.VoiceState, newState: Dis
 
   // 退出後の処理
   if (newState.channel) {
+    // 宿屋の場合は接続しない
+    if (newState.channel.name === '宿屋') return
+
     // キャルをイベントがあったチャンネルに接続する
     await newState.channel?.join()
   }
