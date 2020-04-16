@@ -42,15 +42,9 @@ export const Message = async (msg: Discord.Message, client: Discord.Client) => {
   comment = speakCommands(command, msg)
   if (comment) return console.log(comment)
 
-  // 存在しない場合の処理
-  if (command.charAt(0) !== '/') return
-
-  // ホワイトリストにコマンドがある場合は終了
-  const list = await spreadsheet.GetWhiteList()
-  if (list.find(l => l === command.slice(1))) return
-
-  msg.reply('そんなコマンドないんだけど！')
-  console.log('missing command')
+  // 存在しないコマンドの処理
+  comment = await notExistCommands(command, msg)
+  if (comment) return console.log(comment)
 }
 
 /**
@@ -208,4 +202,23 @@ const speakCommands = (command: string, msg: Discord.Message): Option<string> =>
 
   speak.Play(msg, value.env, status.Volume, value.text)
   return value.comment
+}
+
+/**
+ * 存在しないコマンドの処理をする。
+ * 実行した場合はコメントを返し、しなかった場合は何も返さない
+ * @param command 入力されたコマンド
+ * @param msg DiscordからのMessage
+ * @return 実行したコマンドの結果
+ */
+const notExistCommands = async (command: string, msg: Discord.Message): Promise<Option<string>> => {
+  // コマンドじゃない場合終了
+  if (command.charAt(0) !== '/') return
+
+  // ホワイトリストにコマンドがある場合は終了
+  const list = await spreadsheet.GetWhiteList()
+  if (list.find(l => l === command.slice(1))) return
+
+  msg.reply('そんなコマンドないんだけど！')
+  return 'missing command'
 }
