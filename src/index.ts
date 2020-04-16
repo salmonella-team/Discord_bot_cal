@@ -1,17 +1,12 @@
 import * as Discord from 'discord.js'
 import * as env from './env'
+import {Ready} from './ready'
 import {Message} from './message'
 
 const client = new Discord.Client()
 
-/**
- * キャルが起動した際に通知を送る
- */
-client.on('ready', () => {
-  const channel = client.channels.cache.get(env.GetVal('READY_CHANNEL')) as Discord.TextChannel
-  channel?.send('キャルの参上よ！')
-  console.log(`Logged in as ${client.user?.username}!`)
-})
+// botの起動時に実行
+client.on('ready', () => Ready(client))
 
 /**
  * ボイスチャンネルの入退出、ミュートの解除等を行った際に実行。
