@@ -12,6 +12,6 @@ dotenv.config();
 exports.GetVal = function (key) {
     var val = process.env[key];
     if (!val)
-        throw new Error('環境変数が見つかりませんでした。');
+        throw new Error('環境変数がセットされてないわよ！');
     return val;
 };
