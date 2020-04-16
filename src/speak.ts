@@ -1,5 +1,4 @@
 import * as Discord from 'discord.js'
-import {Option} from './type'
 
 /**
  * 音源をボイスチャンネルで再生させる
@@ -19,13 +18,10 @@ const sound = async (voice: Discord.VoiceState, url: string, volume: number) => 
  * @param url 再生させる音源のURL
  * @param volume キャルの音量
  */
-export const Play = async (msg: Discord.Message, url: Option<string>, volume: number, text: string) => {
+export const Play = async (msg: Discord.Message, url: string, volume: number, text: string) => {
   // 送信者がボイスチャンネルに入って居ない場合終了
   if (!msg.member?.voice.channel)
     return msg.reply('あんたがボイスチャンネルに居ないと喋れないじゃないの！')
-
-  // URLの音源がない場合終了
-  if (!url) return msg.reply('音源のURLがないわ')
 
   sound(msg.member?.voice, url, volume).then(_ => msg.reply(text))
 }

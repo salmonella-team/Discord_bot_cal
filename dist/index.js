@@ -44,13 +44,12 @@ var __importStar = (this && this.__importStar) || function (mod) {
 };
 exports.__esModule = true;
 var Discord = __importStar(require("discord.js"));
-var dotenv = __importStar(require("dotenv"));
+var env = __importStar(require("./env"));
 var message_1 = require("./message");
 var client = new Discord.Client();
-dotenv.config();
 client.on('ready', function () {
     var _a;
-    var channel = client.channels.cache.get(process.env.READY_CHANNEL || '');
+    var channel = client.channels.cache.get(env.GetVal('READY_CHANNEL'));
     channel === null || channel === void 0 ? void 0 : channel.send('キャルの参上よ！');
     console.log("Logged in as " + ((_a = client.user) === null || _a === void 0 ? void 0 : _a.username) + "!");
 });
@@ -88,4 +87,4 @@ client.on('message', function (msg) { return __awaiter(void 0, void 0, void 0, f
         case 1: return [2, _a.apply(void 0, [_b.sent()])];
     }
 }); }); });
-client.login(process.env.CAL_TOKEN);
+client.login(env.GetVal('CAL_TOKEN'));

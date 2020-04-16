@@ -46,6 +46,7 @@ exports.__esModule = true;
 var cal = __importStar(require("./cal"));
 var speak = __importStar(require("./speak"));
 var spreadsheet = __importStar(require("./spreadsheet"));
+var env = __importStar(require("./env"));
 var status = {
     Volume: 0.3,
     Mode: 0
@@ -81,8 +82,8 @@ exports.Message = function (msg, client) { return __awaiter(void 0, void 0, void
                     case '/cal.down':
                         status.Volume = cal.VolumeDown(msg, status.Volume);
                         return [2, 'cal volume down'];
-                    case '/cal.volume':
                     case '/cal.vol':
+                    case '/cal.volume':
                         content = command.split(' ')[1];
                         status.Volume = cal.VolumeChange(msg, status.Volume, content);
                         return [2, 'cal volume change'];
@@ -100,19 +101,19 @@ exports.Message = function (msg, client) { return __awaiter(void 0, void 0, void
                 switch (command) {
                     case '/yabai':
                     case '/yab':
-                        speak.Play(msg, process.env.YABAI_URL, volume, 'ヤバいわよ！');
+                        speak.Play(msg, env.GetVal('YABAI_URL'), volume, 'ヤバいわよ！');
                         return [2, 'speak yabai'];
                     case '/yabai.desu':
                     case '/yabd':
-                        speak.Play(msg, process.env.YABAIDESU_URL, volume, 'ヤバいですね☆');
+                        speak.Play(msg, env.GetVal('YABAIDESU_URL'), volume, 'ヤバいですね☆');
                         return [2, 'speak yabai.desu'];
                     case '/yabai.wayo':
                     case '/yabw':
-                        speak.Play(msg, process.env.YABAIWAYO_URL, volume, 'プリコネの年末年始はヤバいわよ！');
+                        speak.Play(msg, env.GetVal('YABAIWAYO_URL'), volume, 'プリコネの年末年始はヤバいわよ！');
                         return [2, 'speak yabai.wayo'];
                     case '/yabai.yaba':
                     case '/yaby':
-                        speak.Play(msg, process.env.YABAIYABA_URL, volume, 'ヤバいヤバいヤバいヤバいヤバいヤバいですね☆');
+                        speak.Play(msg, env.GetVal('YABAIYABA_URL'), volume, 'ヤバいヤバいヤバいヤバいヤバいヤバいですね☆');
                         return [2, 'speak yabai.yaba'];
                 }
                 if (status.Mode) {
@@ -132,16 +133,16 @@ exports.Message = function (msg, client) { return __awaiter(void 0, void 0, void
                     switch (command) {
                         case '/yabai.full':
                         case '/yabf':
-                            speak.Play(msg, process.env.YABAIFULL_URL, volume, 'プリコネの年末年始はヤバいわよ！(Full)');
+                            speak.Play(msg, env.GetVal('YABAIFULL_URL'), volume, 'プリコネの年末年始はヤバいわよ！(Full)');
                             return [2, 'speak yabai.full'];
                         case '/yabai.yabai':
-                            speak.Play(msg, process.env.YABAYABAI_URL, volume, 'ヤバいヤバいヤバいヤバいヤバいヤバい');
+                            speak.Play(msg, env.GetVal('YABAYABAI_URL'), volume, 'ヤバいヤバいヤバいヤバいヤバいヤバい');
                             return [2, 'speak yabai.yabai'];
                         case '/yabai.slow':
-                            speak.Play(msg, process.env.YABAISLOW_URL, volume, 'ヤバいヤバいヤバいヤバいヤバいヤバいですね☆(slow)');
+                            speak.Play(msg, env.GetVal('YABAISLOW_URL'), volume, 'ヤバいヤバいヤバいヤバいヤバいヤバいですね☆(slow)');
                             return [2, 'speak yabai.slow'];
                         case '/yabai.otwr':
-                            speak.Play(msg, process.env.YABAIOTWR_URL, volume, 'ヤバいヤバいヤバいヤバいヤバいヤバいですね☆(otwr)');
+                            speak.Play(msg, env.GetVal('YABAIOTWR_URL'), volume, 'ヤバいヤバいヤバいヤバいヤバいヤバいですね☆(otwr)');
                             return [2, 'speak yabai.otwr'];
                     }
                 }

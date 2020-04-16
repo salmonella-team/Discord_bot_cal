@@ -54,8 +54,6 @@ exports.Play = function (msg, url, volume, text) { return __awaiter(void 0, void
     return __generator(this, function (_c) {
         if (!((_a = msg.member) === null || _a === void 0 ? void 0 : _a.voice.channel))
             return [2, msg.reply('あんたがボイスチャンネルに居ないと喋れないじゃないの！')];
-        if (!url)
-            return [2, msg.reply('音源のURLがないわ')];
         sound((_b = msg.member) === null || _b === void 0 ? void 0 : _b.voice, url, volume).then(function (_) { return msg.reply(text); });
         return [2];
     });
