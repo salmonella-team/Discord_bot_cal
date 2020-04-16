@@ -3,7 +3,7 @@ import * as cal from './cal'
 import * as speak from './speak'
 import * as spreadsheet from './spreadsheet'
 import * as env from './env'
-import {Option, Mode, Status} from './type'
+import {Mode, Status} from './type'
 
 /**
  * キャルの音量とモードを管理
@@ -21,7 +21,7 @@ const status: Status = {
  * @param client bot(キャル)のclient
  * @return 実行したコマンドの結果
  */
-export const Message = async (msg: Discord.Message, client: Discord.Client): Promise<Option<string>> => {
+export const Message = async (msg: Discord.Message, client: Discord.Client) => {
   // キャルのメッセージはコマンド実行しない
   if (msg.member?.user.username === 'キャル') return
 
@@ -140,3 +140,5 @@ export const Message = async (msg: Discord.Message, client: Discord.Client): Pro
   msg.reply('そんなコマンドないんだけど！')
   return 'missing command'
 }
+
+// const calCommands =
