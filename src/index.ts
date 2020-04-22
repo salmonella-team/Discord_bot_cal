@@ -1,5 +1,5 @@
 import * as Discord from 'discord.js'
-import * as env from './env'
+import throwEnv from 'throw-env'
 import {Ready} from './ready'
 import {VoiceStateUpdate} from './voiceStateUpdate'
 import {Message} from './message'
@@ -17,4 +17,4 @@ client.on('voiceStateUpdate', (oldState: Discord.VoiceState, newState: Discord.V
 // メッセージが送信された際に実行
 client.on('message', async (msg: Discord.Message) => Message(msg, client))
 
-client.login(env.GetVal('CAL_TOKEN'))
+client.login(throwEnv('CAL_TOKEN'))

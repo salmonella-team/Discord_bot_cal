@@ -42,9 +42,12 @@ var __importStar = (this && this.__importStar) || function (mod) {
     result["default"] = mod;
     return result;
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 exports.__esModule = true;
 var Discord = __importStar(require("discord.js"));
-var env = __importStar(require("./env"));
+var throw_env_1 = __importDefault(require("throw-env"));
 var ready_1 = require("./ready");
 var voiceStateUpdate_1 = require("./voiceStateUpdate");
 var message_1 = require("./message");
@@ -56,4 +59,4 @@ client.on('voiceStateUpdate', function (oldState, newState) {
 client.on('message', function (msg) { return __awaiter(void 0, void 0, void 0, function () { return __generator(this, function (_a) {
     return [2, message_1.Message(msg, client)];
 }); }); });
-client.login(env.GetVal('CAL_TOKEN'));
+client.login(throw_env_1["default"]('CAL_TOKEN'));

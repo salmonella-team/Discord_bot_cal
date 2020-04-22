@@ -35,23 +35,19 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
-var __importStar = (this && this.__importStar) || function (mod) {
-    if (mod && mod.__esModule) return mod;
-    var result = {};
-    if (mod != null) for (var k in mod) if (Object.hasOwnProperty.call(mod, k)) result[k] = mod[k];
-    result["default"] = mod;
-    return result;
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 exports.__esModule = true;
-var env = __importStar(require("./env"));
+var throw_env_1 = __importDefault(require("throw-env"));
 var GoogleSpreadsheetAsPromised = require('google-spreadsheet-as-promised');
 var getWorksheet = function (name) { return __awaiter(void 0, void 0, void 0, function () {
     var CREDS, SHEET_ID, sheet;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
-                CREDS = JSON.parse(env.GetVal('CREDS'));
-                SHEET_ID = env.GetVal('SHEET_ID');
+                CREDS = JSON.parse(throw_env_1["default"]('CREDS'));
+                SHEET_ID = throw_env_1["default"]('SHEET_ID');
                 sheet = new GoogleSpreadsheetAsPromised();
                 return [4, sheet.load(SHEET_ID, CREDS)];
             case 1:
