@@ -35,6 +35,9 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 var __importStar = (this && this.__importStar) || function (mod) {
     if (mod && mod.__esModule) return mod;
     var result = {};
@@ -43,10 +46,10 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 exports.__esModule = true;
+var throw_env_1 = __importDefault(require("throw-env"));
 var cal = __importStar(require("./cal"));
 var speak = __importStar(require("./speak"));
 var spreadsheet = __importStar(require("./spreadsheet"));
-var env = __importStar(require("./env"));
 var status = {
     Volume: 0.3,
     Mode: 0
@@ -135,28 +138,28 @@ var speakCommands = function (command, msg) {
             case '/yabai':
             case '/yab':
                 return {
-                    env: env.GetVal('YABAI_URL'),
+                    env: throw_env_1["default"]('YABAI_URL'),
                     text: 'ヤバいわよ！',
                     comment: 'speak yabai'
                 };
             case '/yabai.desu':
             case '/yabd':
                 return {
-                    env: env.GetVal('YABAIDESU_URL'),
+                    env: throw_env_1["default"]('YABAIDESU_URL'),
                     text: 'ヤバいですね☆',
                     comment: 'speak yabai.desu'
                 };
             case '/yabai.wayo':
             case '/yabw':
                 return {
-                    env: env.GetVal('YABAIWAYO_URL'),
+                    env: throw_env_1["default"]('YABAIWAYO_URL'),
                     text: 'プリコネの年末年始はヤバいわよ！',
                     comment: 'speak yabai.wayo'
                 };
             case '/yabai.yaba':
             case '/yaby':
                 return {
-                    env: env.GetVal('YABAIYABA_URL'),
+                    env: throw_env_1["default"]('YABAIYABA_URL'),
                     text: 'ヤバいヤバいヤバいヤバいヤバいヤバいですね☆',
                     comment: 'speak yabai.yaba'
                 };
@@ -167,25 +170,25 @@ var speakCommands = function (command, msg) {
             case '/yabai.full':
             case '/yabf':
                 return {
-                    env: env.GetVal('YABAIFULL_URL'),
+                    env: throw_env_1["default"]('YABAIFULL_URL'),
                     text: 'プリコネの年末年始はヤバいわよ！(Full)',
                     comment: 'speak yabai.full'
                 };
             case '/yabai.yabai':
                 return {
-                    env: env.GetVal('YABAYABAI_URL'),
+                    env: throw_env_1["default"]('YABAYABAI_URL'),
                     text: 'ヤバいヤバいヤバいヤバいヤバいヤバい',
                     comment: 'speak yabai.yabai'
                 };
             case '/yabai.slow':
                 return {
-                    env: env.GetVal('YABAISLOW_URL'),
+                    env: throw_env_1["default"]('YABAISLOW_URL'),
                     text: 'ヤバいヤバいヤバいヤバいヤバいヤバいですね☆(slow)',
                     comment: 'speak yabai.slow'
                 };
             case '/yabai.otwr':
                 return {
-                    env: env.GetVal('YABAIOTWR_URL'),
+                    env: throw_env_1["default"]('YABAIOTWR_URL'),
                     text: 'ヤバいヤバいヤバいヤバいヤバいヤバいですね☆(otwr)',
                     comment: 'speak yabai.otwr'
                 };

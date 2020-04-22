@@ -1,9 +1,10 @@
 import * as Discord from 'discord.js'
+import throwEnv from 'throw-env'
+import Option from 'type-of-option'
 import * as cal from './cal'
 import * as speak from './speak'
 import * as spreadsheet from './spreadsheet'
-import * as env from './env'
-import {Mode, Status, Option} from './type'
+import {Mode, Status} from './type'
 
 /**
  * キャルの音量とモードを管理
@@ -133,14 +134,14 @@ const speakCommands = (command: string, msg: Discord.Message): Option<string> =>
       case '/yabai':
       case '/yab':
         return {
-          env: env.GetVal('YABAI_URL'),
+          env: throwEnv('YABAI_URL'),
           text: 'ヤバいわよ！',
           comment: 'speak yabai',
         }
       case '/yabai.desu':
       case '/yabd':
         return {
-          env: env.GetVal('YABAIDESU_URL'),
+          env: throwEnv('YABAIDESU_URL'),
           text: 'ヤバいですね☆',
           comment: 'speak yabai.desu',
         }
@@ -148,7 +149,7 @@ const speakCommands = (command: string, msg: Discord.Message): Option<string> =>
       case '/yabai.wayo':
       case '/yabw':
         return {
-          env: env.GetVal('YABAIWAYO_URL'),
+          env: throwEnv('YABAIWAYO_URL'),
           text: 'プリコネの年末年始はヤバいわよ！',
           comment: 'speak yabai.wayo',
         }
@@ -156,7 +157,7 @@ const speakCommands = (command: string, msg: Discord.Message): Option<string> =>
       case '/yabai.yaba':
       case '/yaby':
         return {
-          env: env.GetVal('YABAIYABA_URL'),
+          env: throwEnv('YABAIYABA_URL'),
           text: 'ヤバいヤバいヤバいヤバいヤバいヤバいですね☆',
           comment: 'speak yabai.yaba',
         }
@@ -169,28 +170,28 @@ const speakCommands = (command: string, msg: Discord.Message): Option<string> =>
       case '/yabai.full':
       case '/yabf':
         return {
-          env: env.GetVal('YABAIFULL_URL'),
+          env: throwEnv('YABAIFULL_URL'),
           text: 'プリコネの年末年始はヤバいわよ！(Full)',
           comment: 'speak yabai.full',
         }
 
       case '/yabai.yabai':
         return {
-          env: env.GetVal('YABAYABAI_URL'),
+          env: throwEnv('YABAYABAI_URL'),
           text: 'ヤバいヤバいヤバいヤバいヤバいヤバい',
           comment: 'speak yabai.yabai',
         }
 
       case '/yabai.slow':
         return {
-          env: env.GetVal('YABAISLOW_URL'),
+          env: throwEnv('YABAISLOW_URL'),
           text: 'ヤバいヤバいヤバいヤバいヤバいヤバいですね☆(slow)',
           comment: 'speak yabai.slow',
         }
 
       case '/yabai.otwr':
         return {
-          env: env.GetVal('YABAIOTWR_URL'),
+          env: throwEnv('YABAIOTWR_URL'),
           text: 'ヤバいヤバいヤバいヤバいヤバいヤバいですね☆(otwr)',
           comment: 'speak yabai.otwr',
         }
