@@ -1,10 +1,10 @@
 import * as Discord from 'discord.js'
 import throwEnv from 'throw-env'
 import Option from 'type-of-option'
-import * as cal from './cal'
-import * as speak from './speak'
-import * as spreadsheet from './spreadsheet'
-import {Mode, Status} from './type'
+import * as cal from '../message/cal'
+import * as speak from '../message/speak'
+import * as spreadsheet from '../message/spreadsheet'
+import {Mode, Status} from '../config/type'
 
 /**
  * キャルの音量とモードを管理
