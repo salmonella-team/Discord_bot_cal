@@ -23,6 +23,9 @@
 `Develop`ロールが付与されているユーザーのみが管理ができます。詳しくは`/cal.help`を参照してください。  
 spreadsheet: [discord-bot-cal](https://docs.google.com/spreadsheets/d/1IbkSu3kGxhxy9_rI8p_stEWvqSDAYnEUcVUA02TaPfk/edit?usp=sharing)  
 
+### Link
+[discord-bot-cal | Heroku](https://dashboard.heroku.com/apps/discord-bot-cal)
+
 ### npm
 
 - install  
