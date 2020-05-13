@@ -1,6 +1,6 @@
 import {ClientVoiceManager, Message, VoiceConnection, VoiceChannel} from 'discord.js'
 import Option from 'type-of-option'
-import {Mode, Status} from './type'
+import {Mode, Status} from '../config/type'
 import * as spreadsheet from './spreadsheet'
 
 /**

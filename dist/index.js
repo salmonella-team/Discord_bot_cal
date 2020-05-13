@@ -48,9 +48,9 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 exports.__esModule = true;
 var Discord = __importStar(require("discord.js"));
 var throw_env_1 = __importDefault(require("throw-env"));
-var ready_1 = require("./ready");
-var voiceStateUpdate_1 = require("./voiceStateUpdate");
-var message_1 = require("./message");
+var ready_1 = require("./client/ready");
+var voiceStateUpdate_1 = require("./client/voiceStateUpdate");
+var message_1 = require("./client/message");
 var client = new Discord.Client();
 client.on('ready', function () { return ready_1.Ready(client); });
 client.on('voiceStateUpdate', function (oldState, newState) {

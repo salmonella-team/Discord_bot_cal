@@ -47,9 +47,9 @@ var __importStar = (this && this.__importStar) || function (mod) {
 };
 exports.__esModule = true;
 var throw_env_1 = __importDefault(require("throw-env"));
-var cal = __importStar(require("./cal"));
-var speak = __importStar(require("./speak"));
-var spreadsheet = __importStar(require("./spreadsheet"));
+var cal = __importStar(require("../message/cal"));
+var speak = __importStar(require("../message/speak"));
+var spreadsheet = __importStar(require("../message/spreadsheet"));
 var status = {
     Volume: 0.3,
     Mode: 0
