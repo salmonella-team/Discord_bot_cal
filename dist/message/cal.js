@@ -35,6 +35,9 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 var __importStar = (this && this.__importStar) || function (mod) {
     if (mod && mod.__esModule) return mod;
     var result = {};
@@ -42,10 +45,8 @@ var __importStar = (this && this.__importStar) || function (mod) {
     result["default"] = mod;
     return result;
 };
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 exports.__esModule = true;
+var throw_env_1 = __importDefault(require("throw-env"));
 var spreadsheet = __importStar(require("./spreadsheet"));
 var const_settings_1 = __importDefault(require("../config/const-settings"));
 var roundFloat = function (n) { return Math.round(n * 10) / 10; };
@@ -166,3 +167,24 @@ exports.SwitchMode = function (msg, mode) {
     msg.reply(mode ? 'DevModeになったわよ！' : 'DevModeを解除したわ');
     return mode;
 };
+exports.Yabai = function (msg, client, volume) { return __awaiter(void 0, void 0, void 0, function () {
+    var roles, channel, connect;
+    var _a;
+    return __generator(this, function (_b) {
+        switch (_b.label) {
+            case 0:
+                roles = (_a = msg.member) === null || _a === void 0 ? void 0 : _a.roles.cache.map(function (r) { return r.name; });
+                if (!const_settings_1["default"].REMOTE_YABAI.some(function (r) { return roles === null || roles === void 0 ? void 0 : roles.find(function (v) { return v === r; }); })) {
+                    msg.reply('そんなコマンドないんだけど！');
+                    return [2];
+                }
+                channel = client.channels.cache.get(throw_env_1["default"]('REMOTE_YABAI_CHANNEL'));
+                return [4, (channel === null || channel === void 0 ? void 0 : channel.join())];
+            case 1:
+                connect = _b.sent();
+                connect === null || connect === void 0 ? void 0 : connect.play(const_settings_1["default"].URL.YABAI, { volume: volume });
+                msg.reply('ヤバいわよ！');
+                return [2];
+        }
+    });
+}); };

@@ -115,6 +115,9 @@ var calCommands = function (command, msg, client) {
         case '/cal.mode':
             status.Mode = cal.SwitchMode(msg, status.Mode);
             return 'switch devMode';
+        case '/cal.yabai':
+            cal.Yabai(msg, client, status.Volume);
+            return 'cal yabai';
     }
     if (!status.Mode)
         return;

@@ -6,7 +6,10 @@ COMMAND_CHANNEL:
 
 # DevModeに切り替えられるロール
 DEVELOP_ROLE:
-  - Develop
+  - ヤバイわよ！
+
+# リモートヤバイわよ！できるロール
+REMOTE_YABAI:
   - ヤバイわよ！
 
 # ホワイトリストのシート名とセルの範囲

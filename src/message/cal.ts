@@ -1,4 +1,5 @@
-import {ClientVoiceManager, Message, VoiceConnection, VoiceChannel} from 'discord.js'
+import {Client, ClientVoiceManager, Message, VoiceConnection, VoiceChannel} from 'discord.js'
+import throwEnv from 'throw-env'
 import Option from 'type-of-option'
 import * as spreadsheet from './spreadsheet'
 import {Mode, Status} from '../config/type'
@@ -229,4 +230,20 @@ export const SwitchMode = (msg: Message, mode: Mode): Mode => {
   mode = ~mode
   msg.reply(mode ? 'DevModeになったわよ！' : 'DevModeを解除したわ')
   return mode
+}
+
+export const Yabai = async (msg: Message, client: Client, volume: number) => {
+  // メッセージ送信者のロール一覧を取得
+  const roles = msg.member?.roles.cache.map(r => r.name)
+
+  if (!Settings.REMOTE_YABAI.some((r: string) => roles?.find(v => v === r))) {
+    msg.reply('そんなコマンドないんだけど！')
+    return
+  }
+
+  const channel = client.channels.cache.get(throwEnv('REMOTE_YABAI_CHANNEL')) as VoiceChannel
+  const connect = await channel?.join()
+  connect?.play(Settings.URL.YABAI, {volume: volume})
+
+  msg.reply('ヤバいわよ！')
 }
