@@ -40,6 +40,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 exports.__esModule = true;
 var throw_env_1 = __importDefault(require("throw-env"));
+var const_settings_1 = __importDefault(require("../config/const-settings"));
 var GoogleSpreadsheetAsPromised = require('google-spreadsheet-as-promised');
 var getWorksheet = function (name) { return __awaiter(void 0, void 0, void 0, function () {
     var CREDS, SHEET_ID, sheet;
@@ -60,10 +61,10 @@ exports.GetWhiteList = function () { return __awaiter(void 0, void 0, void 0, fu
     var worksheet, cells;
     return __generator(this, function (_a) {
         switch (_a.label) {
-            case 0: return [4, getWorksheet('ホワイトリスト')];
+            case 0: return [4, getWorksheet(const_settings_1["default"].WHITE_LIST.SHEET)];
             case 1:
                 worksheet = _a.sent();
-                return [4, worksheet.getCells('A2:A100')];
+                return [4, worksheet.getCells(const_settings_1["default"].WHITE_LIST.CELLS)];
             case 2:
                 cells = _a.sent();
                 return [2, cells.getAllValues().filter(function (v) { return v; })];
@@ -74,10 +75,10 @@ exports.AddWhiteList = function (name) { return __awaiter(void 0, void 0, void 0
     var worksheet, cells, l, cell;
     return __generator(this, function (_a) {
         switch (_a.label) {
-            case 0: return [4, getWorksheet('ホワイトリスト')];
+            case 0: return [4, getWorksheet(const_settings_1["default"].WHITE_LIST.SHEET)];
             case 1:
                 worksheet = _a.sent();
-                return [4, worksheet.getCells('A2:A100')];
+                return [4, worksheet.getCells(const_settings_1["default"].WHITE_LIST.CELLS)];
             case 2:
                 cells = _a.sent();
                 if (cells.getAllValues().find(function (v) { return v === name; }))

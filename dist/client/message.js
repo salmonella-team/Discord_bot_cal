@@ -35,9 +35,6 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 var __importStar = (this && this.__importStar) || function (mod) {
     if (mod && mod.__esModule) return mod;
     var result = {};
@@ -45,11 +42,14 @@ var __importStar = (this && this.__importStar) || function (mod) {
     result["default"] = mod;
     return result;
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 exports.__esModule = true;
-var throw_env_1 = __importDefault(require("throw-env"));
 var cal = __importStar(require("../message/cal"));
 var speak = __importStar(require("../message/speak"));
 var spreadsheet = __importStar(require("../message/spreadsheet"));
+var const_settings_1 = __importDefault(require("../config/const-settings"));
 var status = {
     Volume: 0.3,
     Mode: 0
@@ -63,7 +63,7 @@ exports.Message = function (msg, client) { return __awaiter(void 0, void 0, void
                 if (((_a = msg.member) === null || _a === void 0 ? void 0 : _a.user.username) === 'キャル')
                     return [2];
                 channel = msg.channel;
-                if ((channel === null || channel === void 0 ? void 0 : channel.name) !== '効果音-001' && (channel === null || channel === void 0 ? void 0 : channel.name) !== 'テスト用')
+                if (!const_settings_1["default"].COMMAND_CHANNEL.some(function (c) { return c === (channel === null || channel === void 0 ? void 0 : channel.name); }))
                     return [2];
                 command = msg.content.replace(/ |\.|,|:|=/, '.');
                 comment = calCommands(command, msg, client);
@@ -138,28 +138,28 @@ var speakCommands = function (command, msg) {
             case '/yabai':
             case '/yab':
                 return {
-                    env: throw_env_1["default"]('YABAI_URL'),
+                    url: const_settings_1["default"].URL.YABAI,
                     text: 'ヤバいわよ！',
                     comment: 'speak yabai'
                 };
             case '/yabai.desu':
             case '/yabd':
                 return {
-                    env: throw_env_1["default"]('YABAIDESU_URL'),
+                    url: const_settings_1["default"].URL.YABAIDESU,
                     text: 'ヤバいですね☆',
                     comment: 'speak yabai.desu'
                 };
             case '/yabai.wayo':
             case '/yabw':
                 return {
-                    env: throw_env_1["default"]('YABAIWAYO_URL'),
+                    url: const_settings_1["default"].URL.YABAIWAYO,
                     text: 'プリコネの年末年始はヤバいわよ！',
                     comment: 'speak yabai.wayo'
                 };
             case '/yabai.yaba':
             case '/yaby':
                 return {
-                    env: throw_env_1["default"]('YABAIYABA_URL'),
+                    url: const_settings_1["default"].URL.YABAIYABA,
                     text: 'ヤバいヤバいヤバいヤバいヤバいヤバいですね☆',
                     comment: 'speak yabai.yaba'
                 };
@@ -170,25 +170,25 @@ var speakCommands = function (command, msg) {
             case '/yabai.full':
             case '/yabf':
                 return {
-                    env: throw_env_1["default"]('YABAIFULL_URL'),
+                    url: const_settings_1["default"].URL.YABAIFULL,
                     text: 'プリコネの年末年始はヤバいわよ！(Full)',
                     comment: 'speak yabai.full'
                 };
             case '/yabai.yabai':
                 return {
-                    env: throw_env_1["default"]('YABAYABAI_URL'),
+                    url: const_settings_1["default"].URL.YABAIYABAI,
                     text: 'ヤバいヤバいヤバいヤバいヤバいヤバい',
                     comment: 'speak yabai.yabai'
                 };
             case '/yabai.slow':
                 return {
-                    env: throw_env_1["default"]('YABAISLOW_URL'),
+                    url: const_settings_1["default"].URL.YABAISLOW,
                     text: 'ヤバいヤバいヤバいヤバいヤバいヤバいですね☆(slow)',
                     comment: 'speak yabai.slow'
                 };
             case '/yabai.otwr':
                 return {
-                    env: throw_env_1["default"]('YABAIOTWR_URL'),
+                    url: const_settings_1["default"].URL.YABAIOTWR,
                     text: 'ヤバいヤバいヤバいヤバいヤバいヤバいですね☆(otwr)',
                     comment: 'speak yabai.otwr'
                 };
@@ -196,7 +196,7 @@ var speakCommands = function (command, msg) {
     })();
     if (!value)
         return;
-    speak.Play(msg, value.env, status.Volume, value.text);
+    speak.Play(msg, value.url, status.Volume, value.text);
     return value.comment;
 };
 var notExistCommands = function (command, msg) { return __awaiter(void 0, void 0, void 0, function () {

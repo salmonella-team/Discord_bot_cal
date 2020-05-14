@@ -42,8 +42,12 @@ var __importStar = (this && this.__importStar) || function (mod) {
     result["default"] = mod;
     return result;
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 exports.__esModule = true;
 var spreadsheet = __importStar(require("./spreadsheet"));
+var const_settings_1 = __importDefault(require("../config/const-settings"));
 var roundFloat = function (n) { return Math.round(n * 10) / 10; };
 exports.ShowStatus = function (msg, voice, status) {
     var channel = voice === null || voice === void 0 ? void 0 : voice.connections.map(function (v) { return v.channel.name; }).toString();
@@ -154,7 +158,7 @@ exports.Help = function (msg, mode) {
 exports.SwitchMode = function (msg, mode) {
     var _a;
     var roles = (_a = msg.member) === null || _a === void 0 ? void 0 : _a.roles.cache.map(function (r) { return r.name; });
-    if (!(roles === null || roles === void 0 ? void 0 : roles.find(function (r) { return r === 'Develop'; }))) {
+    if (!const_settings_1["default"].DEVELOP_ROLE.some(function (r) { return roles === null || roles === void 0 ? void 0 : roles.find(function (v) { return v === r; }); })) {
         msg.reply('Developじゃないやつにモードを切り替える権限ないわ');
         return mode;
     }

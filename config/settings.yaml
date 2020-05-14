@@ -1,0 +1,26 @@
+# コマンドが入力できるチャンネル
+COMMAND_CHANNEL:
+  - 効果音-001
+  - テスト用
+  - bot-test
+
+# DevModeに切り替えられるロール
+DEVELOP_ROLE:
+  - Develop
+  - ヤバイわよ！
+
+# ホワイトリストのシート名とセルの範囲
+WHITE_LIST:
+  SHEET: ホワイトリスト
+  CELLS: A2:A100
+
+# 音源のURL
+URL:
+  YABAI:      https://owncloud.s4m0r1.me/index.php/s/TgQLRPNxXbtRXz2/download
+  YABAIWAYO:  https://owncloud.s4m0r1.me/index.php/s/WyLnZa3y4LS9er9/download
+  YABAIDESU:  https://owncloud.s4m0r1.me/index.php/s/gA4yMyTpJ6wYLra/download
+  YABAIYABA:  https://owncloud.s4m0r1.me/index.php/s/cHbAwR6DJ8Zy53E/download
+  YABAIFULL:  https://owncloud.s4m0r1.me/index.php/s/CPKx3cJggfoS9pX/download
+  YABAIYABAI: https://owncloud.s4m0r1.me/index.php/s/BBbBtPz2WcLRjgY/download
+  YABAISLOW:  https://owncloud.s4m0r1.me/index.php/s/3FTLEWHXP6yjScp/download
+  YABAIOTWR:  https://owncloud.s4m0r1.me/index.php/s/eJX8Ax98SGyQGAy/download

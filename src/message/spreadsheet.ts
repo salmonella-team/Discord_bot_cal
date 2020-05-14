@@ -1,4 +1,5 @@
 import throwEnv from 'throw-env'
+import Settings from '../config/const-settings'
 
 const GoogleSpreadsheetAsPromised = require('google-spreadsheet-as-promised')
 
@@ -22,8 +23,8 @@ const getWorksheet = async (name: string): Promise<any> => {
  * @return ホワイトリストの配列
  */
 export const GetWhiteList = async (): Promise<string[]> => {
-  const worksheet = await getWorksheet('ホワイトリスト')
-  const cells = await worksheet.getCells('A2:A100')
+  const worksheet = await getWorksheet(Settings.WHITE_LIST.SHEET)
+  const cells = await worksheet.getCells(Settings.WHITE_LIST.CELLS)
   return cells.getAllValues().filter((v: string) => v)
 }
 
@@ -34,8 +35,8 @@ export const GetWhiteList = async (): Promise<string[]> => {
  * @return 追加されたかどうかの結果
  */
 export const AddWhiteList = async (name: string): Promise<boolean> => {
-  const worksheet = await getWorksheet('ホワイトリスト')
-  const cells = await worksheet.getCells('A2:A100')
+  const worksheet = await getWorksheet(Settings.WHITE_LIST.SHEET)
+  const cells = await worksheet.getCells(Settings.WHITE_LIST.CELLS)
 
   // 既に登録されていたら終了
   if (cells.getAllValues().find((v: string) => v === name)) return false
