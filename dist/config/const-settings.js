@@ -10,5 +10,6 @@ exports.__esModule = true;
 var fs = __importStar(require("fs"));
 var yaml = __importStar(require("js-yaml"));
 var yml = fs.readFileSync(process.cwd() + "/config/settings.yaml");
-var Settings = yaml.safeLoad(String(yml), 'utf-8');
+var option = 'utf-8';
+var Settings = yaml.safeLoad(String(yml), option);
 exports["default"] = Settings;
