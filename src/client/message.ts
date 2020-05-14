@@ -95,13 +95,13 @@ const calCommands = (command: string, msg: Discord.Message, client: Discord.Clie
       cal.Help(msg, status.Mode)
       return 'cal help'
 
-    case '/cal.mode':
-      status.Mode = cal.SwitchMode(msg, status.Mode)
-      return 'switch devMode'
-
     case '/cal.yabai':
       cal.Yabai(msg, client, status.Volume)
       return 'cal yabai'
+
+    case '/cal.mode':
+      status.Mode = cal.SwitchMode(msg, status.Mode)
+      return 'switch devMode'
   }
 
   // DevModeでない場合、下の処理は行わない
