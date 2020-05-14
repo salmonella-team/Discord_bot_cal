@@ -1,10 +1,10 @@
 import * as Discord from 'discord.js'
-import throwEnv from 'throw-env'
 import Option from 'type-of-option'
 import * as cal from '../message/cal'
 import * as speak from '../message/speak'
 import * as spreadsheet from '../message/spreadsheet'
 import {Mode, Status} from '../config/type'
+import Settings from '../config/const-settings'
 
 /**
  * キャルの音量とモードを管理
@@ -126,7 +126,7 @@ const calCommands = (command: string, msg: Discord.Message, client: Discord.Clie
  */
 const speakCommands = (command: string, msg: Discord.Message): Option<string> => {
   const value: Option<{
-    env: string
+    url: string
     text: string
     comment: string
   }> = (() => {
@@ -134,14 +134,14 @@ const speakCommands = (command: string, msg: Discord.Message): Option<string> =>
       case '/yabai':
       case '/yab':
         return {
-          env: throwEnv('YABAI_URL'),
+          url: Settings.URL.YABAI,
           text: 'ヤバいわよ！',
           comment: 'speak yabai',
         }
       case '/yabai.desu':
       case '/yabd':
         return {
-          env: throwEnv('YABAIDESU_URL'),
+          url: Settings.URL.YABAIDESU,
           text: 'ヤバいですね☆',
           comment: 'speak yabai.desu',
         }
@@ -149,7 +149,7 @@ const speakCommands = (command: string, msg: Discord.Message): Option<string> =>
       case '/yabai.wayo':
       case '/yabw':
         return {
-          env: throwEnv('YABAIWAYO_URL'),
+          url: Settings.URL.YABAIWAYO,
           text: 'プリコネの年末年始はヤバいわよ！',
           comment: 'speak yabai.wayo',
         }
@@ -157,7 +157,7 @@ const speakCommands = (command: string, msg: Discord.Message): Option<string> =>
       case '/yabai.yaba':
       case '/yaby':
         return {
-          env: throwEnv('YABAIYABA_URL'),
+          url: Settings.URL.YABAIYABA,
           text: 'ヤバいヤバいヤバいヤバいヤバいヤバいですね☆',
           comment: 'speak yabai.yaba',
         }
@@ -170,28 +170,28 @@ const speakCommands = (command: string, msg: Discord.Message): Option<string> =>
       case '/yabai.full':
       case '/yabf':
         return {
-          env: throwEnv('YABAIFULL_URL'),
+          url: Settings.URL.YABAIFULL,
           text: 'プリコネの年末年始はヤバいわよ！(Full)',
           comment: 'speak yabai.full',
         }
 
       case '/yabai.yabai':
         return {
-          env: throwEnv('YABAYABAI_URL'),
+          url: Settings.URL.YABAIYABAI,
           text: 'ヤバいヤバいヤバいヤバいヤバいヤバい',
           comment: 'speak yabai.yabai',
         }
 
       case '/yabai.slow':
         return {
-          env: throwEnv('YABAISLOW_URL'),
+          url: Settings.URL.YABAISLOW,
           text: 'ヤバいヤバいヤバいヤバいヤバいヤバいですね☆(slow)',
           comment: 'speak yabai.slow',
         }
 
       case '/yabai.otwr':
         return {
-          env: throwEnv('YABAIOTWR_URL'),
+          url: Settings.URL.YABAIOTWR,
           text: 'ヤバいヤバいヤバいヤバいヤバいヤバいですね☆(otwr)',
           comment: 'speak yabai.otwr',
         }
@@ -201,7 +201,7 @@ const speakCommands = (command: string, msg: Discord.Message): Option<string> =>
   // コマンドがない場合終了
   if (!value) return
 
-  speak.Play(msg, value.env, status.Volume, value.text)
+  speak.Play(msg, value.url, status.Volume, value.text)
   return value.comment
 }
 
