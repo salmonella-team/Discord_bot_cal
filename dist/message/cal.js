@@ -35,6 +35,9 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 var __importStar = (this && this.__importStar) || function (mod) {
     if (mod && mod.__esModule) return mod;
     var result = {};
@@ -42,10 +45,8 @@ var __importStar = (this && this.__importStar) || function (mod) {
     result["default"] = mod;
     return result;
 };
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 exports.__esModule = true;
+var throw_env_1 = __importDefault(require("throw-env"));
 var spreadsheet = __importStar(require("./spreadsheet"));
 var const_settings_1 = __importDefault(require("../config/const-settings"));
 var roundFloat = function (n) { return Math.round(n * 10) / 10; };
@@ -155,11 +156,34 @@ exports.Help = function (msg, mode) {
         : "\u9B54\u6CD5\u4E00\u89A7\u3088\uFF01```\n/cal        \u30AD\u30E3\u30EB\u306E\u72B6\u614B\u3092\u8868\u793A\n/cal.in     \u30AD\u30E3\u30EB\u3092\u30DC\u30A4\u30B9\u30C1\u30E3\u30F3\u30CD\u30EB\u306B\u63A5\u7D9A\n/cal.out    \u30AD\u30E3\u30EB\u3092\u30DC\u30A4\u30B9\u30C1\u30E3\u30F3\u30CD\u30EB\u304B\u3089\u5207\u65AD\n/cal.up     \u30AD\u30E3\u30EB\u306E\u58F0\u91CF\u3092\u4E0A\u3052\u308B\n/cal.down   \u30AD\u30E3\u30EB\u306E\u58F0\u91CF\u3092\u4E0B\u3052\u308B\n/cal.volume <0.1~1.0> \u30AD\u30E3\u30EB\u306E\u58F0\u91CF\u3092\u6307\u5B9A\u306E\u97F3\u91CF\u306B\u3059\u308B\n/cal.reset  \u30AD\u30E3\u30EB\u306E\u97F3\u91CF\u3092\u30EA\u30BB\u30C3\u30C8\u3059\u308B\n/cal.help   \u30AD\u30E3\u30EB\u306E\u30B3\u30DE\u30F3\u30C9\u4E00\u89A7\n\n/yabai      \u30E4\u30D0\u3044\u308F\u3088\uFF01\n/yabai.desu \u30E4\u30D0\u3044\u3067\u3059\u306D\u2606\n/yabai.wayo \u30D7\u30EA\u30B3\u30CD\u306E\u5E74\u672B\u5E74\u59CB\u306F\u30E4\u30D0\u3044\u308F\u3088\uFF01\n/yabai.yaba \u30E4\u30D0\u3044\u30E4\u30D0\u3044\u30E4\u30D0\u3044\u30E4\u30D0\u3044\u30E4\u30D0\u3044\u30E4\u30D0\u3044\u3067\u3059\u306D\u2606\n```\u203B`.`\u306F` `\u3067\u4EE3\u7528\u53EF\u80FD\u3000\u4F8B:`/cal help`\n";
     msg.reply(help);
 };
+var getMsgUserRoles = function (msg) { var _a; return (_a = msg.member) === null || _a === void 0 ? void 0 : _a.roles.cache.map(function (r) { return r.name; }); };
+var isRole = function (checkRoles, userRoles) {
+    return !checkRoles.some(function (r) { return userRoles === null || userRoles === void 0 ? void 0 : userRoles.find(function (v) { return v === r; }); });
+};
+exports.Yabai = function (msg, client, volume) { return __awaiter(void 0, void 0, void 0, function () {
+    var roles, channel, connect;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0:
+                roles = getMsgUserRoles(msg);
+                if (isRole(const_settings_1["default"].REMOTE_YABAI, roles)) {
+                    msg.reply('そんなコマンドないんだけど！');
+                    return [2];
+                }
+                channel = client.channels.cache.get(throw_env_1["default"]('REMOTE_YABAI_CHANNEL'));
+                return [4, (channel === null || channel === void 0 ? void 0 : channel.join())];
+            case 1:
+                connect = _a.sent();
+                connect === null || connect === void 0 ? void 0 : connect.play(const_settings_1["default"].URL.YABAI, { volume: volume });
+                msg.reply('リモートヤバいわよ！');
+                return [2];
+        }
+    });
+}); };
 exports.SwitchMode = function (msg, mode) {
-    var _a;
-    var roles = (_a = msg.member) === null || _a === void 0 ? void 0 : _a.roles.cache.map(function (r) { return r.name; });
-    if (!const_settings_1["default"].DEVELOP_ROLE.some(function (r) { return roles === null || roles === void 0 ? void 0 : roles.find(function (v) { return v === r; }); })) {
-        msg.reply('Developじゃないやつにモードを切り替える権限ないわ');
+    var roles = getMsgUserRoles(msg);
+    if (isRole(const_settings_1["default"].DEVELOP_ROLE, roles)) {
+        msg.reply('あんたにモードを切り替える権限ないわ');
         return mode;
     }
     mode = ~mode;
