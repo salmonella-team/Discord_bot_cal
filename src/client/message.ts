@@ -28,7 +28,7 @@ export const Message = async (msg: Discord.Message, client: Discord.Client) => {
 
   // 指定のチャンネル以外でキャルが動かないようにする
   const channel = msg.channel as Discord.TextChannel
-  if (channel?.name !== '効果音-001' && channel?.name !== 'テスト用') return
+  if (!Settings.COMMAND_CHANNEL.some((c: string) => c === channel?.name)) return
 
   // スペース、カンマ、コロン、イコールの場合でもコマンドが動くようにピリオドに変換する
   const command: string = msg.content.replace(/ |\.|,|:|=/, '.')

@@ -63,7 +63,7 @@ exports.Message = function (msg, client) { return __awaiter(void 0, void 0, void
                 if (((_a = msg.member) === null || _a === void 0 ? void 0 : _a.user.username) === 'キャル')
                     return [2];
                 channel = msg.channel;
-                if ((channel === null || channel === void 0 ? void 0 : channel.name) !== '効果音-001' && (channel === null || channel === void 0 ? void 0 : channel.name) !== 'テスト用')
+                if (!const_settings_1["default"].COMMAND_CHANNEL.some(function (c) { return c === (channel === null || channel === void 0 ? void 0 : channel.name); }))
                     return [2];
                 command = msg.content.replace(/ |\.|,|:|=/, '.');
                 comment = calCommands(command, msg, client);

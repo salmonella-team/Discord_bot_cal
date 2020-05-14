@@ -1,7 +1,8 @@
 import {ClientVoiceManager, Message, VoiceConnection, VoiceChannel} from 'discord.js'
 import Option from 'type-of-option'
-import {Mode, Status} from '../config/type'
 import * as spreadsheet from './spreadsheet'
+import {Mode, Status} from '../config/type'
+import Settings from '../config/const-settings'
 
 /**
  * 小数第一位を四捨五入して返す
@@ -219,7 +220,7 @@ export const SwitchMode = (msg: Message, mode: Mode): Mode => {
   const roles = msg.member?.roles.cache.map(r => r.name)
 
   // Developのロールが付与されていない場合終了
-  if (!roles?.find(r => r === 'Develop')) {
+  if (!Settings.DEVELOP_ROLE.some((r: string) => roles?.find(v => v === r))) {
     msg.reply('Developじゃないやつにモードを切り替える権限ないわ')
     return mode
   }
