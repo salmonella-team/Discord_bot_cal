@@ -157,8 +157,8 @@ exports.Help = function (msg, mode) {
     msg.reply(help);
 };
 var getMsgUserRoles = function (msg) { var _a; return (_a = msg.member) === null || _a === void 0 ? void 0 : _a.roles.cache.map(function (r) { return r.name; }); };
-var isRole = function (roles, userRoles) {
-    return !roles.some(function (r) { return userRoles === null || userRoles === void 0 ? void 0 : userRoles.find(function (v) { return v === r; }); });
+var isRole = function (checkRoles, userRoles) {
+    return !checkRoles.some(function (r) { return userRoles === null || userRoles === void 0 ? void 0 : userRoles.find(function (v) { return v === r; }); });
 };
 exports.Yabai = function (msg, client, volume) { return __awaiter(void 0, void 0, void 0, function () {
     var roles, channel, connect;
@@ -175,7 +175,7 @@ exports.Yabai = function (msg, client, volume) { return __awaiter(void 0, void 0
             case 1:
                 connect = _a.sent();
                 connect === null || connect === void 0 ? void 0 : connect.play(const_settings_1["default"].URL.YABAI, { volume: volume });
-                msg.reply('ヤバいわよ！');
+                msg.reply('リモートヤバいわよ！');
                 return [2];
         }
     });
