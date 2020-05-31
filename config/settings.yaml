@@ -4,6 +4,7 @@ COMMAND_CHANNEL:
   - 効果音-001
   - テスト用
   - bot-test
+  - vc用
 
 # AFK用のチャンネル
 AFK_CHANNEL:
