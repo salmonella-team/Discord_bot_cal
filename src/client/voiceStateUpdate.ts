@@ -1,5 +1,5 @@
 import * as Discord from 'discord.js'
-import Settings from '../config/const-settings'
+import Settings from 'const-settings'
 
 /**
  * ボイスチャンネルの状態が変わった際に、キャルの自動入退出をする

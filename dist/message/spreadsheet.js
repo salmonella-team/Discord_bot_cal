@@ -40,7 +40,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 exports.__esModule = true;
 var throw_env_1 = __importDefault(require("throw-env"));
-var const_settings_1 = __importDefault(require("../config/const-settings"));
+var const_settings_1 = __importDefault(require("const-settings"));
 var GoogleSpreadsheetAsPromised = require('google-spreadsheet-as-promised');
 var getWorksheet = function (name) { return __awaiter(void 0, void 0, void 0, function () {
     var CREDS, SHEET_ID, sheet;

@@ -3,7 +3,7 @@ import throwEnv from 'throw-env'
 import Option from 'type-of-option'
 import * as spreadsheet from './spreadsheet'
 import {Mode, Status} from '../config/type'
-import Settings from '../config/const-settings'
+import Settings from 'const-settings'
 
 /**
  * 小数第一位を四捨五入して返す
