@@ -48,7 +48,7 @@ var __importStar = (this && this.__importStar) || function (mod) {
 exports.__esModule = true;
 var throw_env_1 = __importDefault(require("throw-env"));
 var spreadsheet = __importStar(require("./spreadsheet"));
-var const_settings_1 = __importDefault(require("../config/const-settings"));
+var const_settings_1 = __importDefault(require("const-settings"));
 var roundFloat = function (n) { return Math.round(n * 10) / 10; };
 exports.ShowStatus = function (msg, voice, status) {
     var channel = voice === null || voice === void 0 ? void 0 : voice.connections.map(function (v) { return v.channel.name; }).toString();

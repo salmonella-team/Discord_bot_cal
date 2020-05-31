@@ -4,7 +4,7 @@ import * as cal from '../message/cal'
 import * as speak from '../message/speak'
 import * as spreadsheet from '../message/spreadsheet'
 import {Mode, Status} from '../config/type'
-import Settings from '../config/const-settings'
+import Settings from 'const-settings'
 
 /**
  * キャルの音量とモードを管理

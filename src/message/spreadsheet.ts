@@ -1,5 +1,5 @@
 import throwEnv from 'throw-env'
-import Settings from '../config/const-settings'
+import Settings from 'const-settings'
 
 const GoogleSpreadsheetAsPromised = require('google-spreadsheet-as-promised')
 

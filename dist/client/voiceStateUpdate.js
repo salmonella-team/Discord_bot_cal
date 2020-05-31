@@ -39,7 +39,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 exports.__esModule = true;
-var const_settings_1 = __importDefault(require("../config/const-settings"));
+var const_settings_1 = __importDefault(require("const-settings"));
 exports.VoiceStateUpdate = function (oldState, newState) {
     if (oldState.channel)
         oldStateChannel(oldState.channel);

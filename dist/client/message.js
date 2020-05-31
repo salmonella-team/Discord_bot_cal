@@ -49,7 +49,7 @@ exports.__esModule = true;
 var cal = __importStar(require("../message/cal"));
 var speak = __importStar(require("../message/speak"));
 var spreadsheet = __importStar(require("../message/spreadsheet"));
-var const_settings_1 = __importDefault(require("../config/const-settings"));
+var const_settings_1 = __importDefault(require("const-settings"));
 var status = {
     Volume: 0.3,
     Mode: 0
