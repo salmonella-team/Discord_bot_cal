@@ -173,11 +173,10 @@ export const Help = (msg: Message, mode: Mode) => {
 /cal.down   キャルの声量を下げる
 /cal.volume <0.1~1.0> キャルの声量を指定の音量にする
 /cal.reset  キャルの音量をリセットする
+/cal.list   コマンド用のホワイトリストを表示
+/cal.list <name> ホワイトリストに値を追加
 /cal.help   キャルのコマンド一覧
 /cal.mode   キャルのモードを切り替える
-
-/cal.list コマンド用のホワイトリストを表示
-/cal.list <name> ホワイトリストに値を追加
 
 /yabai       ヤバいわよ！
 /yabai.desu  ヤバいですね☆
@@ -197,6 +196,8 @@ export const Help = (msg: Message, mode: Mode) => {
 /cal.down   キャルの声量を下げる
 /cal.volume <0.1~1.0> キャルの声量を指定の音量にする
 /cal.reset  キャルの音量をリセットする
+/cal.list   コマンド用のホワイトリストを表示
+/cal.list <name> ホワイトリストに値を追加
 /cal.help   キャルのコマンド一覧
 
 /yabai      ヤバいわよ！

@@ -65,10 +65,12 @@ const calCommands = (command: string, msg: Discord.Message, client: Discord.Clie
 
     case '/cal.in':
     case '/cal.join':
+    case '/cal.connect':
       cal.JoinChannel(msg, client.voice)
       return 'cal join channel'
 
     case '/cal.out':
+    case '/cal.discon':
     case '/cal.disconnect':
       cal.Disconnect(msg, client.voice)
       return 'cal disconnect channel'
@@ -99,15 +101,6 @@ const calCommands = (command: string, msg: Discord.Message, client: Discord.Clie
       cal.Yabai(msg, client, status.Volume)
       return 'cal yabai'
 
-    case '/cal.mode':
-      status.Mode = cal.SwitchMode(msg, status.Mode)
-      return 'switch devMode'
-  }
-
-  // DevModeでない場合、下の処理は行わない
-  if (!status.Mode) return
-
-  switch (command.split(' ')[0]) {
     case '/cal.list':
     case '/cal.wl':
       const name = command.split(' ')[1]
@@ -118,6 +111,10 @@ const calCommands = (command: string, msg: Discord.Message, client: Discord.Clie
         cal.AddWhiteList(msg, name)
         return `add whitelist ${name}`
       }
+
+    case '/cal.mode':
+      status.Mode = cal.SwitchMode(msg, status.Mode)
+      return 'switch devMode'
   }
 }
 
@@ -222,7 +219,8 @@ const notExistCommands = async (command: string, msg: Discord.Message): Promise<
 
   // ホワイトリストにコマンドがある場合は終了
   const list = await spreadsheet.GetWhiteList()
-  if (list.find(l => l === command.slice(1))) return
+  const c = command.slice(1).split('.')[0]
+  if (list.find(l => l === c)) return
 
   msg.reply('そんなコマンドないんだけど！')
   return 'missing command'
