@@ -20,7 +20,7 @@
 
 ### ホワイトリスト
 存在しないコマンドを打つとキャルが叱ってくれますが、他人の作ったコマンドも巻き込んでしまうのでホワイトリストを作りました。  
-`Develop`ロールが付与されているユーザーのみが管理ができます。詳しくは`/cal.help`を参照してください。  
+詳しくは`/cal.help`を参照してください。  
 spreadsheet: [discord-bot-cal](https://docs.google.com/spreadsheets/d/1IbkSu3kGxhxy9_rI8p_stEWvqSDAYnEUcVUA02TaPfk/edit?usp=sharing)  
 
 ### Link
