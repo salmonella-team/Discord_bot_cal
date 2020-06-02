@@ -89,9 +89,11 @@ var calCommands = function (command, msg, client) {
             return 'cal show status';
         case '/cal.in':
         case '/cal.join':
+        case '/cal.connect':
             cal.JoinChannel(msg, client.voice);
             return 'cal join channel';
         case '/cal.out':
+        case '/cal.discon':
         case '/cal.disconnect':
             cal.Disconnect(msg, client.voice);
             return 'cal disconnect channel';
@@ -115,13 +117,6 @@ var calCommands = function (command, msg, client) {
         case '/cal.yabai':
             cal.Yabai(msg, client, status.Volume);
             return 'cal yabai';
-        case '/cal.mode':
-            status.Mode = cal.SwitchMode(msg, status.Mode);
-            return 'switch devMode';
-    }
-    if (!status.Mode)
-        return;
-    switch (command.split(' ')[0]) {
         case '/cal.list':
         case '/cal.wl':
             var name_1 = command.split(' ')[1];
@@ -133,6 +128,9 @@ var calCommands = function (command, msg, client) {
                 cal.AddWhiteList(msg, name_1);
                 return "add whitelist " + name_1;
             }
+        case '/cal.mode':
+            status.Mode = cal.SwitchMode(msg, status.Mode);
+            return 'switch devMode';
     }
 };
 var speakCommands = function (command, msg) {
@@ -203,7 +201,7 @@ var speakCommands = function (command, msg) {
     return value.comment;
 };
 var notExistCommands = function (command, msg) { return __awaiter(void 0, void 0, void 0, function () {
-    var list;
+    var list, c;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
@@ -212,7 +210,8 @@ var notExistCommands = function (command, msg) { return __awaiter(void 0, void 0
                 return [4, spreadsheet.GetWhiteList()];
             case 1:
                 list = _a.sent();
-                if (list.find(function (l) { return l === command.slice(1); }))
+                c = command.slice(1).split('.')[0];
+                if (list.find(function (l) { return l === c; }))
                     return [2];
                 msg.reply('そんなコマンドないんだけど！');
                 return [2, 'missing command'];
