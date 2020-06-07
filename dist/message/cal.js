@@ -52,26 +52,25 @@ var const_settings_1 = __importDefault(require("const-settings"));
 var roundFloat = function (n) { return Math.round(n * 10) / 10; };
 exports.ShowStatus = function (msg, voice, status) {
     var channel = voice === null || voice === void 0 ? void 0 : voice.connections.map(function (v) { return v.channel; }).filter(function (v) { return v.guild; }).filter(function (v) { var _a; return v.guild.name === ((_a = msg.guild) === null || _a === void 0 ? void 0 : _a.name); }).map(function (v) { return v.name; }).toString();
-    console.log(channel);
     var join = channel ? channel + "\u306B\u63A5\u7D9A\u3057\u3066\u3044\u308B\u308F" : 'どこのボイスチャンネルにも接続してないわ';
     msg.reply(join + "\n\u97F3\u91CF\u306F" + roundFloat(status.Volume) + "\u3088\uFF01" + (status.Mode ? '(DevMode)' : ''));
 };
-var getVoiceConnection = function (voice) { return voice === null || voice === void 0 ? void 0 : voice.connections.map(function (v) { return v; })[0]; };
+var getVoiceConnection = function (msg, voice) { return voice === null || voice === void 0 ? void 0 : voice.connections.map(function (v) { return v; }).filter(function (v) { var _a; return v.channel.guild.name === ((_a = msg.guild) === null || _a === void 0 ? void 0 : _a.name); })[0]; };
 exports.JoinChannel = function (msg, voice) { return __awaiter(void 0, void 0, void 0, function () {
     var channel, connect;
-    var _a, _b;
-    return __generator(this, function (_c) {
-        switch (_c.label) {
+    var _a;
+    return __generator(this, function (_b) {
+        switch (_b.label) {
             case 0:
                 channel = (_a = msg.member) === null || _a === void 0 ? void 0 : _a.voice.channel;
                 if (!channel)
                     return [2, msg.reply('あんたがボイスチャンネルに居ないと入れないじゃないの！')];
-                connect = getVoiceConnection(voice);
-                if ((channel === null || channel === void 0 ? void 0 : channel.name) === ((_b = connect === null || connect === void 0 ? void 0 : connect.channel) === null || _b === void 0 ? void 0 : _b.name))
+                connect = getVoiceConnection(msg, voice);
+                if ((channel === null || channel === void 0 ? void 0 : channel.name) === (connect === null || connect === void 0 ? void 0 : connect.channel.name))
                     return [2, msg.reply("\u3082\u3046" + (channel === null || channel === void 0 ? void 0 : channel.name) + "\u306B\u63A5\u7D9A\u3057\u3066\u308B\u308F")];
                 return [4, (channel === null || channel === void 0 ? void 0 : channel.join())];
             case 1:
-                _c.sent();
+                _b.sent();
                 msg.reply((channel === null || channel === void 0 ? void 0 : channel.name) + "\u306B\u63A5\u7D9A\u3057\u305F\u308F\u3088\uFF01");
                 return [2];
         }
@@ -79,7 +78,7 @@ exports.JoinChannel = function (msg, voice) { return __awaiter(void 0, void 0, v
 }); };
 exports.Disconnect = function (msg, voice) {
     var _a;
-    var connect = getVoiceConnection(voice);
+    var connect = getVoiceConnection(msg, voice);
     if (!connect)
         return msg.reply('あたしはどこのボイスチャンネルに入ってないわよ');
     connect === null || connect === void 0 ? void 0 : connect.disconnect();
