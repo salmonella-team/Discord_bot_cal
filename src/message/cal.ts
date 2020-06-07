@@ -19,18 +19,24 @@ const roundFloat = (n: number): number => Math.round(n * 10) / 10
  * @param status キャルのステータス
  */
 export const ShowStatus = (msg: Message, voice: Option<ClientVoiceManager>, status: Status) => {
-  const channel: Option<string> = voice?.connections.map(v => v.channel.name).toString()
+  const channel: Option<string> = voice?.connections
+    .map(v => v.channel)
+    .filter(v => v.guild)
+    .filter(v => v.guild.name === msg.guild?.name)
+    .map(v => v.name)
+    .toString()
   const join = channel ? `${channel}に接続しているわ` : 'どこのボイスチャンネルにも接続してないわ'
   msg.reply(`${join}\n音量は${roundFloat(status.Volume)}よ！${status.Mode ? '(DevMode)' : ''}`)
 }
 
 /**
  * ClientVoiceManagerからVoiceConnectionを取得する
+ * @param msg DiscordからのMessage
  * @param voice clientのClientVoiceManager
  * @return 取得したVoiceConnection
  */
-const getVoiceConnection = (voice: Option<ClientVoiceManager>): Option<VoiceConnection> =>
-  voice?.connections.map(v => v)[0]
+const getVoiceConnection = (msg: Message, voice: Option<ClientVoiceManager>): Option<VoiceConnection> =>
+  voice?.connections.map(v => v).filter(v => v.channel.guild.name === msg.guild?.name)[0]
 
 /**
  * メッセージ送信者と同じボイスチャンネルにキャルを接続させ、接続状況をDiscordのメッセージへ送信する
@@ -43,8 +49,8 @@ export const JoinChannel = async (msg: Message, voice: Option<ClientVoiceManager
   if (!channel) return msg.reply('あんたがボイスチャンネルに居ないと入れないじゃないの！')
 
   // キャルが現在の接続している場所と同じチャンネルに入ろうとした場合終了
-  const connect: Option<VoiceConnection> = getVoiceConnection(voice)
-  if (channel?.name === connect?.channel?.name) return msg.reply(`もう${channel?.name}に接続してるわ`)
+  const connect: Option<VoiceConnection> = getVoiceConnection(msg, voice)
+  if (channel?.name === connect?.channel.name) return msg.reply(`もう${channel?.name}に接続してるわ`)
 
   await channel?.join()
   msg.reply(`${channel?.name}に接続したわよ！`)
@@ -57,7 +63,7 @@ export const JoinChannel = async (msg: Message, voice: Option<ClientVoiceManager
  */
 export const Disconnect = (msg: Message, voice: Option<ClientVoiceManager>) => {
   // キャルがボイスチャンネル入っていない場合終了
-  const connect: Option<VoiceConnection> = getVoiceConnection(voice)
+  const connect: Option<VoiceConnection> = getVoiceConnection(msg, voice)
   if (!connect) return msg.reply('あたしはどこのボイスチャンネルに入ってないわよ')
 
   connect?.disconnect()

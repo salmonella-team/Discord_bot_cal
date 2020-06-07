@@ -51,26 +51,26 @@ var spreadsheet = __importStar(require("./spreadsheet"));
 var const_settings_1 = __importDefault(require("const-settings"));
 var roundFloat = function (n) { return Math.round(n * 10) / 10; };
 exports.ShowStatus = function (msg, voice, status) {
-    var channel = voice === null || voice === void 0 ? void 0 : voice.connections.map(function (v) { return v.channel.name; }).toString();
+    var channel = voice === null || voice === void 0 ? void 0 : voice.connections.map(function (v) { return v.channel; }).filter(function (v) { return v.guild; }).filter(function (v) { var _a; return v.guild.name === ((_a = msg.guild) === null || _a === void 0 ? void 0 : _a.name); }).map(function (v) { return v.name; }).toString();
     var join = channel ? channel + "\u306B\u63A5\u7D9A\u3057\u3066\u3044\u308B\u308F" : 'どこのボイスチャンネルにも接続してないわ';
     msg.reply(join + "\n\u97F3\u91CF\u306F" + roundFloat(status.Volume) + "\u3088\uFF01" + (status.Mode ? '(DevMode)' : ''));
 };
-var getVoiceConnection = function (voice) { return voice === null || voice === void 0 ? void 0 : voice.connections.map(function (v) { return v; })[0]; };
+var getVoiceConnection = function (msg, voice) { return voice === null || voice === void 0 ? void 0 : voice.connections.map(function (v) { return v; }).filter(function (v) { var _a; return v.channel.guild.name === ((_a = msg.guild) === null || _a === void 0 ? void 0 : _a.name); })[0]; };
 exports.JoinChannel = function (msg, voice) { return __awaiter(void 0, void 0, void 0, function () {
     var channel, connect;
-    var _a, _b;
-    return __generator(this, function (_c) {
-        switch (_c.label) {
+    var _a;
+    return __generator(this, function (_b) {
+        switch (_b.label) {
             case 0:
                 channel = (_a = msg.member) === null || _a === void 0 ? void 0 : _a.voice.channel;
                 if (!channel)
                     return [2, msg.reply('あんたがボイスチャンネルに居ないと入れないじゃないの！')];
-                connect = getVoiceConnection(voice);
-                if ((channel === null || channel === void 0 ? void 0 : channel.name) === ((_b = connect === null || connect === void 0 ? void 0 : connect.channel) === null || _b === void 0 ? void 0 : _b.name))
+                connect = getVoiceConnection(msg, voice);
+                if ((channel === null || channel === void 0 ? void 0 : channel.name) === (connect === null || connect === void 0 ? void 0 : connect.channel.name))
                     return [2, msg.reply("\u3082\u3046" + (channel === null || channel === void 0 ? void 0 : channel.name) + "\u306B\u63A5\u7D9A\u3057\u3066\u308B\u308F")];
                 return [4, (channel === null || channel === void 0 ? void 0 : channel.join())];
             case 1:
-                _c.sent();
+                _b.sent();
                 msg.reply((channel === null || channel === void 0 ? void 0 : channel.name) + "\u306B\u63A5\u7D9A\u3057\u305F\u308F\u3088\uFF01");
                 return [2];
         }
@@ -78,7 +78,7 @@ exports.JoinChannel = function (msg, voice) { return __awaiter(void 0, void 0, v
 }); };
 exports.Disconnect = function (msg, voice) {
     var _a;
-    var connect = getVoiceConnection(voice);
+    var connect = getVoiceConnection(msg, voice);
     if (!connect)
         return msg.reply('あたしはどこのボイスチャンネルに入ってないわよ');
     connect === null || connect === void 0 ? void 0 : connect.disconnect();
@@ -152,8 +152,8 @@ exports.AddWhiteList = function (msg, name) { return __awaiter(void 0, void 0, v
 }); };
 exports.Help = function (msg, mode) {
     var help = mode
-        ? "\u9AD8\u5EA6\u306A\u9B54\u6CD5\u4E00\u89A7\u3088\uFF01```\n/cal        \u30AD\u30E3\u30EB\u306E\u72B6\u614B\u3092\u8868\u793A\n\n/cal.in     \u30AD\u30E3\u30EB\u3092\u30DC\u30A4\u30B9\u30C1\u30E3\u30F3\u30CD\u30EB\u306B\u63A5\u7D9A\n/cal.out    \u30AD\u30E3\u30EB\u3092\u30DC\u30A4\u30B9\u30C1\u30E3\u30F3\u30CD\u30EB\u304B\u3089\u5207\u65AD\n\n/cal.up     \u30AD\u30E3\u30EB\u306E\u58F0\u91CF\u3092\u4E0A\u3052\u308B\n/cal.down   \u30AD\u30E3\u30EB\u306E\u58F0\u91CF\u3092\u4E0B\u3052\u308B\n/cal.volume <0.1~1.0> \u30AD\u30E3\u30EB\u306E\u58F0\u91CF\u3092\u6307\u5B9A\u306E\u97F3\u91CF\u306B\u3059\u308B\n/cal.reset  \u30AD\u30E3\u30EB\u306E\u97F3\u91CF\u3092\u30EA\u30BB\u30C3\u30C8\u3059\u308B\n\n/cal.list   \u30B3\u30DE\u30F3\u30C9\u7528\u306E\u30DB\u30EF\u30A4\u30C8\u30EA\u30B9\u30C8\u3092\u8868\u793A\n/cal.list <name> \u30DB\u30EF\u30A4\u30C8\u30EA\u30B9\u30C8\u306B\u5024\u3092\u8FFD\u52A0\n\n/cal.help   \u30AD\u30E3\u30EB\u306E\u30B3\u30DE\u30F3\u30C9\u4E00\u89A7\n/cal.mode   \u30AD\u30E3\u30EB\u306E\u30E2\u30FC\u30C9\u3092\u5207\u308A\u66FF\u3048\u308B\n\n\n/yabai       \u30E4\u30D0\u3044\u308F\u3088\uFF01\n/yabai.desu  \u30E4\u30D0\u3044\u3067\u3059\u306D\u2606\n/yabai.wayo  \u30D7\u30EA\u30B3\u30CD\u306E\u5E74\u672B\u5E74\u59CB\u306F\u30E4\u30D0\u3044\u308F\u3088\uFF01\n/yabai.yaba  \u30E4\u30D0\u3044\u30E4\u30D0\u3044\u30E4\u30D0\u3044\u30E4\u30D0\u3044\u30E4\u30D0\u3044\u30E4\u30D0\u3044\u3067\u3059\u306D\u2606\n/yabai.full  \u30D7\u30EA\u30B3\u30CD\u306E\u5E74\u672B\u5E74\u59CB\u306F\u30E4\u30D0\u3044\u308F\u3088\uFF01(Full)\n/yabai.yabai \u30E4\u30D0\u3044\u30E4\u30D0\u3044\u30E4\u30D0\u3044\u30E4\u30D0\u3044\u30E4\u30D0\u3044\u30E4\u30D0\u3044\n/yabai.slow  \u30E4\u30D0\u3044\u30E4\u30D0\u3044\u30E4\u30D0\u3044\u30E4\u30D0\u3044\u30E4\u30D0\u3044\u30E4\u30D0\u3044\u3067\u3059\u306D\u2606(slow)\n/yabai.otwr  \u30E4\u30D0\u3044\u30E4\u30D0\u3044\u30E4\u30D0\u3044\u30E4\u30D0\u3044\u30E4\u30D0\u3044\u30E4\u30D0\u3044\u3067\u3059\u306D\u2606(otwr)\n```\u203B`.`\u306F` `\u3067\u4EE3\u7528\u53EF\u80FD\u3000\u4F8B:`/cal help`\n"
-        : "\u9B54\u6CD5\u4E00\u89A7\u3088\uFF01```\n/cal        \u30AD\u30E3\u30EB\u306E\u72B6\u614B\u3092\u8868\u793A\n\n/cal.in     \u30AD\u30E3\u30EB\u3092\u30DC\u30A4\u30B9\u30C1\u30E3\u30F3\u30CD\u30EB\u306B\u63A5\u7D9A\n/cal.out    \u30AD\u30E3\u30EB\u3092\u30DC\u30A4\u30B9\u30C1\u30E3\u30F3\u30CD\u30EB\u304B\u3089\u5207\u65AD\n\n/cal.up     \u30AD\u30E3\u30EB\u306E\u58F0\u91CF\u3092\u4E0A\u3052\u308B\n/cal.down   \u30AD\u30E3\u30EB\u306E\u58F0\u91CF\u3092\u4E0B\u3052\u308B\n/cal.volume <0.1~1.0> \u30AD\u30E3\u30EB\u306E\u58F0\u91CF\u3092\u6307\u5B9A\u306E\u97F3\u91CF\u306B\u3059\u308B\n/cal.reset  \u30AD\u30E3\u30EB\u306E\u97F3\u91CF\u3092\u30EA\u30BB\u30C3\u30C8\u3059\u308B\n\n/cal.list   \u30B3\u30DE\u30F3\u30C9\u7528\u306E\u30DB\u30EF\u30A4\u30C8\u30EA\u30B9\u30C8\u3092\u8868\u793A\n/cal.list <name> \u30DB\u30EF\u30A4\u30C8\u30EA\u30B9\u30C8\u306B\u5024\u3092\u8FFD\u52A0\n\n/cal.help   \u30AD\u30E3\u30EB\u306E\u30B3\u30DE\u30F3\u30C9\u4E00\u89A7\n\n\n/yabai      \u30E4\u30D0\u3044\u308F\u3088\uFF01\n/yabai.desu \u30E4\u30D0\u3044\u3067\u3059\u306D\u2606\n/yabai.wayo \u30D7\u30EA\u30B3\u30CD\u306E\u5E74\u672B\u5E74\u59CB\u306F\u30E4\u30D0\u3044\u308F\u3088\uFF01\n/yabai.yaba \u30E4\u30D0\u3044\u30E4\u30D0\u3044\u30E4\u30D0\u3044\u30E4\u30D0\u3044\u30E4\u30D0\u3044\u30E4\u30D0\u3044\u3067\u3059\u306D\u2606\n```\u203B`.`\u306F` `\u3067\u4EE3\u7528\u53EF\u80FD\u3000\u4F8B:`/cal help`\n";
+        ? "\u9AD8\u5EA6\u306A\u9B54\u6CD5\u4E00\u89A7\u3088\uFF01```\n/cal        \u30AD\u30E3\u30EB\u306E\u72B6\u614B\u3092\u8868\u793A\n/cal.in     \u30AD\u30E3\u30EB\u3092\u30DC\u30A4\u30B9\u30C1\u30E3\u30F3\u30CD\u30EB\u306B\u63A5\u7D9A\n/cal.out    \u30AD\u30E3\u30EB\u3092\u30DC\u30A4\u30B9\u30C1\u30E3\u30F3\u30CD\u30EB\u304B\u3089\u5207\u65AD\n/cal.up     \u30AD\u30E3\u30EB\u306E\u58F0\u91CF\u3092\u4E0A\u3052\u308B\n/cal.down   \u30AD\u30E3\u30EB\u306E\u58F0\u91CF\u3092\u4E0B\u3052\u308B\n/cal.volume <0.1~1.0> \u30AD\u30E3\u30EB\u306E\u58F0\u91CF\u3092\u6307\u5B9A\u306E\u97F3\u91CF\u306B\u3059\u308B\n/cal.reset  \u30AD\u30E3\u30EB\u306E\u97F3\u91CF\u3092\u30EA\u30BB\u30C3\u30C8\u3059\u308B\n/cal.list   \u30B3\u30DE\u30F3\u30C9\u7528\u306E\u30DB\u30EF\u30A4\u30C8\u30EA\u30B9\u30C8\u3092\u8868\u793A\n/cal.list <name> \u30DB\u30EF\u30A4\u30C8\u30EA\u30B9\u30C8\u306B\u5024\u3092\u8FFD\u52A0\n/cal.help   \u30AD\u30E3\u30EB\u306E\u30B3\u30DE\u30F3\u30C9\u4E00\u89A7\n/cal.mode   \u30AD\u30E3\u30EB\u306E\u30E2\u30FC\u30C9\u3092\u5207\u308A\u66FF\u3048\u308B\n\n/yabai       \u30E4\u30D0\u3044\u308F\u3088\uFF01\n/yabai.desu  \u30E4\u30D0\u3044\u3067\u3059\u306D\u2606\n/yabai.wayo  \u30D7\u30EA\u30B3\u30CD\u306E\u5E74\u672B\u5E74\u59CB\u306F\u30E4\u30D0\u3044\u308F\u3088\uFF01\n/yabai.yaba  \u30E4\u30D0\u3044\u30E4\u30D0\u3044\u30E4\u30D0\u3044\u30E4\u30D0\u3044\u30E4\u30D0\u3044\u30E4\u30D0\u3044\u3067\u3059\u306D\u2606\n/yabai.full  \u30D7\u30EA\u30B3\u30CD\u306E\u5E74\u672B\u5E74\u59CB\u306F\u30E4\u30D0\u3044\u308F\u3088\uFF01(Full)\n/yabai.yabai \u30E4\u30D0\u3044\u30E4\u30D0\u3044\u30E4\u30D0\u3044\u30E4\u30D0\u3044\u30E4\u30D0\u3044\u30E4\u30D0\u3044\n/yabai.slow  \u30E4\u30D0\u3044\u30E4\u30D0\u3044\u30E4\u30D0\u3044\u30E4\u30D0\u3044\u30E4\u30D0\u3044\u30E4\u30D0\u3044\u3067\u3059\u306D\u2606(slow)\n/yabai.otwr  \u30E4\u30D0\u3044\u30E4\u30D0\u3044\u30E4\u30D0\u3044\u30E4\u30D0\u3044\u30E4\u30D0\u3044\u30E4\u30D0\u3044\u3067\u3059\u306D\u2606(otwr)\n```\u203B`.`\u306F` `\u3067\u4EE3\u7528\u53EF\u80FD\u3000\u4F8B:`/cal help`\n"
+        : "\u9B54\u6CD5\u4E00\u89A7\u3088\uFF01```\n/cal        \u30AD\u30E3\u30EB\u306E\u72B6\u614B\u3092\u8868\u793A\n/cal.in     \u30AD\u30E3\u30EB\u3092\u30DC\u30A4\u30B9\u30C1\u30E3\u30F3\u30CD\u30EB\u306B\u63A5\u7D9A\n/cal.out    \u30AD\u30E3\u30EB\u3092\u30DC\u30A4\u30B9\u30C1\u30E3\u30F3\u30CD\u30EB\u304B\u3089\u5207\u65AD\n/cal.up     \u30AD\u30E3\u30EB\u306E\u58F0\u91CF\u3092\u4E0A\u3052\u308B\n/cal.down   \u30AD\u30E3\u30EB\u306E\u58F0\u91CF\u3092\u4E0B\u3052\u308B\n/cal.volume <0.1~1.0> \u30AD\u30E3\u30EB\u306E\u58F0\u91CF\u3092\u6307\u5B9A\u306E\u97F3\u91CF\u306B\u3059\u308B\n/cal.reset  \u30AD\u30E3\u30EB\u306E\u97F3\u91CF\u3092\u30EA\u30BB\u30C3\u30C8\u3059\u308B\n/cal.list   \u30B3\u30DE\u30F3\u30C9\u7528\u306E\u30DB\u30EF\u30A4\u30C8\u30EA\u30B9\u30C8\u3092\u8868\u793A\n/cal.list <name> \u30DB\u30EF\u30A4\u30C8\u30EA\u30B9\u30C8\u306B\u5024\u3092\u8FFD\u52A0\n/cal.help   \u30AD\u30E3\u30EB\u306E\u30B3\u30DE\u30F3\u30C9\u4E00\u89A7\n\n/yabai      \u30E4\u30D0\u3044\u308F\u3088\uFF01\n/yabai.desu \u30E4\u30D0\u3044\u3067\u3059\u306D\u2606\n/yabai.wayo \u30D7\u30EA\u30B3\u30CD\u306E\u5E74\u672B\u5E74\u59CB\u306F\u30E4\u30D0\u3044\u308F\u3088\uFF01\n/yabai.yaba \u30E4\u30D0\u3044\u30E4\u30D0\u3044\u30E4\u30D0\u3044\u30E4\u30D0\u3044\u30E4\u30D0\u3044\u30E4\u30D0\u3044\u3067\u3059\u306D\u2606\n```\u203B`.`\u306F` `\u3067\u4EE3\u7528\u53EF\u80FD\u3000\u4F8B:`/cal help`\n";
     msg.reply(help);
 };
 var getMsgUserRoles = function (msg) { var _a; return (_a = msg.member) === null || _a === void 0 ? void 0 : _a.roles.cache.map(function (r) { return r.name; }); };
