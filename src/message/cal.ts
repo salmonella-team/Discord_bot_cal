@@ -19,7 +19,12 @@ const roundFloat = (n: number): number => Math.round(n * 10) / 10
  * @param status キャルのステータス
  */
 export const ShowStatus = (msg: Message, voice: Option<ClientVoiceManager>, status: Status) => {
-  const channel: Option<string> = voice?.connections.map(v => v.channel.name).toString()
+  const channel: Option<string> = voice?.connections
+    .map(v => v.channel)
+    .filter(v => v.guild)
+    .filter(v => v.guild.name === msg.guild?.name)
+    .map(v => v.name)
+    .toString()
   const join = channel ? `${channel}に接続しているわ` : 'どこのボイスチャンネルにも接続してないわ'
   msg.reply(`${join}\n音量は${roundFloat(status.Volume)}よ！${status.Mode ? '(DevMode)' : ''}`)
 }
