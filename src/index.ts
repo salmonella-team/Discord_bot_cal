@@ -4,6 +4,9 @@ import {Ready} from './client/ready'
 import {VoiceStateUpdate} from './client/voiceStateUpdate'
 import {Message} from './client/message'
 
+import {ConvexManagement} from './convex-management'
+ConvexManagement()
+
 const client = new Discord.Client()
 
 // botの起動時に実行

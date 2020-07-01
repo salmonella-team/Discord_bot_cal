@@ -51,6 +51,8 @@ var throw_env_1 = __importDefault(require("throw-env"));
 var ready_1 = require("./client/ready");
 var voiceStateUpdate_1 = require("./client/voiceStateUpdate");
 var message_1 = require("./client/message");
+var convex_management_1 = require("./convex-management");
+convex_management_1.ConvexManagement();
 var client = new Discord.Client();
 client.on('ready', function () { return ready_1.Ready(client); });
 client.on('voiceStateUpdate', function (oldState, newState) {
