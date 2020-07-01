@@ -14,11 +14,9 @@ var Discord = __importStar(require("discord.js"));
 var throw_env_1 = __importDefault(require("throw-env"));
 var const_settings_1 = __importDefault(require("const-settings"));
 exports.ConvexManagement = function () {
-    console.log('test');
     var client = new Discord.Client();
     client.on('guildMemberAdd', function (member) {
         var _a;
-        console.log('test');
         if (member.guild.name !== const_settings_1["default"].WELCOME_SERVER)
             return;
         var channel = client.channels.cache.get(throw_env_1["default"]('WELCOME_CHANNEL_ID'));
