@@ -20,7 +20,6 @@ const status: Status = {
  * 入力されたメッセージに応じて適切なコマンドを実行する
  * @param msg DiscordからのMessage
  * @param client bot(キャル)のclient
- * @return 実行したコマンドの結果
  */
 export const Message = async (msg: Discord.Message, client: Discord.Client) => {
   // キャルのメッセージはコマンド実行しない
