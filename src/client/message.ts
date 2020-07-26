@@ -135,14 +135,14 @@ const speakCommands = (command: string, msg: Discord.Message): Option<string> =>
       case '/yab':
         return {
           url: Settings.URL.YABAI,
-          text: 'ヤバいわよ！',
+          text: 'ヤバイわよ！',
           comment: 'speak yabai',
         }
       case '/yabai.desu':
       case '/yabd':
         return {
           url: Settings.URL.YABAIDESU,
-          text: 'ヤバいですね☆',
+          text: 'やばいですね☆',
           comment: 'speak yabai.desu',
         }
 
@@ -150,7 +150,7 @@ const speakCommands = (command: string, msg: Discord.Message): Option<string> =>
       case '/yabw':
         return {
           url: Settings.URL.YABAIWAYO,
-          text: 'プリコネの年末年始はヤバいわよ！',
+          text: 'プリコネの年末年始はヤバイわよ！',
           comment: 'speak yabai.wayo',
         }
 
@@ -158,7 +158,7 @@ const speakCommands = (command: string, msg: Discord.Message): Option<string> =>
       case '/yaby':
         return {
           url: Settings.URL.YABAIYABA,
-          text: 'ヤバいヤバいヤバいヤバいヤバいヤバいですね☆',
+          text: 'ヤバイヤバイヤバイヤバイヤバイやばいですね☆',
           comment: 'speak yabai.yaba',
         }
     }
@@ -171,28 +171,28 @@ const speakCommands = (command: string, msg: Discord.Message): Option<string> =>
       case '/yabf':
         return {
           url: Settings.URL.YABAIFULL,
-          text: 'プリコネの年末年始はヤバいわよ！(Full)',
+          text: 'プリコネの年末年始はヤバイわよ！(Full)',
           comment: 'speak yabai.full',
         }
 
       case '/yabai.yabai':
         return {
           url: Settings.URL.YABAIYABAI,
-          text: 'ヤバいヤバいヤバいヤバいヤバいヤバい',
+          text: 'ヤバイヤバイヤバイヤバイヤバイヤバイ',
           comment: 'speak yabai.yabai',
         }
 
       case '/yabai.slow':
         return {
           url: Settings.URL.YABAISLOW,
-          text: 'ヤバいヤバいヤバいヤバいヤバいヤバいですね☆(slow)',
+          text: 'ヤバイヤバイヤバイヤバイヤバイやばいですね☆(slow)',
           comment: 'speak yabai.slow',
         }
 
       case '/yabai.otwr':
         return {
           url: Settings.URL.YABAIOTWR,
-          text: 'ヤバいヤバいヤバいヤバいヤバいヤバいですね☆(otwr)',
+          text: 'ヤバイヤバイヤバイヤバイヤバイやばいですね☆(otwr)',
           comment: 'speak yabai.otwr',
         }
     }
