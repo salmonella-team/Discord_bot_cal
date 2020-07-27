@@ -1,5 +1,4 @@
 import {Client, ClientVoiceManager, Message, VoiceConnection, VoiceChannel} from 'discord.js'
-import throwEnv from 'throw-env'
 import Option from 'type-of-option'
 import * as spreadsheet from './spreadsheet'
 import {Mode, Status} from '../config/type'
@@ -119,9 +118,7 @@ export const VolumeChange = (msg: Message, volume: number, content: string): num
   }
 
   // contentが有効な数値なのか判断する
-  const valid = [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1, '1.0']
-    .map(n => String(n))
-    .find(n => n === content)
+  const valid = [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1, '1.0'].map(n => String(n)).find(n => n === content)
   if (!valid) {
     msg.reply('その音量にはできないんだけど！')
     return volume
@@ -246,7 +243,7 @@ export const Yabai = async (msg: Message, client: Client, volume: number) => {
   }
 
   // リモートヤバイわよ！する
-  const channel = client.channels.cache.get(throwEnv('REMOTE_YABAI_CHANNEL')) as VoiceChannel
+  const channel = client.channels.cache.get(Settings.REMOTE_YABAI_CHANNEL) as VoiceChannel
   const connect = await channel?.join()
   connect?.play(Settings.URL.YABAI, {volume: volume})
 

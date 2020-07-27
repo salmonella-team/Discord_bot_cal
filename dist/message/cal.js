@@ -35,9 +35,6 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 var __importStar = (this && this.__importStar) || function (mod) {
     if (mod && mod.__esModule) return mod;
     var result = {};
@@ -45,8 +42,10 @@ var __importStar = (this && this.__importStar) || function (mod) {
     result["default"] = mod;
     return result;
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 exports.__esModule = true;
-var throw_env_1 = __importDefault(require("throw-env"));
 var spreadsheet = __importStar(require("./spreadsheet"));
 var const_settings_1 = __importDefault(require("const-settings"));
 var roundFloat = function (n) { return Math.round(n * 10) / 10; };
@@ -109,9 +108,7 @@ exports.VolumeChange = function (msg, volume, content) {
         msg.reply('音量が指定されていないんだけど！');
         return volume;
     }
-    var valid = [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1, '1.0']
-        .map(function (n) { return String(n); })
-        .find(function (n) { return n === content; });
+    var valid = [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1, '1.0'].map(function (n) { return String(n); }).find(function (n) { return n === content; });
     if (!valid) {
         msg.reply('その音量にはできないんだけど！');
         return volume;
@@ -170,7 +167,7 @@ exports.Yabai = function (msg, client, volume) { return __awaiter(void 0, void 0
                     msg.reply('そんなコマンドないんだけど！');
                     return [2];
                 }
-                channel = client.channels.cache.get(throw_env_1["default"]('REMOTE_YABAI_CHANNEL'));
+                channel = client.channels.cache.get(const_settings_1["default"].REMOTE_YABAI_CHANNEL);
                 return [4, (channel === null || channel === void 0 ? void 0 : channel.join())];
             case 1:
                 connect = _a.sent();
