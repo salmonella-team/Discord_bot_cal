@@ -140,28 +140,28 @@ var speakCommands = function (command, msg) {
             case '/yab':
                 return {
                     url: const_settings_1["default"].URL.YABAI,
-                    text: 'ヤバいわよ！',
+                    text: 'ヤバイわよ！',
                     comment: 'speak yabai'
                 };
             case '/yabai.desu':
             case '/yabd':
                 return {
                     url: const_settings_1["default"].URL.YABAIDESU,
-                    text: 'ヤバいですね☆',
+                    text: 'やばいですね☆',
                     comment: 'speak yabai.desu'
                 };
             case '/yabai.wayo':
             case '/yabw':
                 return {
                     url: const_settings_1["default"].URL.YABAIWAYO,
-                    text: 'プリコネの年末年始はヤバいわよ！',
+                    text: 'プリコネの年末年始はヤバイわよ！',
                     comment: 'speak yabai.wayo'
                 };
             case '/yabai.yaba':
             case '/yaby':
                 return {
                     url: const_settings_1["default"].URL.YABAIYABA,
-                    text: 'ヤバいヤバいヤバいヤバいヤバいヤバいですね☆',
+                    text: 'ヤバイヤバイヤバイヤバイヤバイやばいですね☆',
                     comment: 'speak yabai.yaba'
                 };
         }
@@ -172,25 +172,25 @@ var speakCommands = function (command, msg) {
             case '/yabf':
                 return {
                     url: const_settings_1["default"].URL.YABAIFULL,
-                    text: 'プリコネの年末年始はヤバいわよ！(Full)',
+                    text: 'プリコネの年末年始はヤバイわよ！(Full)',
                     comment: 'speak yabai.full'
                 };
             case '/yabai.yabai':
                 return {
                     url: const_settings_1["default"].URL.YABAIYABAI,
-                    text: 'ヤバいヤバいヤバいヤバいヤバいヤバい',
+                    text: 'ヤバイヤバイヤバイヤバイヤバイヤバイ',
                     comment: 'speak yabai.yabai'
                 };
             case '/yabai.slow':
                 return {
                     url: const_settings_1["default"].URL.YABAISLOW,
-                    text: 'ヤバいヤバいヤバいヤバいヤバいヤバいですね☆(slow)',
+                    text: 'ヤバイヤバイヤバイヤバイヤバイやばいですね☆(slow)',
                     comment: 'speak yabai.slow'
                 };
             case '/yabai.otwr':
                 return {
                     url: const_settings_1["default"].URL.YABAIOTWR,
-                    text: 'ヤバいヤバいヤバいヤバいヤバいヤバいですね☆(otwr)',
+                    text: 'ヤバイヤバイヤバイヤバイヤバイやばいですね☆(otwr)',
                     comment: 'speak yabai.otwr'
                 };
         }
