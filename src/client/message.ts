@@ -25,6 +25,9 @@ export const Message = async (msg: Discord.Message, client: Discord.Client) => {
   // キャルのメッセージはコマンド実行しない
   if (msg.member?.user.username === 'キャル') return
 
+  // 直前のメッセージを削除
+  removeMessage(msg)
+
   // 指定のチャンネル以外でキャルが動かないようにする
   const channel = msg.channel as Discord.TextChannel
   if (!Settings.COMMAND_CHANNEL.some((c: string) => c === channel?.name)) return
@@ -223,4 +226,19 @@ const notExistCommands = async (command: string, msg: Discord.Message): Promise<
 
   msg.reply('そんなコマンドないんだけど！')
   return 'missing command'
+}
+
+/**
+ * 直前のメッセージを削除。
+ * 引数で数を指定できる
+ * @param msg DiscordからのMessage
+ */
+const removeMessage = async (msg: Discord.Message) => {
+  switch (true) {
+    case /rm/.test(msg.content): {
+      const msgList = (await msg.channel.messages.fetch()).map(v => v)
+      const n = msg.content.replace('/rm ', '')
+      ;[...Array(/\d/.test(n) ? Number(n) + 1 : 2)].forEach((_, i) => msgList[i].delete())
+    }
+  }
 }
