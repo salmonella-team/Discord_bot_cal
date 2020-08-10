@@ -25,6 +25,9 @@ export const Message = async (msg: Discord.Message, client: Discord.Client) => {
   // キャルのメッセージはコマンド実行しない
   if (msg.member?.user.username === 'キャル') return
 
+  // 直前のメッセージを削除
+  removeMessage(msg)
+
   // 指定のチャンネル以外でキャルが動かないようにする
   const channel = msg.channel as Discord.TextChannel
   if (!Settings.COMMAND_CHANNEL.some((c: string) => c === channel?.name)) return
@@ -223,4 +226,26 @@ const notExistCommands = async (command: string, msg: Discord.Message): Promise<
 
   msg.reply('そんなコマンドないんだけど！')
   return 'missing command'
+}
+
+/**
+ * 直前のメッセージを削除。
+ * 引数で数を指定できる
+ * @param msg DiscordからのMessage
+ */
+const removeMessage = async (msg: Discord.Message) => {
+  // ヤバイわよ！のロールがついて入れば実行可能
+  const roles = msg.member?.roles.cache.map(r => r.name)
+  if (!Settings.REMOTE_YABAI.some((r: string) => roles?.find(v => v === r))) return
+
+  switch (true) {
+    case /rm/.test(msg.content): {
+      // チャンネルのメッセージ履歴を取得
+      const msgList = (await msg.channel.messages.fetch()).map(v => v)
+      // 引数の値を数を取得ない場合は1
+      const n = (arg => (/\d/.test(arg) ? Number(arg) : 1))(msg.content.replace('/rm ', ''))
+      // 指定された回数と`/rm`のメッセージを消す
+      ;[...Array(n + 1)].forEach((_, i) => msgList[i].delete())
+    }
+  }
 }

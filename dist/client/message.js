@@ -35,6 +35,26 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
+var __read = (this && this.__read) || function (o, n) {
+    var m = typeof Symbol === "function" && o[Symbol.iterator];
+    if (!m) return o;
+    var i = m.call(o), r, ar = [], e;
+    try {
+        while ((n === void 0 || n-- > 0) && !(r = i.next()).done) ar.push(r.value);
+    }
+    catch (error) { e = { error: error }; }
+    finally {
+        try {
+            if (r && !r.done && (m = i["return"])) m.call(i);
+        }
+        finally { if (e) throw e.error; }
+    }
+    return ar;
+};
+var __spread = (this && this.__spread) || function () {
+    for (var ar = [], i = 0; i < arguments.length; i++) ar = ar.concat(__read(arguments[i]));
+    return ar;
+};
 var __importStar = (this && this.__importStar) || function (mod) {
     if (mod && mod.__esModule) return mod;
     var result = {};
@@ -62,6 +82,7 @@ exports.Message = function (msg, client) { return __awaiter(void 0, void 0, void
             case 0:
                 if (((_a = msg.member) === null || _a === void 0 ? void 0 : _a.user.username) === 'キャル')
                     return [2];
+                removeMessage(msg);
                 channel = msg.channel;
                 if (!const_settings_1["default"].COMMAND_CHANNEL.some(function (c) { return c === (channel === null || channel === void 0 ? void 0 : channel.name); }))
                     return [2];
@@ -215,6 +236,30 @@ var notExistCommands = function (command, msg) { return __awaiter(void 0, void 0
                     return [2];
                 msg.reply('そんなコマンドないんだけど！');
                 return [2, 'missing command'];
+        }
+    });
+}); };
+var removeMessage = function (msg) { return __awaiter(void 0, void 0, void 0, function () {
+    var roles, _a, msgList_1, n;
+    var _b;
+    return __generator(this, function (_c) {
+        switch (_c.label) {
+            case 0:
+                roles = (_b = msg.member) === null || _b === void 0 ? void 0 : _b.roles.cache.map(function (r) { return r.name; });
+                if (!const_settings_1["default"].REMOTE_YABAI.some(function (r) { return roles === null || roles === void 0 ? void 0 : roles.find(function (v) { return v === r; }); }))
+                    return [2];
+                _a = true;
+                switch (_a) {
+                    case /rm/.test(msg.content): return [3, 1];
+                }
+                return [3, 3];
+            case 1: return [4, msg.channel.messages.fetch()];
+            case 2:
+                msgList_1 = (_c.sent()).map(function (v) { return v; });
+                n = (function (arg) { return (/\d/.test(arg) ? Number(arg) : 1); })(msg.content.replace('/rm ', ''));
+                __spread(Array(n + 1)).forEach(function (_, i) { return msgList_1[i]["delete"](); });
+                _c.label = 3;
+            case 3: return [2];
         }
     });
 }); };
