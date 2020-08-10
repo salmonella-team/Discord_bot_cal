@@ -234,11 +234,18 @@ const notExistCommands = async (command: string, msg: Discord.Message): Promise<
  * @param msg DiscordからのMessage
  */
 const removeMessage = async (msg: Discord.Message) => {
+  // ヤバイわよ！のロールがついて入れば実行可能
+  const roles = msg.member?.roles.cache.map(r => r.name)
+  if (!Settings.REMOTE_YABAI.some((r: string) => roles?.find(v => v === r))) return
+
   switch (true) {
     case /rm/.test(msg.content): {
+      // チャンネルのメッセージ履歴を取得
       const msgList = (await msg.channel.messages.fetch()).map(v => v)
-      const n = msg.content.replace('/rm ', '')
-      ;[...Array(/\d/.test(n) ? Number(n) + 1 : 2)].forEach((_, i) => msgList[i].delete())
+      // 引数の値を数を取得ない場合は1
+      const n = (arg => (/\d/.test(arg) ? Number(arg) : 1))(msg.content.replace('/rm ', ''))
+      // 指定された回数と`/rm`のメッセージを消す
+      ;[...Array(n + 1)].forEach((_, i) => msgList[i].delete())
     }
   }
 }

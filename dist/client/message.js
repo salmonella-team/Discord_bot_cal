@@ -240,10 +240,14 @@ var notExistCommands = function (command, msg) { return __awaiter(void 0, void 0
     });
 }); };
 var removeMessage = function (msg) { return __awaiter(void 0, void 0, void 0, function () {
-    var _a, msgList_1, n;
-    return __generator(this, function (_b) {
-        switch (_b.label) {
+    var roles, _a, msgList_1, n;
+    var _b;
+    return __generator(this, function (_c) {
+        switch (_c.label) {
             case 0:
+                roles = (_b = msg.member) === null || _b === void 0 ? void 0 : _b.roles.cache.map(function (r) { return r.name; });
+                if (!const_settings_1["default"].REMOTE_YABAI.some(function (r) { return roles === null || roles === void 0 ? void 0 : roles.find(function (v) { return v === r; }); }))
+                    return [2];
                 _a = true;
                 switch (_a) {
                     case /rm/.test(msg.content): return [3, 1];
@@ -251,10 +255,10 @@ var removeMessage = function (msg) { return __awaiter(void 0, void 0, void 0, fu
                 return [3, 3];
             case 1: return [4, msg.channel.messages.fetch()];
             case 2:
-                msgList_1 = (_b.sent()).map(function (v) { return v; });
-                n = msg.content.replace('/rm ', '');
-                __spread(Array(/\d/.test(n) ? Number(n) + 1 : 2)).forEach(function (_, i) { return msgList_1[i]["delete"](); });
-                _b.label = 3;
+                msgList_1 = (_c.sent()).map(function (v) { return v; });
+                n = (function (arg) { return (/\d/.test(arg) ? Number(arg) : 1); })(msg.content.replace('/rm ', ''));
+                __spread(Array(n + 1)).forEach(function (_, i) { return msgList_1[i]["delete"](); });
+                _c.label = 3;
             case 3: return [2];
         }
     });
