@@ -11,7 +11,7 @@ client.on('ready', () => Ready(client))
 
 // ボイスチャンネルの状態が変わったら実行
 client.on('voiceStateUpdate', (oldState: Discord.VoiceState, newState: Discord.VoiceState) =>
-  VoiceStateUpdate(oldState, newState)
+  VoiceStateUpdate(oldState, newState, client)
 )
 
 // メッセージが送信された際に実行

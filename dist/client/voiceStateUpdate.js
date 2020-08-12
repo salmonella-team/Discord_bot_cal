@@ -40,33 +40,33 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 exports.__esModule = true;
 var const_settings_1 = __importDefault(require("const-settings"));
-exports.VoiceStateUpdate = function (oldState, newState) {
+exports.VoiceStateUpdate = function (oldState, newState, client) {
     if (oldState.channel)
-        oldStateChannel(oldState.channel);
+        oldStateChannel(oldState.channel, client);
     if (newState.channel)
         newStateChannel(newState.channel);
 };
-var oldStateChannel = function (channel) { return __awaiter(void 0, void 0, void 0, function () {
-    var users, connect;
+var oldStateChannel = function (channel, client) { return __awaiter(void 0, void 0, void 0, function () {
+    var exitFromVC, users;
     return __generator(this, function (_a) {
-        switch (_a.label) {
-            case 0:
-                users = channel.members.map(function (m) { return m.user.username; }).toString();
-                if (!(users === 'キャル')) return [3, 2];
-                return [4, channel.join()];
-            case 1:
-                connect = _a.sent();
-                connect === null || connect === void 0 ? void 0 : connect.disconnect();
-                _a.label = 2;
-            case 2: return [2];
-        }
+        exitFromVC = function () { var _a, _b; return (_b = (_a = client.voice) === null || _a === void 0 ? void 0 : _a.connections.map(function (v) { return v; }).filter(function (v) { return v.channel === channel; })[0]) === null || _b === void 0 ? void 0 : _b.disconnect(); };
+        users = channel.members.map(function (m) { return m.user; });
+        if (users.every(function (u) { return u.bot; }))
+            exitFromVC();
+        if (users.map(function (u) { return u.username; }).toString() === 'キャル')
+            exitFromVC();
+        return [2];
     });
 }); };
 var newStateChannel = function (channel) { return __awaiter(void 0, void 0, void 0, function () {
+    var users;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
                 if (const_settings_1["default"].AFK_CHANNEL.some(function (c) { return c === channel.name; }))
+                    return [2];
+                users = channel.members.map(function (m) { return m.user; });
+                if (users.every(function (u) { return u.bot; }))
                     return [2];
                 return [4, channel.join()];
             case 1:

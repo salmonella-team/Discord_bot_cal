@@ -245,7 +245,7 @@ const removeMessage = async (msg: Discord.Message) => {
       // 引数の値を数を取得ない場合は1
       const n = (arg => (/\d/.test(arg) ? Number(arg) : 1))(msg.content.replace('/rm ', ''))
       // 指定された回数と`/rm`のメッセージを消す
-      ;[...Array(n + 1)].forEach((_, i) => msgList[i].delete())
+      ;[...Array(n + 1)].forEach((_, i) => setTimeout(() => msgList[i].delete(), 100))
     }
   }
 }

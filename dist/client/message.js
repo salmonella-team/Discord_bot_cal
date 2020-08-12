@@ -257,7 +257,7 @@ var removeMessage = function (msg) { return __awaiter(void 0, void 0, void 0, fu
             case 2:
                 msgList_1 = (_c.sent()).map(function (v) { return v; });
                 n = (function (arg) { return (/\d/.test(arg) ? Number(arg) : 1); })(msg.content.replace('/rm ', ''));
-                __spread(Array(n + 1)).forEach(function (_, i) { return msgList_1[i]["delete"](); });
+                __spread(Array(n + 1)).forEach(function (_, i) { return setTimeout(function () { return msgList_1[i]["delete"](); }, 100); });
                 _c.label = 3;
             case 3: return [2];
         }
