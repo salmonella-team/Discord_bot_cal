@@ -164,6 +164,13 @@ const speakCommands = (command: string, msg: Discord.Message): Option<string> =>
           text: 'ヤバイヤバイヤバイヤバイヤバイやばいですね☆',
           comment: 'speak yabai.yaba',
         }
+
+      case 'usamaru':
+        return {
+          url: Settings.URL.USAMARU,
+          text: 'ｷﾞｶﾞｷﾞｶﾞﾌﾝﾌﾝｶﾞｶﾞｶﾞｶﾞｶﾞｶﾞｶﾞｶﾞｶﾞ',
+          comment: 'speak usamaru',
+        }
     }
 
     // DevModeでない場合、下の処理は行わない
@@ -240,6 +247,10 @@ const removeMessage = async (msg: Discord.Message) => {
 
   switch (true) {
     case /rm/.test(msg.content): {
+      // スラッシュが入っていなければ終了
+      const match = msg.content.replace(/・/g, '/').match(/\//)
+      if (!match) return
+
       // チャンネルのメッセージ履歴を取得
       const msgList = (await msg.channel.messages.fetch()).map(v => v)
       // 引数の値を数を取得ない場合は1
