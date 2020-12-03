@@ -12,10 +12,25 @@ export const VoiceStateUpdate = (
   newState: Discord.VoiceState,
   client: Discord.Client
 ) => {
+  sendVCLog(oldState, newState)
+
   // 退出前のチャンネルがあった場合、処理をする
   if (oldState.channel) oldStateChannel(oldState.channel, client)
   // 状態遷移後にチャンネルがあった場合、処理をする
   if (newState.channel) newStateChannel(newState.channel)
+}
+
+const sendVCLog = (oldState: Discord.VoiceState, newState: Discord.VoiceState) => {
+  if (oldState.channel) {
+    console.log(oldState.channel.guild.id)
+    console.log(`out: ${oldState.member?.user.username}`)
+  }
+  if (newState.channel) {
+    console.log(newState.channel.guild.id)
+    console.log(`in:  ${newState.member?.user.username}`)
+  }
+  // console.log(newState.member?.user.username)
+  // console.log(newState.member?.voice.mute)
 }
 
 /**

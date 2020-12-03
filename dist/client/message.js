@@ -185,6 +185,12 @@ var speakCommands = function (command, msg) {
                     text: 'ヤバイヤバイヤバイヤバイヤバイやばいですね☆',
                     comment: 'speak yabai.yaba'
                 };
+            case 'usamaru':
+                return {
+                    url: const_settings_1["default"].URL.USAMARU,
+                    text: 'ｷﾞｶﾞｷﾞｶﾞﾌﾝﾌﾝｶﾞｶﾞｶﾞｶﾞｶﾞｶﾞｶﾞｶﾞｶﾞ',
+                    comment: 'speak usamaru'
+                };
         }
         if (!status.Mode)
             return;
@@ -240,7 +246,7 @@ var notExistCommands = function (command, msg) { return __awaiter(void 0, void 0
     });
 }); };
 var removeMessage = function (msg) { return __awaiter(void 0, void 0, void 0, function () {
-    var roles, _a, msgList_1, n;
+    var roles, _a, match, msgList_1, n;
     var _b;
     return __generator(this, function (_c) {
         switch (_c.label) {
@@ -253,7 +259,11 @@ var removeMessage = function (msg) { return __awaiter(void 0, void 0, void 0, fu
                     case /rm/.test(msg.content): return [3, 1];
                 }
                 return [3, 3];
-            case 1: return [4, msg.channel.messages.fetch()];
+            case 1:
+                match = msg.content.replace(/・/g, '/').match(/\//);
+                if (!match)
+                    return [2];
+                return [4, msg.channel.messages.fetch()];
             case 2:
                 msgList_1 = (_c.sent()).map(function (v) { return v; });
                 n = (function (arg) { return (/\d/.test(arg) ? Number(arg) : 1); })(msg.content.replace('/rm ', ''));

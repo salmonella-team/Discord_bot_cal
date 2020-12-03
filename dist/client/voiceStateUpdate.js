@@ -41,10 +41,22 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 exports.__esModule = true;
 var const_settings_1 = __importDefault(require("const-settings"));
 exports.VoiceStateUpdate = function (oldState, newState, client) {
+    sendVCLog(oldState, newState);
     if (oldState.channel)
         oldStateChannel(oldState.channel, client);
     if (newState.channel)
         newStateChannel(newState.channel);
+};
+var sendVCLog = function (oldState, newState) {
+    var _a, _b;
+    if (oldState.channel) {
+        console.log(oldState.channel.guild.id);
+        console.log("out: " + ((_a = oldState.member) === null || _a === void 0 ? void 0 : _a.user.username));
+    }
+    if (newState.channel) {
+        console.log(newState.channel.guild.id);
+        console.log("in:  " + ((_b = newState.member) === null || _b === void 0 ? void 0 : _b.user.username));
+    }
 };
 var oldStateChannel = function (channel, client) { return __awaiter(void 0, void 0, void 0, function () {
     var exitFromVC, users;
