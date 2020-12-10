@@ -39,23 +39,35 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 exports.__esModule = true;
+var throw_env_1 = __importDefault(require("throw-env"));
 var const_settings_1 = __importDefault(require("const-settings"));
 exports.VoiceStateUpdate = function (oldState, newState, client) {
-    sendVCLog(oldState, newState);
-    if (oldState.channel)
-        oldStateChannel(oldState.channel, client);
+    sendVCLog(oldState, newState, client);
     if (newState.channel)
         newStateChannel(newState.channel);
+    if (oldState.channel)
+        oldStateChannel(oldState.channel, client);
 };
-var sendVCLog = function (oldState, newState) {
-    var _a, _b;
+var sendVCLog = function (oldState, newState, client) {
+    var _a, _b, _c, _d;
+    if (oldState.guild.id !== throw_env_1["default"]('SERVER_ID'))
+        return;
+    var name = exports.GetUserName(oldState.member);
+    var channel = client.channels.cache.get(const_settings_1["default"].VC_LOG_CHANNEL);
+    if (((_a = oldState.channel) === null || _a === void 0 ? void 0 : _a.id) === ((_b = newState.channel) === null || _b === void 0 ? void 0 : _b.id)) {
+        if (!((_c = oldState.member) === null || _c === void 0 ? void 0 : _c.user.bot)) {
+            var mute = (_d = newState.member) === null || _d === void 0 ? void 0 : _d.voice.mute;
+            var msg = name + " \u304C\u30DF\u30E5\u30FC\u30C8" + (mute ? 'しました' : 'を解除しました');
+            return channel.send(msg), console.log(msg);
+        }
+    }
     if (oldState.channel) {
-        console.log(oldState.channel.guild.id);
-        console.log("out: " + ((_a = oldState.member) === null || _a === void 0 ? void 0 : _a.user.username));
+        var msg = name + " \u304C " + oldState.channel.name + " \u304B\u3089\u9000\u51FA\u3057\u307E\u3057\u305F";
+        channel.send(msg), console.log(msg);
     }
     if (newState.channel) {
-        console.log(newState.channel.guild.id);
-        console.log("in:  " + ((_b = newState.member) === null || _b === void 0 ? void 0 : _b.user.username));
+        var msg = name + " \u304C " + newState.channel.name + " \u306B\u5165\u5BA4\u3057\u307E\u3057\u305F";
+        channel.send(msg), console.log(msg);
     }
 };
 var oldStateChannel = function (channel, client) { return __awaiter(void 0, void 0, void 0, function () {
@@ -87,3 +99,6 @@ var newStateChannel = function (channel) { return __awaiter(void 0, void 0, void
         }
     });
 }); };
+exports.GetUserName = function (m) {
+    return (m === null || m === void 0 ? void 0 : m.nickname) ? m === null || m === void 0 ? void 0 : m.nickname : (m === null || m === void 0 ? void 0 : m.user.username) || '';
+};
