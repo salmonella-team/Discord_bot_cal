@@ -1,4 +1,6 @@
 import * as Discord from 'discord.js'
+import Option from 'type-of-option'
+import throwEnv from 'throw-env'
 import Settings from 'const-settings'
 
 /**
@@ -12,25 +14,55 @@ export const VoiceStateUpdate = (
   newState: Discord.VoiceState,
   client: Discord.Client
 ) => {
-  sendVCLog(oldState, newState)
+  // vcのログ出力する
+  sendVCLog(oldState, newState, client)
+
+  // 状態遷移後にチャンネルがあった場合、処理をする
+  if (newState.channel) newStateChannel(newState.channel)
 
   // 退出前のチャンネルがあった場合、処理をする
   if (oldState.channel) oldStateChannel(oldState.channel, client)
-  // 状態遷移後にチャンネルがあった場合、処理をする
-  if (newState.channel) newStateChannel(newState.channel)
 }
 
-const sendVCLog = (oldState: Discord.VoiceState, newState: Discord.VoiceState) => {
+/**
+ * vcのログを#ログに出力する
+ * @param oldState 状態遷移前の情報
+ * @param newState 状態遷移後の情報
+ * @param client bot(キャル)のclient
+ */
+const sendVCLog = (oldState: Discord.VoiceState, newState: Discord.VoiceState, client: Discord.Client) => {
+  // サルモネラ菌のサーバーじゃなければ終了
+  if (oldState.guild.id !== throwEnv('SERVER_ID')) return
+
+  // ニックネームを優先してユーザーネームを取得
+  const name = GetUserName(oldState.member)
+
+  // #ログのチャンネル情報
+  const channel = client.channels.cache.get(Settings.VC_LOG_CHANNEL) as Discord.TextChannel
+
+  // 新旧のチャンネルが同じの場合、ミュートの切り替えをしている
+  if (oldState.channel?.id === newState.channel?.id) {
+    // botはミュートしないので省く
+    if (!oldState.member?.user.bot) {
+      // ミュートの状態を取得
+      const mute = newState.member?.voice.mute
+
+      const msg = `${name} がミュート${mute ? 'しました' : 'を解除しました'}`
+      return channel.send(msg), console.log(msg)
+    }
+  }
+
+  // チャンネルから退出した際の処理
   if (oldState.channel) {
-    console.log(oldState.channel.guild.id)
-    console.log(`out: ${oldState.member?.user.username}`)
+    const msg = `${name} が ${oldState.channel.name} から退出しました`
+    channel.send(msg), console.log(msg)
   }
+
+  // チャンネルを入出した際の処理
   if (newState.channel) {
-    console.log(newState.channel.guild.id)
-    console.log(`in:  ${newState.member?.user.username}`)
+    const msg = `${name} が ${newState.channel.name} に入室しました`
+    channel.send(msg), console.log(msg)
   }
-  // console.log(newState.member?.user.username)
-  // console.log(newState.member?.voice.mute)
 }
 
 /**
@@ -71,3 +103,12 @@ const newStateChannel = async (channel: Discord.VoiceChannel) => {
   // キャルをイベントがあったチャンネルに接続する
   await channel.join()
 }
+
+/**
+ * Userの名前を取得する。
+ * ニックネームがある場合はそちらを取る
+ * @param m Userの情報
+ * @return Userの名前
+ */
+export const GetUserName = (m: Option<Discord.GuildMember>): string =>
+  m?.nickname ? m?.nickname : m?.user.username || ''
