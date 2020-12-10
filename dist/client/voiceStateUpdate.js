@@ -55,11 +55,12 @@ var sendVCLog = function (oldState, newState, client) {
     var name = exports.GetUserName(oldState.member);
     var channel = client.channels.cache.get(const_settings_1["default"].VC_LOG_CHANNEL);
     if (((_a = oldState.channel) === null || _a === void 0 ? void 0 : _a.id) === ((_b = newState.channel) === null || _b === void 0 ? void 0 : _b.id)) {
-        if (!((_c = oldState.member) === null || _c === void 0 ? void 0 : _c.user.bot)) {
-            var mute = (_d = newState.member) === null || _d === void 0 ? void 0 : _d.voice.mute;
-            var msg = name + " \u304C\u30DF\u30E5\u30FC\u30C8" + (mute ? 'しました' : 'を解除しました');
-            return channel.send(msg), console.log(msg);
-        }
+        var streaming = (_c = newState.member) === null || _c === void 0 ? void 0 : _c.voice.streaming;
+        var mute = (_d = newState.member) === null || _d === void 0 ? void 0 : _d.voice.mute;
+        var msg = streaming
+            ? name + " \u304C\u753B\u9762\u5171\u6709\u3092" + (streaming ? '開始' : '終了') + "\u3057\u307E\u3057\u305F"
+            : name + " \u304C\u30DF\u30E5\u30FC\u30C8" + (mute ? '' : 'を解除') + "\u3057\u307E\u3057\u305F";
+        return channel.send(msg), console.log(msg);
     }
     if (oldState.channel) {
         var msg = name + " \u304C " + oldState.channel.name + " \u304B\u3089\u9000\u51FA\u3057\u307E\u3057\u305F";

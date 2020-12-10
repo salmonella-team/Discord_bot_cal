@@ -40,16 +40,18 @@ const sendVCLog = (oldState: Discord.VoiceState, newState: Discord.VoiceState, c
   // #ログのチャンネル情報
   const channel = client.channels.cache.get(Settings.VC_LOG_CHANNEL) as Discord.TextChannel
 
-  // 新旧のチャンネルが同じの場合、ミュートの切り替えをしている
+  // 新旧のチャンネルが同じの場合、画面共有の開始・終了かミュートの切り替えをしている
   if (oldState.channel?.id === newState.channel?.id) {
-    // botはミュートしないので省く
-    if (!oldState.member?.user.bot) {
-      // ミュートの状態を取得
-      const mute = newState.member?.voice.mute
+    // 状態を取得
+    const streaming = newState.member?.voice.streaming
+    const mute = newState.member?.voice.mute
 
-      const msg = `${name} がミュート${mute ? 'しました' : 'を解除しました'}`
-      return channel.send(msg), console.log(msg)
-    }
+    // 画面共有の開始・終了とミュートの切り替えを判別する方法がない
+    // 画面共有をしている状態でミュートを切り替える可能性が少ないので、画面共有を優先する
+    const msg = streaming
+      ? `${name} が画面共有を${streaming ? '開始' : '終了'}しました`
+      : `${name} がミュート${mute ? '' : 'を解除'}しました`
+    return channel.send(msg), console.log(msg)
   }
 
   // チャンネルから退出した際の処理
