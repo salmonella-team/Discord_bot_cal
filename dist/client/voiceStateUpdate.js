@@ -52,23 +52,46 @@ var sendVCLog = function (oldState, newState, client) {
     var _a, _b, _c, _d;
     if (oldState.guild.id !== throw_env_1["default"]('SERVER_ID'))
         return;
-    var name = exports.GetUserName(oldState.member);
     var channel = client.channels.cache.get(const_settings_1["default"].VC_LOG_CHANNEL);
     if (((_a = oldState.channel) === null || _a === void 0 ? void 0 : _a.id) === ((_b = newState.channel) === null || _b === void 0 ? void 0 : _b.id)) {
-        var streaming = (_c = newState.member) === null || _c === void 0 ? void 0 : _c.voice.streaming;
-        var mute = (_d = newState.member) === null || _d === void 0 ? void 0 : _d.voice.mute;
-        var msg = streaming
-            ? name + " \u304C\u753B\u9762\u5171\u6709\u3092" + (streaming ? '開始' : '終了') + "\u3057\u307E\u3057\u305F"
-            : name + " \u304C\u30DF\u30E5\u30FC\u30C8" + (mute ? '' : 'を解除') + "\u3057\u307E\u3057\u305F";
-        return channel.send(msg), console.log(msg);
+        if (!((_c = oldState.member) === null || _c === void 0 ? void 0 : _c.user.bot)) {
+            var msg = streamingSndMute(oldState.member);
+            channel.send(msg), console.log(msg);
+            return;
+        }
     }
+    var name = exports.GetUserName(oldState.member);
     if (oldState.channel) {
+        (_d = oldState.member) === null || _d === void 0 ? void 0 : _d.roles.remove(const_settings_1["default"].STREAMING_ROLE);
         var msg = name + " \u304C " + oldState.channel.name + " \u304B\u3089\u9000\u51FA\u3057\u307E\u3057\u305F";
         channel.send(msg), console.log(msg);
     }
     if (newState.channel) {
         var msg = name + " \u304C " + newState.channel.name + " \u306B\u5165\u5BA4\u3057\u307E\u3057\u305F";
         channel.send(msg), console.log(msg);
+    }
+};
+var streamingSndMute = function (member) {
+    var name = exports.GetUserName(member);
+    var streaming = member === null || member === void 0 ? void 0 : member.voice.streaming;
+    var isRole = member === null || member === void 0 ? void 0 : member.roles.cache.some(function (r) { return r.id === const_settings_1["default"].STREAMING_ROLE; });
+    if (isRole) {
+        if (streaming) {
+            return name + " \u304C\u30DF\u30E5\u30FC\u30C8" + ((member === null || member === void 0 ? void 0 : member.voice.mute) ? '' : 'を解除') + "\u3057\u307E\u3057\u305F";
+        }
+        else {
+            member === null || member === void 0 ? void 0 : member.roles.remove(const_settings_1["default"].STREAMING_ROLE);
+            return name + " \u304C\u753B\u9762\u5171\u6709\u3092\u7D42\u4E86\u3057\u307E\u3057\u305F";
+        }
+    }
+    else {
+        if (streaming) {
+            member === null || member === void 0 ? void 0 : member.roles.add(const_settings_1["default"].STREAMING_ROLE);
+            return name + " \u304C\u753B\u9762\u5171\u6709\u3092\u958B\u59CB\u3057\u307E\u3057\u305F";
+        }
+        else {
+            return name + " \u304C\u30DF\u30E5\u30FC\u30C8" + ((member === null || member === void 0 ? void 0 : member.voice.mute) ? '' : 'を解除') + "\u3057\u307E\u3057\u305F";
+        }
     }
 };
 var oldStateChannel = function (channel, client) { return __awaiter(void 0, void 0, void 0, function () {

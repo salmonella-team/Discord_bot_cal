@@ -28,6 +28,9 @@ DEVELOP_ROLE:
 REMOTE_YABAI:
   - ヤバイわよ！
 
+# 画面共有しているか判別するロール
+STREAMING_ROLE: '785179265284964383'
+
 # ホワイトリストのシート名とセルの範囲
 WHITE_LIST:
   SHEET: ホワイトリスト

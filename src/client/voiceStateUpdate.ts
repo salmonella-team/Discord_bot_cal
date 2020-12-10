@@ -34,28 +34,27 @@ const sendVCLog = (oldState: Discord.VoiceState, newState: Discord.VoiceState, c
   // サルモネラ菌のサーバーじゃなければ終了
   if (oldState.guild.id !== throwEnv('SERVER_ID')) return
 
-  // ニックネームを優先してユーザーネームを取得
-  const name = GetUserName(oldState.member)
-
   // #ログのチャンネル情報
   const channel = client.channels.cache.get(Settings.VC_LOG_CHANNEL) as Discord.TextChannel
 
   // 新旧のチャンネルが同じの場合、画面共有の開始・終了かミュートの切り替えをしている
   if (oldState.channel?.id === newState.channel?.id) {
-    // 状態を取得
-    const streaming = newState.member?.voice.streaming
-    const mute = newState.member?.voice.mute
-
-    // 画面共有の開始・終了とミュートの切り替えを判別する方法がない
-    // 画面共有をしている状態でミュートを切り替える可能性が少ないので、画面共有を優先する
-    const msg = streaming
-      ? `${name} が画面共有を${streaming ? '開始' : '終了'}しました`
-      : `${name} がミュート${mute ? '' : 'を解除'}しました`
-    return channel.send(msg), console.log(msg)
+    // botは画面共有やミュートをしないので省く
+    if (!oldState.member?.user.bot) {
+      const msg = streamingSndMute(oldState.member)
+      channel.send(msg), console.log(msg)
+      return
+    }
   }
+
+  // ニックネームを優先してユーザーネームを取得
+  const name = GetUserName(oldState.member)
 
   // チャンネルから退出した際の処理
   if (oldState.channel) {
+    // 画面共有ロールを削除
+    oldState.member?.roles.remove(Settings.STREAMING_ROLE)
+
     const msg = `${name} が ${oldState.channel.name} から退出しました`
     channel.send(msg), console.log(msg)
   }
@@ -64,6 +63,41 @@ const sendVCLog = (oldState: Discord.VoiceState, newState: Discord.VoiceState, c
   if (newState.channel) {
     const msg = `${name} が ${newState.channel.name} に入室しました`
     channel.send(msg), console.log(msg)
+  }
+}
+
+/**
+ * 画面共有とミュートの状態から出力するメッセージを返す
+ * @param member 状態変化者のメンバー情報
+ * @return 出力するメッセージ
+ */
+const streamingSndMute = (member: Option<Discord.GuildMember>): string => {
+  // ニックネームを優先してユーザーネームを取得
+  const name = GetUserName(member)
+
+  // 状態を取得
+  const streaming = member?.voice.streaming
+
+  // 画面共有ロールが付いているか確認
+  const isRole = member?.roles.cache.some(r => r.id === Settings.STREAMING_ROLE)
+
+  // 画面共有ロールが付与されている場合の処理
+  if (isRole) {
+    if (streaming) {
+      return `${name} がミュート${member?.voice.mute ? '' : 'を解除'}しました`
+    } else {
+      // 画面共有ロールを付与
+      member?.roles.remove(Settings.STREAMING_ROLE)
+      return `${name} が画面共有を終了しました`
+    }
+  } else {
+    if (streaming) {
+      // 画面共有ロールを削除
+      member?.roles.add(Settings.STREAMING_ROLE)
+      return `${name} が画面共有を開始しました`
+    } else {
+      return `${name} がミュート${member?.voice.mute ? '' : 'を解除'}しました`
+    }
   }
 }
 
