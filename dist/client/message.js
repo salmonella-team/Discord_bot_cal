@@ -153,6 +153,13 @@ var calCommands = function (command, msg, client) {
             status.Mode = cal.SwitchMode(msg, status.Mode);
             return 'switch devMode';
     }
+    switch (true) {
+        case /bpm/.test(command): {
+            var _a = __read(command.replace('.', ' ').split(' ').map(Number), 4), former = _a[1], ahead = _a[2], bpm = _a[3];
+            msg.channel.send((former / ahead) * bpm);
+            return 'bpm calc';
+        }
+    }
 };
 var speakCommands = function (command, msg) {
     var value = (function () {

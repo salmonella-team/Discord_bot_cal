@@ -118,6 +118,14 @@ const calCommands = (command: string, msg: Discord.Message, client: Discord.Clie
       status.Mode = cal.SwitchMode(msg, status.Mode)
       return 'switch devMode'
   }
+
+  switch (true) {
+    case /bpm/.test(command): {
+      const [, former, ahead, bpm] = command.replace('.', ' ').split(' ').map(Number)
+      msg.channel.send((former / ahead) * bpm)
+      return 'bpm calc'
+    }
+  }
 }
 
 /**
