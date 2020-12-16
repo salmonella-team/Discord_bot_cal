@@ -17,7 +17,7 @@ export const VoiceStateUpdate = (
   // vcのログ出力する
   sendVCLog(oldState, newState, client)
 
-  // 状態遷移後にチャンネルがあった場合、処理をする
+  // 入出前のチャンネルがあった場合、処理をする
   if (newState.channel) newStateChannel(newState.channel)
 
   // 退出前のチャンネルがあった場合、処理をする
@@ -51,27 +51,26 @@ const sendVCLog = (oldState: Discord.VoiceState, newState: Discord.VoiceState, c
   // ニックネームを優先してユーザーネームを取得
   const name = getUserName(oldState.member)
 
-  // 入退出時に外すロール
-  const roleRemove = (m: Option<Discord.GuildMember>) => {
-    m?.roles.remove(Settings.STREAMING_ROLE)
-    m?.roles.remove(Settings.VIDEO_ROLE)
+  // チャンネルを入出した際の処理
+  if (newState.channel) {
+    // ロールを外す
+    newState.member?.roles.remove(Settings.STREAMING_ROLE)
+    newState.member?.roles.remove(Settings.VIDEO_ROLE)
+    // スピーカーミュート状態ならロールを付与する
+    if (newState.member?.voice.deaf) newState.member?.roles.add(Settings.DEAF_ROLE)
+
+    const msg = `${name} が ${newState.channel.name} に入室しました`
+    channel.send(msg), console.log(msg)
   }
 
   // チャンネルから退出した際の処理
   if (oldState.channel) {
     // ロールを外す
-    roleRemove(oldState.member)
+    oldState.member?.roles.remove(Settings.STREAMING_ROLE)
+    oldState.member?.roles.remove(Settings.VIDEO_ROLE)
+    oldState.member?.roles.remove(Settings.DEAF_ROLE)
 
     const msg = `${name} が ${oldState.channel.name} から退出しました`
-    channel.send(msg), console.log(msg)
-  }
-
-  // チャンネルを入出した際の処理
-  if (newState.channel) {
-    // ロールを外す
-    roleRemove(newState.member)
-
-    const msg = `${name} が ${newState.channel.name} に入室しました`
     channel.send(msg), console.log(msg)
   }
 }
@@ -88,10 +87,12 @@ const streamingSndMute = (member: Option<Discord.GuildMember>): string => {
   // ロールが付いているか確認
   const streamRole = getIsRole(Settings.STREAMING_ROLE, member)
   const videoRole = getIsRole(Settings.VIDEO_ROLE, member)
+  const deafRole = getIsRole(Settings.DEAF_ROLE, member)
 
   // 状態のフラグを取得
   const streamFlag = member?.voice.streaming
   const videoFlag = member?.voice.selfVideo
+  const deafFlag = member?.voice.deaf
 
   // 戻り値の定義
   const streamStart = (): string => {
@@ -110,13 +111,29 @@ const streamingSndMute = (member: Option<Discord.GuildMember>): string => {
     member?.roles.remove(Settings.VIDEO_ROLE)
     return `${name} がカメラをオフにしました`
   }
-  const mute = `${name} がミュート${member?.voice.mute ? '' : 'を解除'}しました`
+  const mute = (): string => {
+    if (deafRole) {
+      if (deafFlag) {
+        return `${name} がマイクミュート${member?.voice.mute ? '' : 'を解除'}しました`
+      } else {
+        member?.roles.remove(Settings.DEAF_ROLE)
+        return `${name} がスピーカーミュートを解除しました`
+      }
+    } else {
+      if (deafFlag) {
+        member?.roles.add(Settings.DEAF_ROLE)
+        return `${name} がスピーカーミュートしました`
+      } else {
+        return `${name} がマイクミュート${member?.voice.mute ? '' : 'を解除'}しました`
+      }
+    }
+  }
   const none = ''
 
   // prettier-ignore
   if (streamRole && videoRole) {
     return (
-       streamFlag &&  videoFlag ? mute          :  // ミュート
+       streamFlag &&  videoFlag ? mute()        :  // ミュート
       !streamFlag &&  videoFlag ? streamEnd()   :  // 画面共有終了
        streamFlag && !videoFlag ? videoOff()    :  // カメラオフ
       !streamFlag && !videoFlag ? none          :  // ×
@@ -124,15 +141,15 @@ const streamingSndMute = (member: Option<Discord.GuildMember>): string => {
   } else if (!streamRole && videoRole) {
     return (
        streamFlag &&  videoFlag ? streamStart() :  // 画面共有開始
-      !streamFlag &&  videoFlag ? mute          :  // ミュート
-       streamFlag && !videoFlag ? none          :  // y×
+      !streamFlag &&  videoFlag ? mute()        :  // ミュート
+       streamFlag && !videoFlag ? none          :  // ×
       !streamFlag && !videoFlag ? videoOff()    :  // カメラオフ
     none)
   } else if (streamRole && !videoRole) {
     return (
        streamFlag &&  videoFlag ? videoOn()     :  // カメラオン
       !streamFlag &&  videoFlag ? none          :  // ×
-       streamFlag && !videoFlag ? mute          :  // ミュート
+       streamFlag && !videoFlag ? mute()        :  // ミュート
       !streamFlag && !videoFlag ? streamEnd()   :  // 画面共有終了
     none)
   } else if (!streamRole && !videoRole) {
@@ -140,7 +157,7 @@ const streamingSndMute = (member: Option<Discord.GuildMember>): string => {
        streamFlag &&  videoFlag ? none          :  // ×
       !streamFlag &&  videoFlag ? videoOn()     :  // カメラオン
        streamFlag && !videoFlag ? streamStart() :  // 画面共有開始
-      !streamFlag && !videoFlag ? mute          :  // ミュート
+      !streamFlag && !videoFlag ? mute()        :  // ミュート
     none)
   } else {
     return none

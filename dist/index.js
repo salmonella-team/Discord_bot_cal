@@ -51,8 +51,14 @@ var throw_env_1 = __importDefault(require("throw-env"));
 var ready_1 = require("./client/ready");
 var voiceStateUpdate_1 = require("./client/voiceStateUpdate");
 var message_1 = require("./client/message");
-var client = new Discord.Client();
+var client = new Discord.Client({
+    partials: ['MESSAGE', 'CHANNEL', 'REACTION'],
+    ws: { intents: Discord.Intents.ALL }
+});
 client.on('ready', function () { return ready_1.Ready(client); });
+client.on('guildMemberSpeaking', function (newMember, _oldMember) {
+    console.log(newMember.voice.mute);
+});
 client.on('voiceStateUpdate', function (oldState, newState) {
     return voiceStateUpdate_1.VoiceStateUpdate(oldState, newState, client);
 });
