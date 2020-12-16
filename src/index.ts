@@ -4,10 +4,18 @@ import {Ready} from './client/ready'
 import {VoiceStateUpdate} from './client/voiceStateUpdate'
 import {Message} from './client/message'
 
-const client = new Discord.Client()
+const client = new Discord.Client({
+  partials: ['MESSAGE', 'CHANNEL', 'REACTION'],
+  ws: {intents: Discord.Intents.ALL},
+})
 
 // botの起動時に実行
 client.on('ready', () => Ready(client))
+
+client.on('guildMemberSpeaking', (newMember, _oldMember) => {
+  console.log(newMember.voice.mute)
+  // console.log(oldMember.voice.mute)
+})
 
 // ボイスチャンネルの状態が変わったら実行
 client.on('voiceStateUpdate', (oldState: Discord.VoiceState, newState: Discord.VoiceState) =>

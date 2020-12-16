@@ -49,49 +49,111 @@ exports.VoiceStateUpdate = function (oldState, newState, client) {
         oldStateChannel(oldState.channel, client);
 };
 var sendVCLog = function (oldState, newState, client) {
-    var _a, _b, _c, _d;
+    var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k;
     if (oldState.guild.id !== throw_env_1["default"]('SERVER_ID'))
         return;
     var channel = client.channels.cache.get(const_settings_1["default"].VC_LOG_CHANNEL);
     if (((_a = oldState.channel) === null || _a === void 0 ? void 0 : _a.id) === ((_b = newState.channel) === null || _b === void 0 ? void 0 : _b.id)) {
         if (!((_c = oldState.member) === null || _c === void 0 ? void 0 : _c.user.bot)) {
             var msg = streamingSndMute(oldState.member);
+            if (!msg)
+                return;
             channel.send(msg), console.log(msg);
             return;
         }
     }
-    var name = exports.GetUserName(oldState.member);
-    if (oldState.channel) {
-        (_d = oldState.member) === null || _d === void 0 ? void 0 : _d.roles.remove(const_settings_1["default"].STREAMING_ROLE);
-        var msg = name + " \u304C " + oldState.channel.name + " \u304B\u3089\u9000\u51FA\u3057\u307E\u3057\u305F";
+    var name = getUserName(oldState.member);
+    if (newState.channel) {
+        (_d = newState.member) === null || _d === void 0 ? void 0 : _d.roles.remove(const_settings_1["default"].STREAMING_ROLE);
+        (_e = newState.member) === null || _e === void 0 ? void 0 : _e.roles.remove(const_settings_1["default"].VIDEO_ROLE);
+        if ((_f = newState.member) === null || _f === void 0 ? void 0 : _f.voice.deaf)
+            (_g = newState.member) === null || _g === void 0 ? void 0 : _g.roles.add(const_settings_1["default"].DEAF_ROLE);
+        var msg = name + " \u304C " + newState.channel.name + " \u306B\u5165\u5BA4\u3057\u307E\u3057\u305F";
         channel.send(msg), console.log(msg);
     }
-    if (newState.channel) {
-        var msg = name + " \u304C " + newState.channel.name + " \u306B\u5165\u5BA4\u3057\u307E\u3057\u305F";
+    if (oldState.channel) {
+        (_h = oldState.member) === null || _h === void 0 ? void 0 : _h.roles.remove(const_settings_1["default"].STREAMING_ROLE);
+        (_j = oldState.member) === null || _j === void 0 ? void 0 : _j.roles.remove(const_settings_1["default"].VIDEO_ROLE);
+        (_k = oldState.member) === null || _k === void 0 ? void 0 : _k.roles.remove(const_settings_1["default"].DEAF_ROLE);
+        var msg = name + " \u304C " + oldState.channel.name + " \u304B\u3089\u9000\u51FA\u3057\u307E\u3057\u305F";
         channel.send(msg), console.log(msg);
     }
 };
 var streamingSndMute = function (member) {
-    var name = exports.GetUserName(member);
-    var streaming = member === null || member === void 0 ? void 0 : member.voice.streaming;
-    var isRole = member === null || member === void 0 ? void 0 : member.roles.cache.some(function (r) { return r.id === const_settings_1["default"].STREAMING_ROLE; });
-    if (isRole) {
-        if (streaming) {
-            return name + " \u304C\u30DF\u30E5\u30FC\u30C8" + ((member === null || member === void 0 ? void 0 : member.voice.mute) ? '' : 'を解除') + "\u3057\u307E\u3057\u305F";
+    var name = getUserName(member);
+    var streamRole = getIsRole(const_settings_1["default"].STREAMING_ROLE, member);
+    var videoRole = getIsRole(const_settings_1["default"].VIDEO_ROLE, member);
+    var deafRole = getIsRole(const_settings_1["default"].DEAF_ROLE, member);
+    var streamFlag = member === null || member === void 0 ? void 0 : member.voice.streaming;
+    var videoFlag = member === null || member === void 0 ? void 0 : member.voice.selfVideo;
+    var deafFlag = member === null || member === void 0 ? void 0 : member.voice.deaf;
+    var streamStart = function () {
+        member === null || member === void 0 ? void 0 : member.roles.add(const_settings_1["default"].STREAMING_ROLE);
+        return name + " \u304C\u753B\u9762\u5171\u6709\u3092\u958B\u59CB\u3057\u307E\u3057\u305F";
+    };
+    var streamEnd = function () {
+        member === null || member === void 0 ? void 0 : member.roles.remove(const_settings_1["default"].STREAMING_ROLE);
+        return name + " \u304C\u753B\u9762\u5171\u6709\u3092\u7D42\u4E86\u3057\u307E\u3057\u305F";
+    };
+    var videoOn = function () {
+        member === null || member === void 0 ? void 0 : member.roles.add(const_settings_1["default"].VIDEO_ROLE);
+        return name + " \u304C\u30AB\u30E1\u30E9\u3092\u30AA\u30F3\u306B\u3057\u307E\u3057\u305F";
+    };
+    var videoOff = function () {
+        member === null || member === void 0 ? void 0 : member.roles.remove(const_settings_1["default"].VIDEO_ROLE);
+        return name + " \u304C\u30AB\u30E1\u30E9\u3092\u30AA\u30D5\u306B\u3057\u307E\u3057\u305F";
+    };
+    var mute = function () {
+        if (deafRole) {
+            if (deafFlag) {
+                return name + " \u304C\u30DE\u30A4\u30AF\u30DF\u30E5\u30FC\u30C8" + ((member === null || member === void 0 ? void 0 : member.voice.mute) ? '' : 'を解除') + "\u3057\u307E\u3057\u305F";
+            }
+            else {
+                member === null || member === void 0 ? void 0 : member.roles.remove(const_settings_1["default"].DEAF_ROLE);
+                return name + " \u304C\u30B9\u30D4\u30FC\u30AB\u30FC\u30DF\u30E5\u30FC\u30C8\u3092\u89E3\u9664\u3057\u307E\u3057\u305F";
+            }
         }
         else {
-            member === null || member === void 0 ? void 0 : member.roles.remove(const_settings_1["default"].STREAMING_ROLE);
-            return name + " \u304C\u753B\u9762\u5171\u6709\u3092\u7D42\u4E86\u3057\u307E\u3057\u305F";
+            if (deafFlag) {
+                member === null || member === void 0 ? void 0 : member.roles.add(const_settings_1["default"].DEAF_ROLE);
+                return name + " \u304C\u30B9\u30D4\u30FC\u30AB\u30FC\u30DF\u30E5\u30FC\u30C8\u3057\u307E\u3057\u305F";
+            }
+            else {
+                return name + " \u304C\u30DE\u30A4\u30AF\u30DF\u30E5\u30FC\u30C8" + ((member === null || member === void 0 ? void 0 : member.voice.mute) ? '' : 'を解除') + "\u3057\u307E\u3057\u305F";
+            }
         }
+    };
+    var none = '';
+    if (streamRole && videoRole) {
+        return (streamFlag && videoFlag ? mute() :
+            !streamFlag && videoFlag ? streamEnd() :
+                streamFlag && !videoFlag ? videoOff() :
+                    !streamFlag && !videoFlag ? none :
+                        none);
+    }
+    else if (!streamRole && videoRole) {
+        return (streamFlag && videoFlag ? streamStart() :
+            !streamFlag && videoFlag ? mute() :
+                streamFlag && !videoFlag ? none :
+                    !streamFlag && !videoFlag ? videoOff() :
+                        none);
+    }
+    else if (streamRole && !videoRole) {
+        return (streamFlag && videoFlag ? videoOn() :
+            !streamFlag && videoFlag ? none :
+                streamFlag && !videoFlag ? mute() :
+                    !streamFlag && !videoFlag ? streamEnd() :
+                        none);
+    }
+    else if (!streamRole && !videoRole) {
+        return (streamFlag && videoFlag ? none :
+            !streamFlag && videoFlag ? videoOn() :
+                streamFlag && !videoFlag ? streamStart() :
+                    !streamFlag && !videoFlag ? mute() :
+                        none);
     }
     else {
-        if (streaming) {
-            member === null || member === void 0 ? void 0 : member.roles.add(const_settings_1["default"].STREAMING_ROLE);
-            return name + " \u304C\u753B\u9762\u5171\u6709\u3092\u958B\u59CB\u3057\u307E\u3057\u305F";
-        }
-        else {
-            return name + " \u304C\u30DF\u30E5\u30FC\u30C8" + ((member === null || member === void 0 ? void 0 : member.voice.mute) ? '' : 'を解除') + "\u3057\u307E\u3057\u305F";
-        }
+        return none;
     }
 };
 var oldStateChannel = function (channel, client) { return __awaiter(void 0, void 0, void 0, function () {
@@ -123,6 +185,5 @@ var newStateChannel = function (channel) { return __awaiter(void 0, void 0, void
         }
     });
 }); };
-exports.GetUserName = function (m) {
-    return (m === null || m === void 0 ? void 0 : m.nickname) ? m === null || m === void 0 ? void 0 : m.nickname : (m === null || m === void 0 ? void 0 : m.user.username) || '';
-};
+var getUserName = function (m) { return ((m === null || m === void 0 ? void 0 : m.nickname) ? m === null || m === void 0 ? void 0 : m.nickname : (m === null || m === void 0 ? void 0 : m.user.username) || ''); };
+var getIsRole = function (id, m) { return m === null || m === void 0 ? void 0 : m.roles.cache.some(function (r) { return r.id === id; }); };

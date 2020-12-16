@@ -17,7 +17,7 @@ export const VoiceStateUpdate = (
   // vcのログ出力する
   sendVCLog(oldState, newState, client)
 
-  // 状態遷移後にチャンネルがあった場合、処理をする
+  // 入出前のチャンネルがあった場合、処理をする
   if (newState.channel) newStateChannel(newState.channel)
 
   // 退出前のチャンネルがあった場合、処理をする
@@ -42,26 +42,35 @@ const sendVCLog = (oldState: Discord.VoiceState, newState: Discord.VoiceState, c
     // botは画面共有やミュートをしないので省く
     if (!oldState.member?.user.bot) {
       const msg = streamingSndMute(oldState.member)
+      if (!msg) return
       channel.send(msg), console.log(msg)
       return
     }
   }
 
   // ニックネームを優先してユーザーネームを取得
-  const name = GetUserName(oldState.member)
-
-  // チャンネルから退出した際の処理
-  if (oldState.channel) {
-    // 画面共有ロールを削除
-    oldState.member?.roles.remove(Settings.STREAMING_ROLE)
-
-    const msg = `${name} が ${oldState.channel.name} から退出しました`
-    channel.send(msg), console.log(msg)
-  }
+  const name = getUserName(oldState.member)
 
   // チャンネルを入出した際の処理
   if (newState.channel) {
+    // ロールを外す
+    newState.member?.roles.remove(Settings.STREAMING_ROLE)
+    newState.member?.roles.remove(Settings.VIDEO_ROLE)
+    // スピーカーミュート状態ならロールを付与する
+    if (newState.member?.voice.deaf) newState.member?.roles.add(Settings.DEAF_ROLE)
+
     const msg = `${name} が ${newState.channel.name} に入室しました`
+    channel.send(msg), console.log(msg)
+  }
+
+  // チャンネルから退出した際の処理
+  if (oldState.channel) {
+    // ロールを外す
+    oldState.member?.roles.remove(Settings.STREAMING_ROLE)
+    oldState.member?.roles.remove(Settings.VIDEO_ROLE)
+    oldState.member?.roles.remove(Settings.DEAF_ROLE)
+
+    const msg = `${name} が ${oldState.channel.name} から退出しました`
     channel.send(msg), console.log(msg)
   }
 }
@@ -73,31 +82,85 @@ const sendVCLog = (oldState: Discord.VoiceState, newState: Discord.VoiceState, c
  */
 const streamingSndMute = (member: Option<Discord.GuildMember>): string => {
   // ニックネームを優先してユーザーネームを取得
-  const name = GetUserName(member)
+  const name = getUserName(member)
 
-  // 状態を取得
-  const streaming = member?.voice.streaming
+  // ロールが付いているか確認
+  const streamRole = getIsRole(Settings.STREAMING_ROLE, member)
+  const videoRole = getIsRole(Settings.VIDEO_ROLE, member)
+  const deafRole = getIsRole(Settings.DEAF_ROLE, member)
 
-  // 画面共有ロールが付いているか確認
-  const isRole = member?.roles.cache.some(r => r.id === Settings.STREAMING_ROLE)
+  // 状態のフラグを取得
+  const streamFlag = member?.voice.streaming
+  const videoFlag = member?.voice.selfVideo
+  const deafFlag = member?.voice.deaf
 
-  // 画面共有ロールが付与されている場合の処理
-  if (isRole) {
-    if (streaming) {
-      return `${name} がミュート${member?.voice.mute ? '' : 'を解除'}しました`
+  // 戻り値の定義
+  const streamStart = (): string => {
+    member?.roles.add(Settings.STREAMING_ROLE)
+    return `${name} が画面共有を開始しました`
+  }
+  const streamEnd = (): string => {
+    member?.roles.remove(Settings.STREAMING_ROLE)
+    return `${name} が画面共有を終了しました`
+  }
+  const videoOn = (): string => {
+    member?.roles.add(Settings.VIDEO_ROLE)
+    return `${name} がカメラをオンにしました`
+  }
+  const videoOff = (): string => {
+    member?.roles.remove(Settings.VIDEO_ROLE)
+    return `${name} がカメラをオフにしました`
+  }
+  const mute = (): string => {
+    if (deafRole) {
+      if (deafFlag) {
+        return `${name} がマイクミュート${member?.voice.mute ? '' : 'を解除'}しました`
+      } else {
+        member?.roles.remove(Settings.DEAF_ROLE)
+        return `${name} がスピーカーミュートを解除しました`
+      }
     } else {
-      // 画面共有ロールを付与
-      member?.roles.remove(Settings.STREAMING_ROLE)
-      return `${name} が画面共有を終了しました`
+      if (deafFlag) {
+        member?.roles.add(Settings.DEAF_ROLE)
+        return `${name} がスピーカーミュートしました`
+      } else {
+        return `${name} がマイクミュート${member?.voice.mute ? '' : 'を解除'}しました`
+      }
     }
+  }
+  const none = ''
+
+  // prettier-ignore
+  if (streamRole && videoRole) {
+    return (
+       streamFlag &&  videoFlag ? mute()        :  // ミュート
+      !streamFlag &&  videoFlag ? streamEnd()   :  // 画面共有終了
+       streamFlag && !videoFlag ? videoOff()    :  // カメラオフ
+      !streamFlag && !videoFlag ? none          :  // ×
+    none)
+  } else if (!streamRole && videoRole) {
+    return (
+       streamFlag &&  videoFlag ? streamStart() :  // 画面共有開始
+      !streamFlag &&  videoFlag ? mute()        :  // ミュート
+       streamFlag && !videoFlag ? none          :  // ×
+      !streamFlag && !videoFlag ? videoOff()    :  // カメラオフ
+    none)
+  } else if (streamRole && !videoRole) {
+    return (
+       streamFlag &&  videoFlag ? videoOn()     :  // カメラオン
+      !streamFlag &&  videoFlag ? none          :  // ×
+       streamFlag && !videoFlag ? mute()        :  // ミュート
+      !streamFlag && !videoFlag ? streamEnd()   :  // 画面共有終了
+    none)
+  } else if (!streamRole && !videoRole) {
+    return (
+       streamFlag &&  videoFlag ? none          :  // ×
+      !streamFlag &&  videoFlag ? videoOn()     :  // カメラオン
+       streamFlag && !videoFlag ? streamStart() :  // 画面共有開始
+      !streamFlag && !videoFlag ? mute()        :  // ミュート
+    none)
   } else {
-    if (streaming) {
-      // 画面共有ロールを削除
-      member?.roles.add(Settings.STREAMING_ROLE)
-      return `${name} が画面共有を開始しました`
-    } else {
-      return `${name} がミュート${member?.voice.mute ? '' : 'を解除'}しました`
-    }
+    return none
   }
 }
 
@@ -146,5 +209,12 @@ const newStateChannel = async (channel: Discord.VoiceChannel) => {
  * @param m Userの情報
  * @return Userの名前
  */
-export const GetUserName = (m: Option<Discord.GuildMember>): string =>
-  m?.nickname ? m?.nickname : m?.user.username || ''
+const getUserName = (m: Option<Discord.GuildMember>): string => (m?.nickname ? m?.nickname : m?.user.username || '')
+
+/**
+ * 引数で渡したロールが付与されているか確認する
+ * @param id ロールのid
+ * @param m Userの情報
+ * @return ロールが付与されていたかの真偽値
+ */
+const getIsRole = (id: string, m: Option<Discord.GuildMember>): Option<boolean> => m?.roles.cache.some(r => r.id === id)
