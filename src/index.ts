@@ -12,11 +12,6 @@ const client = new Discord.Client({
 // botの起動時に実行
 client.on('ready', () => Ready(client))
 
-client.on('guildMemberSpeaking', (newMember, _oldMember) => {
-  console.log(newMember.voice.mute)
-  // console.log(oldMember.voice.mute)
-})
-
 // ボイスチャンネルの状態が変わったら実行
 client.on('voiceStateUpdate', (oldState: Discord.VoiceState, newState: Discord.VoiceState) =>
   VoiceStateUpdate(oldState, newState, client)
