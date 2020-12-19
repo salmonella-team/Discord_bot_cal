@@ -192,11 +192,37 @@ var speakCommands = function (command, msg) {
                     text: 'ヤバイヤバイヤバイヤバイヤバイやばいですね☆',
                     comment: 'speak yabai.yaba'
                 };
+            case '/jinai':
+            case '/jinnai':
+                return {
+                    url: const_settings_1["default"].URL.JINNAI,
+                    text: '笑いのニューウェーブ\n陣 内 智 則',
+                    comment: 'speak jinnai'
+                };
+            case '/jinaitomonori':
+            case '/jinnaitomonori':
+                return {
+                    url: const_settings_1["default"].URL.JINNAITOMONORI,
+                    text: '次々に、新しい仕掛けを繰り出すのは、この男〜！\n笑いのニューウェーブ\n陣 内 智 則',
+                    comment: 'speak jinnaitomonori'
+                };
             case 'usamaru':
                 return {
                     url: const_settings_1["default"].URL.USAMARU,
                     text: 'ｷﾞｶﾞｷﾞｶﾞﾌﾝﾌﾝｶﾞｶﾞｶﾞｶﾞｶﾞｶﾞｶﾞｶﾞｶﾞ',
                     comment: 'speak usamaru'
+                };
+            case 'deden':
+                return {
+                    url: const_settings_1["default"].URL.DEDEN,
+                    text: 'ﾃﾞﾃﾞﾝ',
+                    comment: 'speak deden'
+                };
+            case 'gi':
+                return {
+                    url: const_settings_1["default"].URL.GI,
+                    text: 'ギラティナ',
+                    comment: 'speak gi'
                 };
         }
         if (!status.Mode)

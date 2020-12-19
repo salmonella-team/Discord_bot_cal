@@ -42,13 +42,16 @@ WHITE_LIST:
 
 # 音源のURL
 URL:
-  YABAI:      https://nextcloud.salmonella.tk/index.php/s/2MwnkFwQGiQGMRR/download
-  YABAIWAYO:  https://nextcloud.salmonella.tk/index.php/s/b979bn3pGAiczY3/download
-  YABAIDESU:  https://nextcloud.salmonella.tk/index.php/s/8wKm4tijSKm8ag3/download
-  YABAIYABA:  https://nextcloud.salmonella.tk/index.php/s/ZdGwzSBefcGno2b/download
-  YABAIFULL:  https://nextcloud.salmonella.tk/index.php/s/Q3NzaWm4NpmnpSn/download
-  YABAIYABAI: https://nextcloud.salmonella.tk/index.php/s/y3zAwdRYiDmMmdr/download
-  YABAISLOW:  https://nextcloud.salmonella.tk/index.php/s/pSbrEafTGQryfP9/download
-  YABAIOTWR:  https://nextcloud.salmonella.tk/index.php/s/6zwRmgCAHm29Gzn/download
-  USAMARU:    https://firebasestorage.googleapis.com/v0/b/practice-smicle.appspot.com/o/cal-bot%2Fusamaru.wav?alt=media&token=fa04af94-6177-4339-b2e8-07b781fe4b74
-  # USAMARU:    https://nextcloud.salmonella.tk/index.php/s/t8HGELPLZqkkATP/download
+  YABAI: https://firebasestorage.googleapis.com/v0/b/practice-smicle.appspot.com/o/cal-bot%2Fyabai.wav?alt=media&token=2822b79e-3a96-4ba1-b41b-faf08c8dc83a
+  YABAIWAYO: https://firebasestorage.googleapis.com/v0/b/practice-smicle.appspot.com/o/cal-bot%2Fyabaiwayo.wav?alt=media&token=2e605577-37c6-4abc-99f0-f8cfd8aca9ad
+  YABAIDESU: https://firebasestorage.googleapis.com/v0/b/practice-smicle.appspot.com/o/cal-bot%2Fyabaidesune.wav?alt=media&token=f8b00f56-e73a-4453-9e46-3ac85e61d8fb
+  YABAIYABA: https://firebasestorage.googleapis.com/v0/b/practice-smicle.appspot.com/o/cal-bot%2Fyabayaba.wav?alt=media&token=8e35e529-fefe-47b1-8181-e0774e95b2dc
+  YABAIFULL: https://firebasestorage.googleapis.com/v0/b/practice-smicle.appspot.com/o/cal-bot%2Fyabaiwayofull.wav?alt=media&token=c9391090-865b-425e-8a1d-6aecde7e7cfa
+  YABAIYABAI: https://firebasestorage.googleapis.com/v0/b/practice-smicle.appspot.com/o/cal-bot%2Fyabayabai.wav?alt=media&token=da346b8f-d11d-4a2e-b5e8-64ea297cd789
+  YABAISLOW: https://firebasestorage.googleapis.com/v0/b/practice-smicle.appspot.com/o/cal-bot%2Fyabaislow.wav?alt=media&token=13ab1306-a81d-426f-8410-d04403416268
+  YABAIOTWR: https://firebasestorage.googleapis.com/v0/b/practice-smicle.appspot.com/o/cal-bot%2Fyabaiotwr.wav?alt=media&token=a9b46699-ff50-4f1c-b02f-2055ea1a0b8d
+  JINNAI: https://firebasestorage.googleapis.com/v0/b/practice-smicle.appspot.com/o/cal-bot%2Fjinnai.wav?alt=media&token=39fa812f-1154-4643-9d91-0b4fc16353ad
+  JINNAITOMONORI: https://firebasestorage.googleapis.com/v0/b/practice-smicle.appspot.com/o/cal-bot%2Fjinnaitomonori.wav?alt=media&token=95e61e67-ce7d-4b54-90a2-2f7ac28088a1
+  USAMARU: https://firebasestorage.googleapis.com/v0/b/practice-smicle.appspot.com/o/cal-bot%2Fusamaru.wav?alt=media&token=eabc4d55-f604-47b8-8841-8f0d56544342
+  DEDEN: https://firebasestorage.googleapis.com/v0/b/practice-smicle.appspot.com/o/cal-bot%2Fdeden.wav?alt=media&token=9dc22157-19c1-482b-acf9-adcfc286bc35
+  GI: https://firebasestorage.googleapis.com/v0/b/practice-smicle.appspot.com/o/cal-bot%2Fgi.wav?alt=media&token=6c2e1624-40e5-4fe2-a68a-701e3b629729
