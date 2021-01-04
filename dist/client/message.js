@@ -343,7 +343,7 @@ var readAloud = function (msg, client) { return __awaiter(void 0, void 0, void 0
                 vc = client.voice.connections.map(function (v) { return v; }).filter(function (v) { var _a; return v.channel.guild.id === ((_a = msg.guild) === null || _a === void 0 ? void 0 : _a.id); });
                 if (!vc.length)
                     return [2];
-                lang = /^en/.test(msg.content) ? 'en-US' : 'ja-JP';
+                lang = /^en/.test(msg.content.replace('おはなし', '').trim()) ? 'en-US' : 'ja-JP';
                 content = aloudFormat(msg.content);
                 if (!content)
                     return [2];
@@ -381,6 +381,8 @@ var aloudFormat = function (content) {
         call: function () { return separat.char[separat.count ? separat.count-- : separat.count++]; }
     };
     return content
+        .replace('おはなし', '')
+        .trim()
         .replace(/^en/, '')
         .trim()
         .replace(/https?:\/\/\S+/g, '')

@@ -342,7 +342,7 @@ const readAloud = async (msg: Discord.Message, client: Discord.Client): Promise<
   if (!vc.length) return
 
   // 英語か日本語かを判別
-  const lang = /^en/.test(msg.content) ? 'en-US' : 'ja-JP'
+  const lang = /^en/.test(msg.content.replace('おはなし', '').trim()) ? 'en-US' : 'ja-JP'
 
   // 入力された文字を読み上げられる形に整形
   const content = aloudFormat(msg.content)
@@ -395,6 +395,8 @@ const aloudFormat = (content: string): string => {
   }
 
   return content
+    .replace('おはなし', '') // おはなしを除去する
+    .trim() // 余分な空白を除去
     .replace(/^en/, '') // 先頭のenを除去
     .trim() // 余分な空白を除去
     .replace(/https?:\/\/\S+/g, '') // URLを除去
