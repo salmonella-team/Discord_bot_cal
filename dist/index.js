@@ -60,6 +60,9 @@ client.on('voiceStateUpdate', function (oldState, newState) {
     return voiceStateUpdate_1.VoiceStateUpdate(oldState, newState, client);
 });
 client.on('message', function (msg) { return __awaiter(void 0, void 0, void 0, function () { return __generator(this, function (_a) {
-    return [2, message_1.Message(msg, client)];
+    switch (_a.label) {
+        case 0: return [4, message_1.Message(msg, client)];
+        case 1: return [2, _a.sent()];
+    }
 }); }); });
 client.login(throw_env_1["default"]('CAL_TOKEN'));

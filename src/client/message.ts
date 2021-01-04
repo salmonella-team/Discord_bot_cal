@@ -1,10 +1,14 @@
 import * as Discord from 'discord.js'
+import axios from 'axios'
+import {AxiosRequestConfig} from 'axios'
+import {getAudioUrl} from 'google-tts-api'
+import throwEnv from 'throw-env'
 import Option from 'type-of-option'
+import Settings from 'const-settings'
 import * as cal from '../message/cal'
 import * as speak from '../message/speak'
 import * as spreadsheet from '../message/spreadsheet'
 import {Mode, Status} from '../config/type'
-import Settings from 'const-settings'
 
 /**
  * キャルの音量とモードを管理
@@ -25,17 +29,14 @@ export const Message = async (msg: Discord.Message, client: Discord.Client) => {
   // キャルのメッセージはコマンド実行しない
   if (msg.member?.user.username === 'キャル') return
 
-  // 直前のメッセージを削除
-  removeMessage(msg)
+  let comment: Option<string>
 
-  // 指定のチャンネル以外でキャルが動かないようにする
-  const channel = msg.channel as Discord.TextChannel
-  if (!Settings.COMMAND_CHANNEL.some((c: string) => c === channel?.name)) return
+  // 直前のメッセージを削除
+  comment = await removeMessage(msg)
+  if (comment) return console.log(comment)
 
   // スペース、カンマ、コロン、イコールの場合でもコマンドが動くようにピリオドに変換する
   const command: string = msg.content.replace(/ |\.|,|:|=/, '.')
-
-  let comment: Option<string>
 
   // キャルに関するコマンドを実行
   comment = calCommands(command, msg, client)
@@ -48,6 +49,10 @@ export const Message = async (msg: Discord.Message, client: Discord.Client) => {
   // 存在しないコマンドの処理
   comment = await notExistCommands(command, msg)
   if (comment) return console.log(comment)
+
+  // 入力された文字を読み上げる処理
+  comment = await readAloud(msg, client)
+  if (comment) return console.log(comment)
 }
 
 /**
@@ -59,6 +64,10 @@ export const Message = async (msg: Discord.Message, client: Discord.Client) => {
  * @return 実行したコマンドの結果
  */
 const calCommands = (command: string, msg: Discord.Message, client: Discord.Client): Option<string> => {
+  // 指定のチャンネル以外でキャルが動かないようにする
+  const channel = msg.channel as Discord.TextChannel
+  if (!Settings.COMMAND_CHANNEL.some((c: string) => c === channel?.name)) return
+
   switch (command.split(' ')[0]) {
     case '/cal':
     case '/cal.status':
@@ -136,6 +145,10 @@ const calCommands = (command: string, msg: Discord.Message, client: Discord.Clie
  * @return 実行したコマンドの結果
  */
 const speakCommands = (command: string, msg: Discord.Message): Option<string> => {
+  // 指定のチャンネル以外でキャルが動かないようにする
+  const channel = msg.channel as Discord.TextChannel
+  if (!Settings.COMMAND_CHANNEL.some((c: string) => c === channel?.name)) return
+
   const value: Option<{
     url: string
     text: string
@@ -261,13 +274,17 @@ const speakCommands = (command: string, msg: Discord.Message): Option<string> =>
  * @return 実行したコマンドの結果
  */
 const notExistCommands = async (command: string, msg: Discord.Message): Promise<Option<string>> => {
+  // 指定のチャンネル以外でキャルが動かないようにする
+  const channel = msg.channel as Discord.TextChannel
+  if (!Settings.COMMAND_CHANNEL.some((c: string) => c === channel?.name)) return
+
   // コマンドじゃない場合終了
   if (command.charAt(0) !== '/') return
 
   // ホワイトリストにコマンドがある場合は終了
   const list = await spreadsheet.GetWhiteList()
-  const c = command.slice(1).split('.')[0]
-  if (list.find(l => l === c)) return
+  const cmd = command.slice(1).split('.')[0]
+  if (list.find(l => l === cmd)) return
 
   msg.reply('そんなコマンドないんだけど！')
   return 'missing command'
@@ -277,17 +294,18 @@ const notExistCommands = async (command: string, msg: Discord.Message): Promise<
  * 直前のメッセージを削除。
  * 引数で数を指定できる
  * @param msg DiscordからのMessage
+ * @return 実行したコマンドの結果
  */
-const removeMessage = async (msg: Discord.Message) => {
+const removeMessage = async (msg: Discord.Message): Promise<Option<string>> => {
   // ヤバイわよ！のロールがついて入れば実行可能
   const roles = msg.member?.roles.cache.map(r => r.name)
-  if (!Settings.REMOTE_YABAI.some((r: string) => roles?.find(v => v === r))) return
+  if (!Settings.REMOTE_YABAI.some((r: string) => roles?.find(v => v === r))) return ''
 
   switch (true) {
     case /rm/.test(msg.content): {
       // スラッシュが入っていなければ終了
       const match = msg.content.replace(/・/g, '/').match(/\//)
-      if (!match) return
+      if (!match) return ''
 
       // チャンネルのメッセージ履歴を取得
       const msgList = (await msg.channel.messages.fetch()).map(v => v)
@@ -295,6 +313,94 @@ const removeMessage = async (msg: Discord.Message) => {
       const n = (arg => (/\d/.test(arg) ? Number(arg) : 1))(msg.content.replace('/rm ', ''))
       // 指定された回数と`/rm`のメッセージを消す
       ;[...Array(n + 1)].forEach((_, i) => setTimeout(() => msgList[i].delete(), 100))
+
+      return 'delete message'
+    }
+
+    default: {
+      return ''
     }
   }
+}
+
+/**
+ * 入力された文字を読み上げる処理、先頭にenが付いていたら英語で日本語を喋る
+ * @param msg DiscordからのMessage
+ * @param client bot(キャル)のclient
+ * @return 読み上げた文字の内容
+ */
+const readAloud = async (msg: Discord.Message, client: Discord.Client): Promise<Option<string>> => {
+  // botのメッセージは喋らない
+  if (msg.author.bot) return
+
+  // 読み上げするチャンネル以外では喋らない
+  const channel = msg.channel as Discord.TextChannel
+  if (!Settings.READ_ALOUD_CHANNEL.some((c: string) => c === channel?.name)) return
+
+  // キャルがvcに居ない場合は終了
+  const vc = client.voice.connections.map(v => v).filter(v => v.channel.guild.id === msg.guild?.id)
+  if (!vc.length) return
+
+  // 英語か日本語かを判別
+  const lang = /^en/.test(msg.content) ? 'en-US' : 'ja-JP'
+
+  // 入力された文字を読み上げられる形に整形
+  const content = aloudFormat(msg.content)
+
+  // 文字が空の場合は終了
+  if (!content) return
+
+  // ひらがな化APIを使用するためにパラメータ等を設定
+  const options: AxiosRequestConfig = {
+    method: 'post',
+    url: Settings.API_URL.HIRAGANA,
+    headers: {'Content-Type': 'application/json'},
+    data: {
+      app_id: throwEnv('HIRAGANA_APIKEY'),
+      sentence: content,
+      output_type: 'katakana',
+    },
+  }
+
+  // ひらがな化APIを使って構文解析をし、カタカナに変換する
+  const res = await axios(options)
+    .then(r => r.data)
+    .catch(e => console.log(e))
+
+  // 変換された文字をgttsに投げ、音声を取得する
+  const url = getAudioUrl(res.converted.slice(0, 200), {
+    lang: lang,
+    slow: false,
+    host: Settings.API_URL.GTTS,
+  })
+
+  // 現在キャルが入っているチャンネルで音声を再生する
+  const connect = await vc[0].voice?.channel?.join()
+  connect?.play(url, {volume: 0.5})
+
+  return `speak ${lang === 'en-US' ? 'en ' : ''}${content}`
+}
+
+/**
+ * 入力された文字を読み上げられる形に整形する
+ * @param content 整形する前の文字列
+ * @return 整形した後の文字列
+ */
+const aloudFormat = (content: string): string => {
+  // callする毎に><が切り替わるObjectを作成
+  const separat = {
+    char: ['>', '<'],
+    count: 0,
+    call: () => separat.char[separat.count ? separat.count-- : separat.count++],
+  }
+
+  return content
+    .replace(/^en/, '') // 先頭のenを除去
+    .trim() // 余分な空白を除去
+    .replace(/https?:\/\/\S+/g, '') // URLを除去
+    .split('') // 一文字ずつに分解
+    .map(c => (c === ':' ? separat.call() : c)) // :を><に変換
+    .join('') // 分解した文字を結合
+    .replace(/<[^<>]*>/g, '') // <>に囲まれている文字を全て除去
+    .slice(0, 200) // 200文字以上は喋れないので切り捨てる
 }

@@ -55,6 +55,9 @@ var __spread = (this && this.__spread) || function () {
     for (var ar = [], i = 0; i < arguments.length; i++) ar = ar.concat(__read(arguments[i]));
     return ar;
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 var __importStar = (this && this.__importStar) || function (mod) {
     if (mod && mod.__esModule) return mod;
     var result = {};
@@ -62,30 +65,31 @@ var __importStar = (this && this.__importStar) || function (mod) {
     result["default"] = mod;
     return result;
 };
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 exports.__esModule = true;
+var axios_1 = __importDefault(require("axios"));
+var google_tts_api_1 = require("google-tts-api");
+var throw_env_1 = __importDefault(require("throw-env"));
+var const_settings_1 = __importDefault(require("const-settings"));
 var cal = __importStar(require("../message/cal"));
 var speak = __importStar(require("../message/speak"));
 var spreadsheet = __importStar(require("../message/spreadsheet"));
-var const_settings_1 = __importDefault(require("const-settings"));
 var status = {
     Volume: 0.3,
     Mode: 0
 };
 exports.Message = function (msg, client) { return __awaiter(void 0, void 0, void 0, function () {
-    var channel, command, comment;
+    var comment, command;
     var _a;
     return __generator(this, function (_b) {
         switch (_b.label) {
             case 0:
                 if (((_a = msg.member) === null || _a === void 0 ? void 0 : _a.user.username) === 'キャル')
                     return [2];
-                removeMessage(msg);
-                channel = msg.channel;
-                if (!const_settings_1["default"].COMMAND_CHANNEL.some(function (c) { return c === (channel === null || channel === void 0 ? void 0 : channel.name); }))
-                    return [2];
+                return [4, removeMessage(msg)];
+            case 1:
+                comment = _b.sent();
+                if (comment)
+                    return [2, console.log(comment)];
                 command = msg.content.replace(/ |\.|,|:|=/, '.');
                 comment = calCommands(command, msg, client);
                 if (comment)
@@ -94,7 +98,12 @@ exports.Message = function (msg, client) { return __awaiter(void 0, void 0, void
                 if (comment)
                     return [2, console.log(comment)];
                 return [4, notExistCommands(command, msg)];
-            case 1:
+            case 2:
+                comment = _b.sent();
+                if (comment)
+                    return [2, console.log(comment)];
+                return [4, readAloud(msg, client)];
+            case 3:
                 comment = _b.sent();
                 if (comment)
                     return [2, console.log(comment)];
@@ -103,6 +112,9 @@ exports.Message = function (msg, client) { return __awaiter(void 0, void 0, void
     });
 }); };
 var calCommands = function (command, msg, client) {
+    var channel = msg.channel;
+    if (!const_settings_1["default"].COMMAND_CHANNEL.some(function (c) { return c === (channel === null || channel === void 0 ? void 0 : channel.name); }))
+        return;
     switch (command.split(' ')[0]) {
         case '/cal':
         case '/cal.status':
@@ -162,6 +174,9 @@ var calCommands = function (command, msg, client) {
     }
 };
 var speakCommands = function (command, msg) {
+    var channel = msg.channel;
+    if (!const_settings_1["default"].COMMAND_CHANNEL.some(function (c) { return c === (channel === null || channel === void 0 ? void 0 : channel.name); }))
+        return;
     var value = (function () {
         switch (command) {
             case '/yabai':
@@ -261,17 +276,20 @@ var speakCommands = function (command, msg) {
     return value.comment;
 };
 var notExistCommands = function (command, msg) { return __awaiter(void 0, void 0, void 0, function () {
-    var list, c;
+    var channel, list, cmd;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
+                channel = msg.channel;
+                if (!const_settings_1["default"].COMMAND_CHANNEL.some(function (c) { return c === (channel === null || channel === void 0 ? void 0 : channel.name); }))
+                    return [2];
                 if (command.charAt(0) !== '/')
                     return [2];
                 return [4, spreadsheet.GetWhiteList()];
             case 1:
                 list = _a.sent();
-                c = command.slice(1).split('.')[0];
-                if (list.find(function (l) { return l === c; }))
+                cmd = command.slice(1).split('.')[0];
+                if (list.find(function (l) { return l === cmd; }))
                     return [2];
                 msg.reply('そんなコマンドないんだけど！');
                 return [2, 'missing command'];
@@ -286,7 +304,7 @@ var removeMessage = function (msg) { return __awaiter(void 0, void 0, void 0, fu
             case 0:
                 roles = (_b = msg.member) === null || _b === void 0 ? void 0 : _b.roles.cache.map(function (r) { return r.name; });
                 if (!const_settings_1["default"].REMOTE_YABAI.some(function (r) { return roles === null || roles === void 0 ? void 0 : roles.find(function (v) { return v === r; }); }))
-                    return [2];
+                    return [2, ''];
                 _a = true;
                 switch (_a) {
                     case /rm/.test(msg.content): return [3, 1];
@@ -295,14 +313,80 @@ var removeMessage = function (msg) { return __awaiter(void 0, void 0, void 0, fu
             case 1:
                 match = msg.content.replace(/・/g, '/').match(/\//);
                 if (!match)
-                    return [2];
+                    return [2, ''];
                 return [4, msg.channel.messages.fetch()];
             case 2:
                 msgList_1 = (_c.sent()).map(function (v) { return v; });
                 n = (function (arg) { return (/\d/.test(arg) ? Number(arg) : 1); })(msg.content.replace('/rm ', ''));
                 __spread(Array(n + 1)).forEach(function (_, i) { return setTimeout(function () { return msgList_1[i]["delete"](); }, 100); });
-                _c.label = 3;
-            case 3: return [2];
+                return [2, 'delete message'];
+            case 3:
+                {
+                    return [2, ''];
+                }
+                _c.label = 4;
+            case 4: return [2];
         }
     });
 }); };
+var readAloud = function (msg, client) { return __awaiter(void 0, void 0, void 0, function () {
+    var channel, vc, lang, content, options, res, url, connect;
+    var _a, _b;
+    return __generator(this, function (_c) {
+        switch (_c.label) {
+            case 0:
+                if (msg.author.bot)
+                    return [2];
+                channel = msg.channel;
+                if (!const_settings_1["default"].READ_ALOUD_CHANNEL.some(function (c) { return c === (channel === null || channel === void 0 ? void 0 : channel.name); }))
+                    return [2];
+                vc = client.voice.connections.map(function (v) { return v; }).filter(function (v) { var _a; return v.channel.guild.id === ((_a = msg.guild) === null || _a === void 0 ? void 0 : _a.id); });
+                if (!vc.length)
+                    return [2];
+                lang = /^en/.test(msg.content) ? 'en-US' : 'ja-JP';
+                content = aloudFormat(msg.content);
+                if (!content)
+                    return [2];
+                options = {
+                    method: 'post',
+                    url: const_settings_1["default"].API_URL.HIRAGANA,
+                    headers: { 'Content-Type': 'application/json' },
+                    data: {
+                        app_id: throw_env_1["default"]('HIRAGANA_APIKEY'),
+                        sentence: content,
+                        output_type: 'katakana'
+                    }
+                };
+                return [4, axios_1["default"](options)
+                        .then(function (r) { return r.data; })["catch"](function (e) { return console.log(e); })];
+            case 1:
+                res = _c.sent();
+                url = google_tts_api_1.getAudioUrl(res.converted.slice(0, 200), {
+                    lang: lang,
+                    slow: false,
+                    host: const_settings_1["default"].API_URL.GTTS
+                });
+                return [4, ((_b = (_a = vc[0].voice) === null || _a === void 0 ? void 0 : _a.channel) === null || _b === void 0 ? void 0 : _b.join())];
+            case 2:
+                connect = _c.sent();
+                connect === null || connect === void 0 ? void 0 : connect.play(url, { volume: 0.5 });
+                return [2, "speak " + (lang === 'en-US' ? 'en ' : '') + content];
+        }
+    });
+}); };
+var aloudFormat = function (content) {
+    var separat = {
+        char: ['>', '<'],
+        count: 0,
+        call: function () { return separat.char[separat.count ? separat.count-- : separat.count++]; }
+    };
+    return content
+        .replace(/^en/, '')
+        .trim()
+        .replace(/https?:\/\/\S+/g, '')
+        .split('')
+        .map(function (c) { return (c === ':' ? separat.call() : c); })
+        .join('')
+        .replace(/<[^<>]*>/g, '')
+        .slice(0, 200);
+};

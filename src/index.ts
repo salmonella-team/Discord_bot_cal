@@ -18,6 +18,6 @@ client.on('voiceStateUpdate', (oldState: Discord.VoiceState, newState: Discord.V
 )
 
 // メッセージが送信された際に実行
-client.on('message', async (msg: Discord.Message) => Message(msg, client))
+client.on('message', async (msg: Discord.Message) => await Message(msg, client))
 
 client.login(throwEnv('CAL_TOKEN'))
