@@ -14,6 +14,7 @@ COMMAND_CHANNEL:
   - テスト用
   - bot-test
   - vc用
+  - しろはの部屋
 
 # AFK用のチャンネル
 AFK_CHANNEL:
