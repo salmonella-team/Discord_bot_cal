@@ -1,4 +1,5 @@
 import * as Discord from 'discord.js'
+import moji from 'moji'
 import axios from 'axios'
 import {AxiosRequestConfig} from 'axios'
 import {getAudioUrl} from 'google-tts-api'
@@ -390,6 +391,29 @@ const readAloud = async (msg: Discord.Message, client: Discord.Client): Promise<
  * @return 整形した後の文字列
  */
 const aloudFormat = (content: string): string => {
+  /**
+   * 行末wをワラに変える
+   * @param str 変換する文字列
+   * @return 変換した文字列
+   */
+  const replaceWara = (str: string): string => {
+    let flag = false
+    return str
+      .split('')
+      .reverse()
+      .map(s => {
+        if (flag) return s
+        if (!/w/i.test(s)) {
+          flag = true
+          return s
+        } else {
+          return 'ワラ'
+        }
+      })
+      .reverse()
+      .join('')
+  }
+
   // callする毎に><が切り替わるObjectを作成
   const separat = {
     char: ['>', '<'],
@@ -397,13 +421,19 @@ const aloudFormat = (content: string): string => {
     call: () => separat.char[separat.count ? separat.count-- : separat.count++],
   }
 
-  // emojiTrimのカウンタ
+  // 絵文字トリム用のカウンタ
   const counter = {
     count: 0,
     call: () => (counter.count = counter.count === 2 ? 0 : counter.count + 1),
   }
 
-  // 絵文字の余計な部分を省く
+  /**
+   * 絵文字の余計な部分を消す為に:を<>に変換する
+   * @param c 文字
+   * @param i インデックス
+   * @param str 配列
+   * @return 変換した文字
+   */
   const emojiTrim = (c: string, i: number, str: string[]): string => {
     if (counter.count) {
       return c === ':' ? (counter.call(), separat.call()) : c
@@ -413,12 +443,17 @@ const aloudFormat = (content: string): string => {
     }
   }
 
-  return content
+  return moji(content)
+    .convert('HK', 'ZK') // 半角カナを全角カナに変換
+    .toString() // String型に戻す
     .replace(/おはなし|お話し|お話/, '') // おはなしを除去する
     .trim() // 余分な空白を除去
     .replace(/^en/, '') // 先頭のenを除去
     .trim() // 余分な空白を除去
     .replace(/https?:\/\/\S+/g, '') // URLを除去
+    .split('\n') // 一行ずつに分解
+    .map(replaceWara) // 文末のwをワラに変える
+    .join('') // 分解した文字を結合
     .split('') // 一文字ずつに分解
     .map(emojiTrim) // :を><に変換
     .join('') // 分解した文字を結合

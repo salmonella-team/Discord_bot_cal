@@ -66,6 +66,7 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 exports.__esModule = true;
+var moji_1 = __importDefault(require("moji"));
 var axios_1 = __importDefault(require("axios"));
 var google_tts_api_1 = require("google-tts-api");
 var throw_env_1 = __importDefault(require("throw-env"));
@@ -377,6 +378,25 @@ var readAloud = function (msg, client) { return __awaiter(void 0, void 0, void 0
     });
 }); };
 var aloudFormat = function (content) {
+    var replaceWara = function (str) {
+        var flag = false;
+        return str
+            .split('')
+            .reverse()
+            .map(function (s) {
+            if (flag)
+                return s;
+            if (!/w/i.test(s)) {
+                flag = true;
+                return s;
+            }
+            else {
+                return 'ワラ';
+            }
+        })
+            .reverse()
+            .join('');
+    };
     var separat = {
         char: ['>', '<'],
         count: 0,
@@ -396,12 +416,17 @@ var aloudFormat = function (content) {
             return c;
         }
     };
-    return content
+    return moji_1["default"](content)
+        .convert('HK', 'ZK')
+        .toString()
         .replace(/おはなし|お話し|お話/, '')
         .trim()
         .replace(/^en/, '')
         .trim()
         .replace(/https?:\/\/\S+/g, '')
+        .split('\n')
+        .map(replaceWara)
+        .join('')
         .split('')
         .map(emojiTrim)
         .join('')
