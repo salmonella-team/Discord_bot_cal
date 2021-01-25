@@ -341,6 +341,9 @@ const readAloud = async (msg: Discord.Message, client: Discord.Client): Promise<
   const vc = client.voice.connections.map(v => v).filter(v => v.channel.guild.id === msg.guild?.id)
   if (!vc.length) return
 
+  // コードブロックの場合は終了
+  if (/\`\`\`/.test(msg.content)) return
+
   // 英語か日本語かを判別
   const lang = /^en/.test(msg.content.replace('おはなし', '').trim()) ? 'en-US' : 'ja-JP'
 
@@ -394,14 +397,30 @@ const aloudFormat = (content: string): string => {
     call: () => separat.char[separat.count ? separat.count-- : separat.count++],
   }
 
+  // emojiTrimのカウンタ
+  const counter = {
+    count: 0,
+    call: () => (counter.count = counter.count === 2 ? 0 : counter.count + 1),
+  }
+
+  // 絵文字の余計な部分を省く
+  const emojiTrim = (c: string, i: number, str: string[]): string => {
+    if (counter.count) {
+      return c === ':' ? (counter.call(), separat.call()) : c
+    } else {
+      if (c === '<' && str[i + 1] === ':') counter.call()
+      return c
+    }
+  }
+
   return content
-    .replace('おはなし', '') // おはなしを除去する
+    .replace(/おはなし|お話し|お話/, '') // おはなしを除去する
     .trim() // 余分な空白を除去
     .replace(/^en/, '') // 先頭のenを除去
     .trim() // 余分な空白を除去
     .replace(/https?:\/\/\S+/g, '') // URLを除去
     .split('') // 一文字ずつに分解
-    .map(c => (c === ':' ? separat.call() : c)) // :を><に変換
+    .map(emojiTrim) // :を><に変換
     .join('') // 分解した文字を結合
     .replace(/<[^<>]*>/g, '') // <>に囲まれている文字を全て除去
     .slice(0, 200) // 200文字以上は喋れないので切り捨てる

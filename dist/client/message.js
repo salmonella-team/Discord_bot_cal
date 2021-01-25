@@ -343,6 +343,8 @@ var readAloud = function (msg, client) { return __awaiter(void 0, void 0, void 0
                 vc = client.voice.connections.map(function (v) { return v; }).filter(function (v) { var _a; return v.channel.guild.id === ((_a = msg.guild) === null || _a === void 0 ? void 0 : _a.id); });
                 if (!vc.length)
                     return [2];
+                if (/\`\`\`/.test(msg.content))
+                    return [2];
                 lang = /^en/.test(msg.content.replace('おはなし', '').trim()) ? 'en-US' : 'ja-JP';
                 content = aloudFormat(msg.content);
                 if (!content)
@@ -380,14 +382,28 @@ var aloudFormat = function (content) {
         count: 0,
         call: function () { return separat.char[separat.count ? separat.count-- : separat.count++]; }
     };
+    var counter = {
+        count: 0,
+        call: function () { return (counter.count = counter.count === 2 ? 0 : counter.count + 1); }
+    };
+    var emojiTrim = function (c, i, str) {
+        if (counter.count) {
+            return c === ':' ? (counter.call(), separat.call()) : c;
+        }
+        else {
+            if (c === '<' && str[i + 1] === ':')
+                counter.call();
+            return c;
+        }
+    };
     return content
-        .replace('おはなし', '')
+        .replace(/おはなし|お話し|お話/, '')
         .trim()
         .replace(/^en/, '')
         .trim()
         .replace(/https?:\/\/\S+/g, '')
         .split('')
-        .map(function (c) { return (c === ':' ? separat.call() : c); })
+        .map(emojiTrim)
         .join('')
         .replace(/<[^<>]*>/g, '')
         .slice(0, 200);
