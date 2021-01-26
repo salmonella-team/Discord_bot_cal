@@ -66,6 +66,7 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 exports.__esModule = true;
+var moji_1 = __importDefault(require("moji"));
 var axios_1 = __importDefault(require("axios"));
 var google_tts_api_1 = require("google-tts-api");
 var throw_env_1 = __importDefault(require("throw-env"));
@@ -207,15 +208,15 @@ var speakCommands = function (command, msg) {
                     text: 'ヤバイヤバイヤバイヤバイヤバイやばいですね☆',
                     comment: 'speak yabai.yaba'
                 };
-            case '/jinai':
-            case '/jinnai':
+            case 'jinai':
+            case 'jinnai':
                 return {
                     url: const_settings_1["default"].URL.JINNAI,
                     text: '笑いのニューウェーブ\n陣 内 智 則',
                     comment: 'speak jinnai'
                 };
-            case '/jinaitomonori':
-            case '/jinnaitomonori':
+            case 'jinaitomonori':
+            case 'jinnaitomonori':
                 return {
                     url: const_settings_1["default"].URL.JINNAITOMONORI,
                     text: '次々に、新しい仕掛けを繰り出すのは、この男〜！\n笑いのニューウェーブ\n陣 内 智 則',
@@ -226,6 +227,18 @@ var speakCommands = function (command, msg) {
                     url: const_settings_1["default"].URL.USAMARU,
                     text: 'ｷﾞｶﾞｷﾞｶﾞﾌﾝﾌﾝｶﾞｶﾞｶﾞｶﾞｶﾞｶﾞｶﾞｶﾞｶﾞ',
                     comment: 'speak usamaru'
+                };
+            case 'ニューイヤーバースト':
+                return {
+                    url: const_settings_1["default"].URL.NYARU,
+                    text: '何発でも打ち込むわ！ニューイヤーバースト！！！',
+                    comment: 'speak nyaru'
+                };
+            case 'heero':
+                return {
+                    url: const_settings_1["default"].URL.HEERO,
+                    text: 'ヒイロ・ユイ',
+                    comment: 'speak heero'
                 };
             case 'deden':
                 return {
@@ -238,6 +251,30 @@ var speakCommands = function (command, msg) {
                     url: const_settings_1["default"].URL.GI,
                     text: 'ギラティナ',
                     comment: 'speak gi'
+                };
+            case '船越':
+                return {
+                    url: const_settings_1["default"].URL.FUNAKOSHI,
+                    text: '火曜サスペンス劇場 フラッシュバックテーマ',
+                    comment: 'speak funakoshi'
+                };
+            case '片平':
+                return {
+                    url: const_settings_1["default"].URL.KATAHIRA,
+                    text: '火曜サスペンス劇場 アイキャッチ',
+                    comment: 'speak katahira'
+                };
+            case '<.reichan:778714208954220586>':
+                return {
+                    url: const_settings_1["default"].URL.REITYAN,
+                    text: 'れいちゃん',
+                    comment: 'speak reityan'
+                };
+            case '素敵な仲間が増えますよ':
+                return {
+                    url: const_settings_1["default"].URL.KARIN,
+                    text: 'クソメガネ',
+                    comment: 'speak karin'
                 };
         }
         if (!status.Mode)
@@ -343,6 +380,8 @@ var readAloud = function (msg, client) { return __awaiter(void 0, void 0, void 0
                 vc = client.voice.connections.map(function (v) { return v; }).filter(function (v) { var _a; return v.channel.guild.id === ((_a = msg.guild) === null || _a === void 0 ? void 0 : _a.id); });
                 if (!vc.length)
                     return [2];
+                if (/\`\`\`/.test(msg.content))
+                    return [2];
                 lang = /^en/.test(msg.content.replace('おはなし', '').trim()) ? 'en-US' : 'ja-JP';
                 content = aloudFormat(msg.content);
                 if (!content)
@@ -375,19 +414,57 @@ var readAloud = function (msg, client) { return __awaiter(void 0, void 0, void 0
     });
 }); };
 var aloudFormat = function (content) {
+    var replaceWara = function (str) {
+        var flag = false;
+        return str
+            .split('')
+            .reverse()
+            .map(function (s) {
+            if (flag)
+                return s;
+            if (!/w/i.test(s)) {
+                flag = true;
+                return s;
+            }
+            else {
+                return 'ワラ';
+            }
+        })
+            .reverse()
+            .join('');
+    };
     var separat = {
         char: ['>', '<'],
         count: 0,
         call: function () { return separat.char[separat.count ? separat.count-- : separat.count++]; }
     };
-    return content
-        .replace('おはなし', '')
+    var counter = {
+        count: 0,
+        call: function () { return (counter.count = counter.count === 2 ? 0 : counter.count + 1); }
+    };
+    var emojiTrim = function (c, i, str) {
+        if (counter.count) {
+            return c === ':' ? (counter.call(), separat.call()) : c;
+        }
+        else {
+            if (c === '<' && str[i + 1] === ':')
+                counter.call();
+            return c;
+        }
+    };
+    return moji_1["default"](content)
+        .convert('HK', 'ZK')
+        .toString()
+        .replace(/おはなし|お話し|お話/, '')
         .trim()
         .replace(/^en/, '')
         .trim()
         .replace(/https?:\/\/\S+/g, '')
+        .split('\n')
+        .map(replaceWara)
+        .join('')
         .split('')
-        .map(function (c) { return (c === ':' ? separat.call() : c); })
+        .map(emojiTrim)
         .join('')
         .replace(/<[^<>]*>/g, '')
         .slice(0, 200);

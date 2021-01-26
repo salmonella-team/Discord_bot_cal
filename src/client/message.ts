@@ -1,4 +1,5 @@
 import * as Discord from 'discord.js'
+import moji from 'moji'
 import axios from 'axios'
 import {AxiosRequestConfig} from 'axios'
 import {getAudioUrl} from 'google-tts-api'
@@ -186,16 +187,16 @@ const speakCommands = (command: string, msg: Discord.Message): Option<string> =>
           comment: 'speak yabai.yaba',
         }
 
-      case '/jinai':
-      case '/jinnai':
+      case 'jinai':
+      case 'jinnai':
         return {
           url: Settings.URL.JINNAI,
           text: '笑いのニューウェーブ\n陣 内 智 則',
           comment: 'speak jinnai',
         }
 
-      case '/jinaitomonori':
-      case '/jinnaitomonori':
+      case 'jinaitomonori':
+      case 'jinnaitomonori':
         return {
           url: Settings.URL.JINNAITOMONORI,
           text: '次々に、新しい仕掛けを繰り出すのは、この男〜！\n笑いのニューウェーブ\n陣 内 智 則',
@@ -207,6 +208,20 @@ const speakCommands = (command: string, msg: Discord.Message): Option<string> =>
           url: Settings.URL.USAMARU,
           text: 'ｷﾞｶﾞｷﾞｶﾞﾌﾝﾌﾝｶﾞｶﾞｶﾞｶﾞｶﾞｶﾞｶﾞｶﾞｶﾞ',
           comment: 'speak usamaru',
+        }
+
+      case 'ニューイヤーバースト':
+        return {
+          url: Settings.URL.NYARU,
+          text: '何発でも打ち込むわ！ニューイヤーバースト！！！',
+          comment: 'speak nyaru',
+        }
+
+      case 'heero':
+        return {
+          url: Settings.URL.HEERO,
+          text: 'ヒイロ・ユイ',
+          comment: 'speak heero',
         }
 
       case 'deden':
@@ -221,6 +236,34 @@ const speakCommands = (command: string, msg: Discord.Message): Option<string> =>
           url: Settings.URL.GI,
           text: 'ギラティナ',
           comment: 'speak gi',
+        }
+
+      case '船越':
+        return {
+          url: Settings.URL.FUNAKOSHI,
+          text: '火曜サスペンス劇場 フラッシュバックテーマ',
+          comment: 'speak funakoshi',
+        }
+
+      case '片平':
+        return {
+          url: Settings.URL.KATAHIRA,
+          text: '火曜サスペンス劇場 アイキャッチ',
+          comment: 'speak katahira',
+        }
+
+      case '<.reichan:778714208954220586>':
+        return {
+          url: Settings.URL.REITYAN,
+          text: 'れいちゃん',
+          comment: 'speak reityan',
+        }
+
+      case '素敵な仲間が増えますよ':
+        return {
+          url: Settings.URL.KARIN,
+          text: 'クソメガネ',
+          comment: 'speak karin',
         }
     }
 
@@ -341,6 +384,9 @@ const readAloud = async (msg: Discord.Message, client: Discord.Client): Promise<
   const vc = client.voice.connections.map(v => v).filter(v => v.channel.guild.id === msg.guild?.id)
   if (!vc.length) return
 
+  // コードブロックの場合は終了
+  if (/\`\`\`/.test(msg.content)) return
+
   // 英語か日本語かを判別
   const lang = /^en/.test(msg.content.replace('おはなし', '').trim()) ? 'en-US' : 'ja-JP'
 
@@ -387,6 +433,29 @@ const readAloud = async (msg: Discord.Message, client: Discord.Client): Promise<
  * @return 整形した後の文字列
  */
 const aloudFormat = (content: string): string => {
+  /**
+   * 行末wをワラに変える
+   * @param str 変換する文字列
+   * @return 変換した文字列
+   */
+  const replaceWara = (str: string): string => {
+    let flag = false
+    return str
+      .split('')
+      .reverse()
+      .map(s => {
+        if (flag) return s
+        if (!/w/i.test(s)) {
+          flag = true
+          return s
+        } else {
+          return 'ワラ'
+        }
+      })
+      .reverse()
+      .join('')
+  }
+
   // callする毎に><が切り替わるObjectを作成
   const separat = {
     char: ['>', '<'],
@@ -394,14 +463,41 @@ const aloudFormat = (content: string): string => {
     call: () => separat.char[separat.count ? separat.count-- : separat.count++],
   }
 
-  return content
-    .replace('おはなし', '') // おはなしを除去する
+  // 絵文字トリム用のカウンタ
+  const counter = {
+    count: 0,
+    call: () => (counter.count = counter.count === 2 ? 0 : counter.count + 1),
+  }
+
+  /**
+   * 絵文字の余計な部分を消す為に:を<>に変換する
+   * @param c 文字
+   * @param i インデックス
+   * @param str 配列
+   * @return 変換した文字
+   */
+  const emojiTrim = (c: string, i: number, str: string[]): string => {
+    if (counter.count) {
+      return c === ':' ? (counter.call(), separat.call()) : c
+    } else {
+      if (c === '<' && str[i + 1] === ':') counter.call()
+      return c
+    }
+  }
+
+  return moji(content)
+    .convert('HK', 'ZK') // 半角カナを全角カナに変換
+    .toString() // String型に戻す
+    .replace(/おはなし|お話し|お話/, '') // おはなしを除去する
     .trim() // 余分な空白を除去
     .replace(/^en/, '') // 先頭のenを除去
     .trim() // 余分な空白を除去
     .replace(/https?:\/\/\S+/g, '') // URLを除去
+    .split('\n') // 一行ずつに分解
+    .map(replaceWara) // 文末のwをワラに変える
+    .join('') // 分解した文字を結合
     .split('') // 一文字ずつに分解
-    .map(c => (c === ':' ? separat.call() : c)) // :を><に変換
+    .map(emojiTrim) // :を><に変換
     .join('') // 分解した文字を結合
     .replace(/<[^<>]*>/g, '') // <>に囲まれている文字を全て除去
     .slice(0, 200) // 200文字以上は喋れないので切り捨てる
