@@ -252,6 +252,12 @@ const speakCommands = (command: string, msg: Discord.Message): Option<string> =>
           comment: 'speak katahira',
         }
 
+      case 'おはなし<.reichan:778714208954220586>':
+      case 'お話し<.reichan:778714208954220586>':
+      case 'お話<.reichan:778714208954220586>':
+      case 'おはなし.<:reichan:778714208954220586>':
+      case 'お話し.<:reichan:778714208954220586>':
+      case 'お話.<:reichan:778714208954220586>':
       case '<.reichan:778714208954220586>':
         return {
           url: Settings.URL.REITYAN,
