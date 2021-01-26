@@ -187,16 +187,16 @@ const speakCommands = (command: string, msg: Discord.Message): Option<string> =>
           comment: 'speak yabai.yaba',
         }
 
-      case '/jinai':
-      case '/jinnai':
+      case 'jinai':
+      case 'jinnai':
         return {
           url: Settings.URL.JINNAI,
           text: '笑いのニューウェーブ\n陣 内 智 則',
           comment: 'speak jinnai',
         }
 
-      case '/jinaitomonori':
-      case '/jinnaitomonori':
+      case 'jinaitomonori':
+      case 'jinnaitomonori':
         return {
           url: Settings.URL.JINNAITOMONORI,
           text: '次々に、新しい仕掛けを繰り出すのは、この男〜！\n笑いのニューウェーブ\n陣 内 智 則',
@@ -208,6 +208,20 @@ const speakCommands = (command: string, msg: Discord.Message): Option<string> =>
           url: Settings.URL.USAMARU,
           text: 'ｷﾞｶﾞｷﾞｶﾞﾌﾝﾌﾝｶﾞｶﾞｶﾞｶﾞｶﾞｶﾞｶﾞｶﾞｶﾞ',
           comment: 'speak usamaru',
+        }
+
+      case 'ニューイヤーバースト':
+        return {
+          url: Settings.URL.NYARU,
+          text: '何発でも打ち込むわ！ニューイヤーバースト！！！',
+          comment: 'speak nyaru',
+        }
+
+      case 'heero':
+        return {
+          url: Settings.URL.HEERO,
+          text: 'ヒイロ・ユイ',
+          comment: 'speak heero',
         }
 
       case 'deden':
@@ -222,6 +236,34 @@ const speakCommands = (command: string, msg: Discord.Message): Option<string> =>
           url: Settings.URL.GI,
           text: 'ギラティナ',
           comment: 'speak gi',
+        }
+
+      case '船越':
+        return {
+          url: Settings.URL.FUNAKOSHI,
+          text: '火曜サスペンス劇場 フラッシュバックテーマ',
+          comment: 'speak funakoshi',
+        }
+
+      case '片平':
+        return {
+          url: Settings.URL.KATAHIRA,
+          text: '火曜サスペンス劇場 アイキャッチ',
+          comment: 'speak katahira',
+        }
+
+      case '<.reichan:778714208954220586>':
+        return {
+          url: Settings.URL.REITYAN,
+          text: 'れいちゃん',
+          comment: 'speak reityan',
+        }
+
+      case '素敵な仲間が増えますよ':
+        return {
+          url: Settings.URL.KARIN,
+          text: 'クソメガネ',
+          comment: 'speak karin',
         }
     }
 

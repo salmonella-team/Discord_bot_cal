@@ -14,7 +14,6 @@ COMMAND_CHANNEL:
   - テスト用
   - bot-test
   - vc用
-  - しろはの部屋
 
 # AFK用のチャンネル
 AFK_CHANNEL:
@@ -35,7 +34,6 @@ READ_ALOUD_CHANNEL:
   - vc用
   - くらばと-vc用
   - しろはの部屋
-  - bot-test
 
 # 画面共有しているか判別するロール
 STREAMING_ROLE: '785179265284964383'
@@ -69,5 +67,11 @@ URL:
   JINNAI: https://firebasestorage.googleapis.com/v0/b/practice-smicle.appspot.com/o/cal-bot%2Fjinnai.wav?alt=media&token=39fa812f-1154-4643-9d91-0b4fc16353ad
   JINNAITOMONORI: https://firebasestorage.googleapis.com/v0/b/practice-smicle.appspot.com/o/cal-bot%2Fjinnaitomonori.wav?alt=media&token=95e61e67-ce7d-4b54-90a2-2f7ac28088a1
   USAMARU: https://firebasestorage.googleapis.com/v0/b/practice-smicle.appspot.com/o/cal-bot%2Fusamaru.wav?alt=media&token=eabc4d55-f604-47b8-8841-8f0d56544342
-  DEDEN: https://firebasestorage.googleapis.com/v0/b/practice-smicle.appspot.com/o/cal-bot%2Fdeden.wav?alt=media&token=9dc22157-19c1-482b-acf9-adcfc286bc35
+  NYARU: https://firebasestorage.googleapis.com/v0/b/practice-smicle.appspot.com/o/cal-bot%2Fnyaru.wav?alt=media&token=6e6c9ca1-9b34-49c0-aeeb-076290041cbc
+  HEERO: https://firebasestorage.googleapis.com/v0/b/practice-smicle.appspot.com/o/cal-bot%2Fheero.wav?alt=media&token=ca8a6f46-28b0-4f77-9f5a-660c1de3605a
+  DEDEN: https://firebasestorage.googleapis.com/v0/b/practice-smicle.appspot.com/o/cal-bot%2Fdeden.wav?alt=media&token=72bb55d3-63bf-4629-8122-bedc0d884522
   GI: https://firebasestorage.googleapis.com/v0/b/practice-smicle.appspot.com/o/cal-bot%2Fgi.wav?alt=media&token=6c2e1624-40e5-4fe2-a68a-701e3b629729
+  FUNAKOSHI: https://firebasestorage.googleapis.com/v0/b/practice-smicle.appspot.com/o/cal-bot%2Ffunakoshi.wav?alt=media&token=658f2afd-61f0-469c-a142-eb5e1f167e58
+  KATAHIRA: https://firebasestorage.googleapis.com/v0/b/practice-smicle.appspot.com/o/cal-bot%2Fkatahira.wav?alt=media&token=ade1ac50-5efe-43f2-9f6d-c5a9900d4490
+  REITYAN: https://firebasestorage.googleapis.com/v0/b/practice-smicle.appspot.com/o/cal-bot%2Freityan.wav?alt=media&token=1bdccd28-177c-4a78-af71-6f348eaa119f
+  KARIN: https://firebasestorage.googleapis.com/v0/b/practice-smicle.appspot.com/o/cal-bot%2Fkarin.wav?alt=media&token=7dd1a5ca-c9a6-4701-9154-df5640d25afc

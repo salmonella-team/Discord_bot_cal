@@ -208,15 +208,15 @@ var speakCommands = function (command, msg) {
                     text: 'ヤバイヤバイヤバイヤバイヤバイやばいですね☆',
                     comment: 'speak yabai.yaba'
                 };
-            case '/jinai':
-            case '/jinnai':
+            case 'jinai':
+            case 'jinnai':
                 return {
                     url: const_settings_1["default"].URL.JINNAI,
                     text: '笑いのニューウェーブ\n陣 内 智 則',
                     comment: 'speak jinnai'
                 };
-            case '/jinaitomonori':
-            case '/jinnaitomonori':
+            case 'jinaitomonori':
+            case 'jinnaitomonori':
                 return {
                     url: const_settings_1["default"].URL.JINNAITOMONORI,
                     text: '次々に、新しい仕掛けを繰り出すのは、この男〜！\n笑いのニューウェーブ\n陣 内 智 則',
@@ -227,6 +227,18 @@ var speakCommands = function (command, msg) {
                     url: const_settings_1["default"].URL.USAMARU,
                     text: 'ｷﾞｶﾞｷﾞｶﾞﾌﾝﾌﾝｶﾞｶﾞｶﾞｶﾞｶﾞｶﾞｶﾞｶﾞｶﾞ',
                     comment: 'speak usamaru'
+                };
+            case 'ニューイヤーバースト':
+                return {
+                    url: const_settings_1["default"].URL.NYARU,
+                    text: '何発でも打ち込むわ！ニューイヤーバースト！！！',
+                    comment: 'speak nyaru'
+                };
+            case 'heero':
+                return {
+                    url: const_settings_1["default"].URL.HEERO,
+                    text: 'ヒイロ・ユイ',
+                    comment: 'speak heero'
                 };
             case 'deden':
                 return {
@@ -239,6 +251,30 @@ var speakCommands = function (command, msg) {
                     url: const_settings_1["default"].URL.GI,
                     text: 'ギラティナ',
                     comment: 'speak gi'
+                };
+            case '船越':
+                return {
+                    url: const_settings_1["default"].URL.FUNAKOSHI,
+                    text: '火曜サスペンス劇場 フラッシュバックテーマ',
+                    comment: 'speak funakoshi'
+                };
+            case '片平':
+                return {
+                    url: const_settings_1["default"].URL.KATAHIRA,
+                    text: '火曜サスペンス劇場 アイキャッチ',
+                    comment: 'speak katahira'
+                };
+            case '<.reichan:778714208954220586>':
+                return {
+                    url: const_settings_1["default"].URL.REITYAN,
+                    text: 'れいちゃん',
+                    comment: 'speak reityan'
+                };
+            case '素敵な仲間が増えますよ':
+                return {
+                    url: const_settings_1["default"].URL.KARIN,
+                    text: 'クソメガネ',
+                    comment: 'speak karin'
                 };
         }
         if (!status.Mode)
