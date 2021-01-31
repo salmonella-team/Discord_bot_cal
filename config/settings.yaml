@@ -33,6 +33,7 @@ READ_ALOUD_CHANNEL:
   - ttsチャンネル
   - vc用
   - くらばと-vc用
+  - vc用-運営
 
 # 画面共有しているか判別するロール
 STREAMING_ROLE: '785179265284964383'
