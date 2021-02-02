@@ -178,7 +178,6 @@ var speakCommands = function (command, msg) {
     var channel = msg.channel;
     if (!const_settings_1["default"].COMMAND_CHANNEL.some(function (c) { return c === (channel === null || channel === void 0 ? void 0 : channel.name); }))
         return;
-    console.log(command);
     var value = (function () {
         switch (command) {
             case '/yabai':
@@ -265,6 +264,12 @@ var speakCommands = function (command, msg) {
                     text: '火曜サスペンス劇場 アイキャッチ',
                     comment: 'speak katahira'
                 };
+            case 'おはなし<.reichan:778714208954220586>':
+            case 'お話し<.reichan:778714208954220586>':
+            case 'お話<.reichan:778714208954220586>':
+            case 'おはなし.<:reichan:778714208954220586>':
+            case 'お話し.<:reichan:778714208954220586>':
+            case 'お話.<:reichan:778714208954220586>':
             case '<.reichan:778714208954220586>':
                 return {
                     url: const_settings_1["default"].URL.REITYAN,
