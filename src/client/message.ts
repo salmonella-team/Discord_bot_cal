@@ -252,12 +252,6 @@ const speakCommands = (command: string, msg: Discord.Message): Option<string> =>
           comment: 'speak katahira',
         }
 
-      case 'おはなし<.reichan:778714208954220586>':
-      case 'お話し<.reichan:778714208954220586>':
-      case 'お話<.reichan:778714208954220586>':
-      case 'おはなし.<:reichan:778714208954220586>':
-      case 'お話し.<:reichan:778714208954220586>':
-      case 'お話.<:reichan:778714208954220586>':
       case '<.reichan:778714208954220586>':
         return {
           url: Settings.URL.REITYAN,
@@ -385,6 +379,12 @@ const readAloud = async (msg: Discord.Message, client: Discord.Client): Promise<
   // 読み上げするチャンネル以外では喋らない
   const channel = msg.channel as Discord.TextChannel
   if (!Settings.READ_ALOUD_CHANNEL.some((c: string) => c === channel?.name)) return
+
+  // 全角のｗを入力した人をvcから切断する
+  if (/ｗ/.test(msg.content)) {
+    msg.member?.voice.kick()
+    return
+  }
 
   // キャルがvcに居ない場合は終了
   const vc = client.voice.connections.map(v => v).filter(v => v.channel.guild.id === msg.guild?.id)
