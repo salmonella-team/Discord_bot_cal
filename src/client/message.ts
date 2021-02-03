@@ -380,9 +380,9 @@ const readAloud = async (msg: Discord.Message, client: Discord.Client): Promise<
   const channel = msg.channel as Discord.TextChannel
   if (!Settings.READ_ALOUD_CHANNEL.some((c: string) => c === channel?.name)) return
 
-  // 全角のｗを入力した人をvcから切断する
-  if (/ｗ/.test(msg.content)) {
-    msg.member?.voice.kick()
+  // 全角のｗ|Ｗを入力した人をvcから切断する
+  if (/ｗ|Ｗ/.test(msg.content)) {
+    msg.reply('全角文字打つやつはぶっ殺すわよ！！')
     return
   }
 

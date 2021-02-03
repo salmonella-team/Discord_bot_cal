@@ -368,17 +368,17 @@ var removeMessage = function (msg) { return __awaiter(void 0, void 0, void 0, fu
 }); };
 var readAloud = function (msg, client) { return __awaiter(void 0, void 0, void 0, function () {
     var channel, vc, lang, content, options, res, url, connect;
-    var _a, _b, _c;
-    return __generator(this, function (_d) {
-        switch (_d.label) {
+    var _a, _b;
+    return __generator(this, function (_c) {
+        switch (_c.label) {
             case 0:
                 if (msg.author.bot)
                     return [2];
                 channel = msg.channel;
                 if (!const_settings_1["default"].READ_ALOUD_CHANNEL.some(function (c) { return c === (channel === null || channel === void 0 ? void 0 : channel.name); }))
                     return [2];
-                if (/ｗ/.test(msg.content)) {
-                    (_a = msg.member) === null || _a === void 0 ? void 0 : _a.voice.kick();
+                if (/ｗ|Ｗ/.test(msg.content)) {
+                    msg.reply('全角文字打つやつはぶっ殺すわよ！！');
                     return [2];
                 }
                 vc = client.voice.connections.map(function (v) { return v; }).filter(function (v) { var _a; return v.channel.guild.id === ((_a = msg.guild) === null || _a === void 0 ? void 0 : _a.id); });
@@ -403,15 +403,15 @@ var readAloud = function (msg, client) { return __awaiter(void 0, void 0, void 0
                 return [4, axios_1["default"](options)
                         .then(function (r) { return r.data; })["catch"](function (e) { return console.log(e); })];
             case 1:
-                res = _d.sent();
+                res = _c.sent();
                 url = google_tts_api_1.getAudioUrl(res.converted.slice(0, 200), {
                     lang: lang,
                     slow: false,
                     host: const_settings_1["default"].API_URL.GTTS
                 });
-                return [4, ((_c = (_b = vc[0].voice) === null || _b === void 0 ? void 0 : _b.channel) === null || _c === void 0 ? void 0 : _c.join())];
+                return [4, ((_b = (_a = vc[0].voice) === null || _a === void 0 ? void 0 : _a.channel) === null || _b === void 0 ? void 0 : _b.join())];
             case 2:
-                connect = _d.sent();
+                connect = _c.sent();
                 connect === null || connect === void 0 ? void 0 : connect.play(url, { volume: 0.5 });
                 return [2, "speak " + (lang === 'en-US' ? 'en ' : '') + content];
         }
