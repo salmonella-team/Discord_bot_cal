@@ -377,9 +377,9 @@ var readAloud = function (msg, client) { return __awaiter(void 0, void 0, void 0
                 channel = msg.channel;
                 if (!const_settings_1["default"].READ_ALOUD_CHANNEL.some(function (c) { return c === (channel === null || channel === void 0 ? void 0 : channel.name); }))
                     return [2];
-                if (/ｗ|Ｗ/.test(msg.content)) {
+                if (/[Ａ-Ｚ]+|[ａ-ｚ]+|[０-９]+|　/.test(msg.content)) {
                     msg.reply('全角文字打つやつはぶっ殺すわよ！！');
-                    return [2];
+                    msg.content = 'en 全角文字打つやつはぶっ殺すわよ！！';
                 }
                 vc = client.voice.connections.map(function (v) { return v; }).filter(function (v) { var _a; return v.channel.guild.id === ((_a = msg.guild) === null || _a === void 0 ? void 0 : _a.id); });
                 if (!vc.length)
