@@ -4,20 +4,20 @@ import {Ready} from './client/ready'
 import {VoiceStateUpdate} from './client/voiceStateUpdate'
 import {Message} from './client/message'
 
-export const client = new Discord.Client({
+export const Client = new Discord.Client({
   partials: ['MESSAGE', 'CHANNEL', 'REACTION'],
   ws: {intents: Discord.Intents.ALL},
 })
 
 // botの起動時に実行
-client.on('ready', () => Ready(client))
+Client.on('ready', () => Ready(Client))
 
 // ボイスチャンネルの状態が変わったら実行
-client.on('voiceStateUpdate', (oldState: Discord.VoiceState, newState: Discord.VoiceState) =>
-  VoiceStateUpdate(oldState, newState, client)
+Client.on('voiceStateUpdate', (oldState: Discord.VoiceState, newState: Discord.VoiceState) =>
+  VoiceStateUpdate(oldState, newState, Client)
 )
 
 // メッセージが送信された際に実行
-client.on('message', async (msg: Discord.Message) => await Message(msg, client))
+Client.on('message', async (msg: Discord.Message) => await Message(msg, Client))
 
-client.login(throwEnv('CAL_TOKEN'))
+Client.login(throwEnv('CAL_TOKEN'))

@@ -1,8 +1,8 @@
 import * as Discord from 'discord.js'
 import Settings from 'const-settings'
-import {client} from '../index'
+import {Client} from '../index'
 
-const getTextChannel = (id: string): Discord.TextChannel => client.channels.cache.get(id) as Discord.TextChannel
+const getTextChannel = (id: string): Discord.TextChannel => Client.channels.cache.get(id) as Discord.TextChannel
 
 export const VcChannelList = async (): Promise<string[]> => {
   const channel = getTextChannel(Settings.VC_CHANNEL.ID)

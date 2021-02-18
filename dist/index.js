@@ -51,18 +51,18 @@ var throw_env_1 = __importDefault(require("throw-env"));
 var ready_1 = require("./client/ready");
 var voiceStateUpdate_1 = require("./client/voiceStateUpdate");
 var message_1 = require("./client/message");
-exports.client = new Discord.Client({
+exports.Client = new Discord.Client({
     partials: ['MESSAGE', 'CHANNEL', 'REACTION'],
     ws: { intents: Discord.Intents.ALL }
 });
-exports.client.on('ready', function () { return ready_1.Ready(exports.client); });
-exports.client.on('voiceStateUpdate', function (oldState, newState) {
-    return voiceStateUpdate_1.VoiceStateUpdate(oldState, newState, exports.client);
+exports.Client.on('ready', function () { return ready_1.Ready(exports.Client); });
+exports.Client.on('voiceStateUpdate', function (oldState, newState) {
+    return voiceStateUpdate_1.VoiceStateUpdate(oldState, newState, exports.Client);
 });
-exports.client.on('message', function (msg) { return __awaiter(void 0, void 0, void 0, function () { return __generator(this, function (_a) {
+exports.Client.on('message', function (msg) { return __awaiter(void 0, void 0, void 0, function () { return __generator(this, function (_a) {
     switch (_a.label) {
-        case 0: return [4, message_1.Message(msg, exports.client)];
+        case 0: return [4, message_1.Message(msg, exports.Client)];
         case 1: return [2, _a.sent()];
     }
 }); }); });
-exports.client.login(throw_env_1["default"]('CAL_TOKEN'));
+exports.Client.login(throw_env_1["default"]('CAL_TOKEN'));

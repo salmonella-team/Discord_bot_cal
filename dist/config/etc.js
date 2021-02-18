@@ -41,7 +41,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 exports.__esModule = true;
 var const_settings_1 = __importDefault(require("const-settings"));
 var index_1 = require("../index");
-var getTextChannel = function (id) { return index_1.client.channels.cache.get(id); };
+var getTextChannel = function (id) { return index_1.Client.channels.cache.get(id); };
 exports.VcChannelList = function () { return __awaiter(void 0, void 0, void 0, function () {
     var channel, msg;
     return __generator(this, function (_a) {
