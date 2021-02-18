@@ -1,8 +1,7 @@
-import {Client, ClientVoiceManager, Message, VoiceConnection, VoiceChannel} from 'discord.js'
+import {ClientVoiceManager, Message, VoiceConnection, VoiceChannel} from 'discord.js'
 import Option from 'type-of-option'
 import * as spreadsheet from './spreadsheet'
 import {Mode, Status} from '../config/type'
-import Settings from 'const-settings'
 
 /**
  * 小数第一位を四捨五入して返す
@@ -214,57 +213,12 @@ export const Help = (msg: Message, mode: Mode) => {
 }
 
 /**
- * メッセージ送信者のロール一覧を取得
- * @param msg DiscordからのMessage
- */
-const getMsgUserRoles = (msg: Message): Option<string[]> => msg.member?.roles.cache.map(r => r.name)
-
-/**
- * ロールが含まれているか確認をする
- * @param checkRoles settings.yamlのロール
- * @param userRoles メッセージ送信者のロール
- */
-const isRole = (checkRoles: string[], userRoles: Option<string[]>): boolean =>
-  !checkRoles.some((r: string) => userRoles?.find(v => v === r))
-
-/**
- * リモートでヤバイわよ！を鳴らすことができる。
- * ヤバイわよ！のロールが付与されていないユーザーの場合は切り替えない
- * @param msg DiscordからのMessage
- * @param client bot(キャル)のclient
- * @param volume キャルの音量
- */
-export const Yabai = async (msg: Message, client: Client, volume: number) => {
-  // ヤバイわよ！のロールが付与されていないユーザーの場合終了
-  const roles = getMsgUserRoles(msg)
-  if (isRole(Settings.REMOTE_YABAI, roles)) {
-    msg.reply('そんなコマンドないんだけど！')
-    return
-  }
-
-  // リモートヤバイわよ！する
-  const channel = client.channels.cache.get(Settings.REMOTE_YABAI_CHANNEL) as VoiceChannel
-  const connect = await channel?.join()
-  connect?.play(Settings.URL.YABAI, {volume: volume})
-
-  msg.reply('リモートヤバいわよ！')
-}
-
-/**
  * キャルのDevModeを切り替えて、Mode状態をDiscordのメッセージへ送信する。
- * DeveModeの切り替えできるロールが付与されていないユーザーの場合は切り替えない
  * @param msg DiscordからのMessage
  * @param mode キャルのMode
  * @return 変更したMode
  */
 export const SwitchMode = (msg: Message, mode: Mode): Mode => {
-  // DeveModeの切り替えできるロールが付与されていない場合終了
-  const roles = getMsgUserRoles(msg)
-  if (isRole(Settings.DEVELOP_ROLE, roles)) {
-    msg.reply('あんたにモードを切り替える権限ないわ')
-    return mode
-  }
-
   // ModeのOn・Offを切り替える
   mode = ~mode
   msg.reply(mode ? 'DevModeになったわよ！' : 'DevModeを解除したわ')

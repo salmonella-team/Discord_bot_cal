@@ -4,16 +4,16 @@ CHANNEL_CALL_ID: '632987047350501377'
 # vcのログを出力するチャンネルのID
 VC_LOG_CHANNEL: '632817156022730782'
 
-# リモートヤバイわよ！するチャンネルのID
-REMOTE_YABAI_CHANNEL: '627929231397224509'
+# サルモネラ菌のサーバーID
+SALMONELLA_ID: '627929230331740177'
+
+# べろばあのサーバーID
+BEROBA_ID: '714020537231343653'
 
 # コマンドが入力できるチャンネル
-COMMAND_CHANNEL:
-  - 効果音
-  - 効果音-001
-  - テスト用
-  - bot-test
-  - vc用
+VC_CHANNEL:
+  ID: '811981203435421708'
+  MESSAGE: '811981710656667678'
 
 # AFK用のチャンネル
 AFK_CHANNEL:
@@ -25,23 +25,14 @@ AFK_CHANNEL:
 DEVELOP_ROLE:
   - ヤバイわよ！
 
-# リモートヤバイわよ！できるロール
-REMOTE_YABAI:
-  - ヤバイわよ！
-
-# おはなしできるチャンネル
-READ_ALOUD_CHANNEL:
-  - ttsチャンネル
-  - vc用
-  - くらばと-vc用
-  - vc用-運営
-
 # 画面共有しているか判別するロール
 STREAMING_ROLE: '785179265284964383'
 # カメラが動いているか判別するロール
 VIDEO_ROLE: '788673883933769738'
 # スピーカーミュートしているか判別するロール
 DEAF_ROLE: '788701105739268099'
+# 中華のロール
+CHINA_ROLE: '809095677153640489'
 
 # ホワイトリストのシート名とセルの範囲
 WHITE_LIST:
@@ -67,6 +58,12 @@ URL:
   YABAIOTWR: https://firebasestorage.googleapis.com/v0/b/practice-smicle.appspot.com/o/cal-bot%2Fyabaiotwr.wav?alt=media&token=a9b46699-ff50-4f1c-b02f-2055ea1a0b8d
   JINNAI: https://firebasestorage.googleapis.com/v0/b/practice-smicle.appspot.com/o/cal-bot%2Fjinnai.wav?alt=media&token=39fa812f-1154-4643-9d91-0b4fc16353ad
   JINNAITOMONORI: https://firebasestorage.googleapis.com/v0/b/practice-smicle.appspot.com/o/cal-bot%2Fjinnaitomonori.wav?alt=media&token=95e61e67-ce7d-4b54-90a2-2f7ac28088a1
+  HIKAKIN: https://firebasestorage.googleapis.com/v0/b/practice-smicle.appspot.com/o/cal-bot%2Fhikakin.wav?alt=media&token=a0a00909-8030-4ef9-ac0b-e76fd1ed59ee
+  HELLOYOUTUBE: https://firebasestorage.googleapis.com/v0/b/practice-smicle.appspot.com/o/cal-bot%2FhelloYouTube.wav?alt=media&token=1f789380-a758-4af4-9fe8-1b48443a061e
+  HIKAKINTV: https://firebasestorage.googleapis.com/v0/b/practice-smicle.appspot.com/o/cal-bot%2Fhikakintv.wav?alt=media&token=ade50593-2da3-4788-a306-d89c22e3fa09
+  SETOKOUJI: https://firebasestorage.googleapis.com/v0/b/practice-smicle.appspot.com/o/cal-bot%2Fsetokouji.wav?alt=media&token=8519fab6-7ca9-43c1-8ccf-cf832a67ce84
+  MISUZU: https://firebasestorage.googleapis.com/v0/b/practice-smicle.appspot.com/o/cal-bot%2Fmisuzu.wav?alt=media&token=3eee9f2f-f82f-45e6-973f-234f7134cf42
+  SUSHIRO: https://firebasestorage.googleapis.com/v0/b/practice-smicle.appspot.com/o/cal-bot%2Fsushiro.wav?alt=media&token=7a960e18-4055-4cba-8f05-a060956b37c0
   USAMARU: https://firebasestorage.googleapis.com/v0/b/practice-smicle.appspot.com/o/cal-bot%2Fusamaru.wav?alt=media&token=eabc4d55-f604-47b8-8841-8f0d56544342
   NYARU: https://firebasestorage.googleapis.com/v0/b/practice-smicle.appspot.com/o/cal-bot%2Fnyaru.wav?alt=media&token=6e6c9ca1-9b34-49c0-aeeb-076290041cbc
   HEERO: https://firebasestorage.googleapis.com/v0/b/practice-smicle.appspot.com/o/cal-bot%2Fheero.wav?alt=media&token=ca8a6f46-28b0-4f77-9f5a-660c1de3605a
@@ -76,3 +73,6 @@ URL:
   KATAHIRA: https://firebasestorage.googleapis.com/v0/b/practice-smicle.appspot.com/o/cal-bot%2Fkatahira.wav?alt=media&token=ade1ac50-5efe-43f2-9f6d-c5a9900d4490
   REITYAN: https://firebasestorage.googleapis.com/v0/b/practice-smicle.appspot.com/o/cal-bot%2Freityan.wav?alt=media&token=1bdccd28-177c-4a78-af71-6f348eaa119f
   KARIN: https://firebasestorage.googleapis.com/v0/b/practice-smicle.appspot.com/o/cal-bot%2Fkarin.wav?alt=media&token=7dd1a5ca-c9a6-4701-9154-df5640d25afc
+  ZAWAZAWA: https://firebasestorage.googleapis.com/v0/b/practice-smicle.appspot.com/o/cal-bot%2Fzawazawa.wav?alt=media&token=5e2568ff-5522-404c-858f-ff2331a35ef1
+  MUSCLE: https://firebasestorage.googleapis.com/v0/b/practice-smicle.appspot.com/o/cal-bot%2Fmuscle.wav?alt=media&token=dec0ade7-8c9e-4f5c-a485-1e99443b7e39
+  NEKO: https://firebasestorage.googleapis.com/v0/b/practice-smicle.appspot.com/o/cal-bot%2Fneko.wav?alt=media&token=47fda8c8-0c8b-4679-8ce4-029f242eac81

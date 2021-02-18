@@ -39,9 +39,10 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 exports.__esModule = true;
-var throw_env_1 = __importDefault(require("throw-env"));
 var const_settings_1 = __importDefault(require("const-settings"));
 exports.VoiceStateUpdate = function (oldState, newState, client) {
+    if ([const_settings_1["default"].SALMONELLA_ID, const_settings_1["default"].BEROBA_ID].every(function (id) { return id !== oldState.guild.id; }))
+        return;
     sendVCLog(oldState, newState, client);
     if (newState.channel)
         newStateChannel(newState.channel);
@@ -50,7 +51,7 @@ exports.VoiceStateUpdate = function (oldState, newState, client) {
 };
 var sendVCLog = function (oldState, newState, client) {
     var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k;
-    if (oldState.guild.id !== throw_env_1["default"]('SERVER_ID'))
+    if (oldState.guild.id !== const_settings_1["default"].SALMONELLA_ID)
         return;
     var channel = client.channels.cache.get(const_settings_1["default"].VC_LOG_CHANNEL);
     if (((_a = oldState.channel) === null || _a === void 0 ? void 0 : _a.id) === ((_b = newState.channel) === null || _b === void 0 ? void 0 : _b.id)) {

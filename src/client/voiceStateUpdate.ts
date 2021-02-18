@@ -1,6 +1,5 @@
 import * as Discord from 'discord.js'
 import Option from 'type-of-option'
-import throwEnv from 'throw-env'
 import Settings from 'const-settings'
 
 /**
@@ -14,6 +13,9 @@ export const VoiceStateUpdate = (
   newState: Discord.VoiceState,
   client: Discord.Client
 ) => {
+  // サルモネラ菌とべろばあ以外でキャルがvcに入らないようにする
+  if ([Settings.SALMONELLA_ID, Settings.BEROBA_ID].every(id => id !== oldState.guild.id)) return
+
   // vcのログ出力する
   sendVCLog(oldState, newState, client)
 
@@ -32,7 +34,7 @@ export const VoiceStateUpdate = (
  */
 const sendVCLog = (oldState: Discord.VoiceState, newState: Discord.VoiceState, client: Discord.Client) => {
   // サルモネラ菌のサーバーじゃなければ終了
-  if (oldState.guild.id !== throwEnv('SERVER_ID')) return
+  if (oldState.guild.id !== Settings.SALMONELLA_ID) return
 
   // #ログのチャンネル情報
   const channel = client.channels.cache.get(Settings.VC_LOG_CHANNEL) as Discord.TextChannel

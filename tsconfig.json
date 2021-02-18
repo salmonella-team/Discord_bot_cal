@@ -14,5 +14,16 @@
     "allowJs": true,
     "outDir": "./dist/"
   },
-  "files": ["src/message/cal.ts", "src/index.ts", "src/client/message.ts", "src/client/ready.ts", "src/message/spreadsheet.ts", "src/config/type.ts", "src/client/voiceStateUpdate.ts"]
+  "files": [
+    "src/index.ts",
+    "src/client/message.ts",
+    "src/client/ready.ts",
+    "src/client/voiceStateUpdate.ts",
+    "src/config/etc.ts",
+    "src/config/type.ts",
+    "src/message/aloud.ts",
+    "src/message/cal.ts",
+    "src/message/speak.ts",
+    "src/message/spreadsheet.ts"
+  ]
 }
