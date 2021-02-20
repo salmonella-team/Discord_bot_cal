@@ -45,10 +45,10 @@ var __importStar = (this && this.__importStar) || function (mod) {
 exports.__esModule = true;
 var spreadsheet = __importStar(require("./spreadsheet"));
 var roundFloat = function (n) { return Math.round(n * 10) / 10; };
-exports.ShowStatus = function (msg, voice, status) {
+exports.ShowStatus = function (msg, voice, Status) {
     var channel = voice === null || voice === void 0 ? void 0 : voice.connections.map(function (v) { return v.channel; }).filter(function (v) { return v.guild; }).filter(function (v) { var _a; return v.guild.name === ((_a = msg.guild) === null || _a === void 0 ? void 0 : _a.name); }).map(function (v) { return v.name; }).toString();
     var join = channel ? channel + "\u306B\u63A5\u7D9A\u3057\u3066\u3044\u308B\u308F" : 'どこのボイスチャンネルにも接続してないわ';
-    msg.reply(join + "\n\u97F3\u91CF\u306F" + roundFloat(status.Volume) + "\u3088\uFF01" + (status.Mode ? '(DevMode)' : ''));
+    msg.reply(join + "\n\u97F3\u91CF\u306F" + roundFloat(Status.volume) + "\u3088\uFF01" + (Status.mode ? '(DevMode)' : ''));
 };
 var getVoiceConnection = function (msg, voice) { return voice === null || voice === void 0 ? void 0 : voice.connections.map(function (v) { return v; }).filter(function (v) { var _a; return v.channel.guild.name === ((_a = msg.guild) === null || _a === void 0 ? void 0 : _a.name); })[0]; };
 exports.JoinChannel = function (msg, voice) { return __awaiter(void 0, void 0, void 0, function () {
@@ -113,8 +113,8 @@ exports.VolumeChange = function (msg, volume, content) {
     return Number(content);
 };
 exports.VolumeReset = function (msg) {
-    msg.reply('音量をリセットしたわよ！(0.3)');
-    return 0.3;
+    msg.reply('音量をリセットしたわよ！(0.2)');
+    return 0.2;
 };
 exports.GetWhiteList = function (msg) { return __awaiter(void 0, void 0, void 0, function () {
     var whiteList;

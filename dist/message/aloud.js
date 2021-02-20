@@ -35,28 +35,15 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
-var __read = (this && this.__read) || function (o, n) {
-    var m = typeof Symbol === "function" && o[Symbol.iterator];
-    if (!m) return o;
-    var i = m.call(o), r, ar = [], e;
-    try {
-        while ((n === void 0 || n-- > 0) && !(r = i.next()).done) ar.push(r.value);
-    }
-    catch (error) { e = { error: error }; }
-    finally {
-        try {
-            if (r && !r.done && (m = i["return"])) m.call(i);
-        }
-        finally { if (e) throw e.error; }
-    }
-    return ar;
-};
-var __spread = (this && this.__spread) || function () {
-    for (var ar = [], i = 0; i < arguments.length; i++) ar = ar.concat(__read(arguments[i]));
-    return ar;
-};
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (Object.hasOwnProperty.call(mod, k)) result[k] = mod[k];
+    result["default"] = mod;
+    return result;
 };
 exports.__esModule = true;
 var moji_1 = __importDefault(require("moji"));
@@ -65,51 +52,22 @@ var google_tts_api_1 = require("google-tts-api");
 var throw_env_1 = __importDefault(require("throw-env"));
 var const_settings_1 = __importDefault(require("const-settings"));
 var etc_1 = require("../config/etc");
-exports.RemoveMessage = function (msg) { return __awaiter(void 0, void 0, void 0, function () {
-    var roles, _a, match, msgList_1, n;
-    var _b;
-    return __generator(this, function (_c) {
-        switch (_c.label) {
-            case 0:
-                roles = (_b = msg.member) === null || _b === void 0 ? void 0 : _b.roles.cache.map(function (r) { return r.name; });
-                if (!const_settings_1["default"].DEVELOP_ROLE.some(function (r) { return roles === null || roles === void 0 ? void 0 : roles.find(function (v) { return v === r; }); }))
-                    return [2, ''];
-                _a = true;
-                switch (_a) {
-                    case /rm/.test(msg.content): return [3, 1];
-                }
-                return [3, 3];
-            case 1:
-                match = msg.content.replace(/・/g, '/').match(/\//);
-                if (!match)
-                    return [2, ''];
-                return [4, msg.channel.messages.fetch()];
-            case 2:
-                msgList_1 = (_c.sent()).map(function (v) { return v; });
-                n = (function (arg) { return (/\d/.test(arg) ? Number(arg) : 1); })(msg.content.replace('/rm ', ''));
-                __spread(Array(n + 1)).forEach(function (_, i) { return setTimeout(function () { return msgList_1[i]["delete"](); }, 100); });
-                return [2, 'delete message'];
-            case 3:
-                {
-                    return [2, ''];
-                }
-                _c.label = 4;
-            case 4: return [2];
-        }
-    });
-}); };
+var fs = __importStar(require("fs"));
+var Stream = false;
+var Queue = [];
+var Dispatcher;
 exports.Read = function (msg, client) { return __awaiter(void 0, void 0, void 0, function () {
-    var channel, vc, lang, content, options, res, url, connect;
-    var _a, _b, _c, _d;
-    return __generator(this, function (_e) {
-        switch (_e.label) {
+    var channel, vc, lang, content, options, res, url;
+    var _a, _b, _c;
+    return __generator(this, function (_d) {
+        switch (_d.label) {
             case 0:
                 if (msg.author.bot)
                     return [2];
                 channel = msg.channel;
                 return [4, etc_1.VcChannelList()];
             case 1:
-                if (!(_e.sent()).some(function (c) { return c === (channel === null || channel === void 0 ? void 0 : channel.name); }))
+                if (!(_d.sent()).some(function (c) { return c === (channel === null || channel === void 0 ? void 0 : channel.name); }))
                     return [2];
                 if (/[Ａ-Ｚ]+|[ａ-ｚ]+|[０-９]+|　/.test(msg.content)) {
                     if (((_a = msg.guild) === null || _a === void 0 ? void 0 : _a.id) === const_settings_1["default"].BEROBA_ID) {
@@ -121,9 +79,21 @@ exports.Read = function (msg, client) { return __awaiter(void 0, void 0, void 0,
                         .replace(/^(en|us|zh|cn|es|ru|de|it|vi|vn|gb|ja|jp)/i, '')
                         .trim();
                 }
-                vc = client.voice.connections.map(function (v) { return v; }).filter(function (v) { var _a; return v.channel.guild.id === ((_a = msg.guild) === null || _a === void 0 ? void 0 : _a.id); });
-                if (!vc.length)
+                vc = (_c = client.voice) === null || _c === void 0 ? void 0 : _c.connections.map(function (v) { return v; }).filter(function (v) { var _a; return v.channel.guild.id === ((_a = msg.guild) === null || _a === void 0 ? void 0 : _a.id); });
+                if (!(vc === null || vc === void 0 ? void 0 : vc.length))
                     return [2];
+                if (!(msg.content === '/skip')) return [3, 4];
+                Dispatcher === null || Dispatcher === void 0 ? void 0 : Dispatcher.destroy();
+                if (!(Queue.length > 0)) return [3, 3];
+                return [4, exports.Play(Queue.shift(), vc[0])];
+            case 2:
+                _d.sent();
+                _d.label = 3;
+            case 3:
+                Stream = false;
+                console.log('skip');
+                return [2];
+            case 4:
                 if (/\`\`\`/.test(msg.content))
                     return [2];
                 lang = (function (str) {
@@ -164,18 +134,62 @@ exports.Read = function (msg, client) { return __awaiter(void 0, void 0, void 0,
                 };
                 return [4, axios_1["default"](options)
                         .then(function (r) { return r.data; })["catch"](function (e) { return console.log(e); })];
+            case 5:
+                res = _d.sent();
+                url = google_tts_api_1.getAudioUrl(res.converted.slice(0, 200), { lang: lang });
+                exports.Add({ content: content, url: url, volume: 0.5 }, vc[0]);
+                return [2];
+        }
+    });
+}); };
+exports.Add = function (item, vc) { return __awaiter(void 0, void 0, void 0, function () {
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0:
+                Queue.push(item);
+                if (Stream === true)
+                    return [2];
+                return [4, exports.Play(Queue.shift(), vc)];
+            case 1:
+                _a.sent();
+                return [2];
+        }
+    });
+}); };
+exports.Play = function (item, vc) { return __awaiter(void 0, void 0, void 0, function () {
+    var re, connect;
+    var _a, _b;
+    return __generator(this, function (_c) {
+        switch (_c.label) {
+            case 0: return [4, axios_1["default"].get((item === null || item === void 0 ? void 0 : item.url) || '', { responseType: 'arraybuffer' })];
+            case 1:
+                re = _c.sent();
+                fs.writeFileSync("./tmp.mp3", Buffer.from(re.data), 'binary');
+                return [4, ((_b = (_a = vc.voice) === null || _a === void 0 ? void 0 : _a.channel) === null || _b === void 0 ? void 0 : _b.join())];
             case 2:
-                res = _e.sent();
-                url = google_tts_api_1.getAudioUrl(res.converted.slice(0, 200), {
-                    lang: lang,
-                    slow: false,
-                    host: const_settings_1["default"].API_URL.GTTS
+                connect = _c.sent();
+                Dispatcher = connect === null || connect === void 0 ? void 0 : connect.play(fs.createReadStream('./tmp.mp3'), { volume: item === null || item === void 0 ? void 0 : item.volume });
+                Dispatcher === null || Dispatcher === void 0 ? void 0 : Dispatcher.on('start', function () {
+                    Stream = true;
+                    console.log("start: " + (item === null || item === void 0 ? void 0 : item.content));
                 });
-                return [4, ((_d = (_c = vc[0].voice) === null || _c === void 0 ? void 0 : _c.channel) === null || _d === void 0 ? void 0 : _d.join())];
-            case 3:
-                connect = _e.sent();
-                connect === null || connect === void 0 ? void 0 : connect.play(url, { volume: 0.5 });
-                return [2, "speak " + lang + " " + content];
+                Dispatcher === null || Dispatcher === void 0 ? void 0 : Dispatcher.on('finish', function () { return __awaiter(void 0, void 0, void 0, function () {
+                    return __generator(this, function (_a) {
+                        switch (_a.label) {
+                            case 0:
+                                if (!(Queue.length > 0)) return [3, 2];
+                                return [4, exports.Play(Queue.shift(), vc)];
+                            case 1:
+                                _a.sent();
+                                _a.label = 2;
+                            case 2:
+                                Stream = false;
+                                console.log("finish: " + (item === null || item === void 0 ? void 0 : item.content));
+                                return [2];
+                        }
+                    });
+                }); });
+                return [2];
         }
     });
 }); };
@@ -188,7 +202,7 @@ var aloudFormat = function (content) {
             .map(function (s) {
             if (flag)
                 return s;
-            if (!/w/i.test(s)) {
+            if (!/w|ｗ|Ｗ/i.test(s)) {
                 flag = true;
                 return s;
             }
