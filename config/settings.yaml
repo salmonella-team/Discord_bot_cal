@@ -43,10 +43,8 @@ WHITE_LIST:
 API_URL:
   # ひらがな化APIのURL
   HIRAGANA: 'https://labs.goo.ne.jp/api/hiragana'
-  # gttsのURl
-  GTTS: 'https://translate.google.com'
 
-# 音源のURL
+# 音声のURL
 URL:
   YABAI: https://firebasestorage.googleapis.com/v0/b/practice-smicle.appspot.com/o/cal-bot%2Fyabai.wav?alt=media&token=2822b79e-3a96-4ba1-b41b-faf08c8dc83a
   YABAIWAYO: https://firebasestorage.googleapis.com/v0/b/practice-smicle.appspot.com/o/cal-bot%2Fyabaiwayo.wav?alt=media&token=2e605577-37c6-4abc-99f0-f8cfd8aca9ad

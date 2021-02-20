@@ -1,7 +1,7 @@
 import {ClientVoiceManager, Message, VoiceConnection, VoiceChannel} from 'discord.js'
 import Option from 'type-of-option'
 import * as spreadsheet from './spreadsheet'
-import {Mode, Status} from '../config/type'
+import {Mode, CalStatus} from '../config/type'
 
 /**
  * 小数第一位を四捨五入して返す
@@ -16,7 +16,7 @@ const roundFloat = (n: number): number => Math.round(n * 10) / 10
  * @param voice clientのClientVoiceManager
  * @param status キャルのステータス
  */
-export const ShowStatus = (msg: Message, voice: Option<ClientVoiceManager>, status: Status) => {
+export const ShowStatus = (msg: Message, voice: Option<ClientVoiceManager>, Status: CalStatus) => {
   const channel: Option<string> = voice?.connections
     .map(v => v.channel)
     .filter(v => v.guild)
@@ -24,7 +24,7 @@ export const ShowStatus = (msg: Message, voice: Option<ClientVoiceManager>, stat
     .map(v => v.name)
     .toString()
   const join = channel ? `${channel}に接続しているわ` : 'どこのボイスチャンネルにも接続してないわ'
-  msg.reply(`${join}\n音量は${roundFloat(status.Volume)}よ！${status.Mode ? '(DevMode)' : ''}`)
+  msg.reply(`${join}\n音量は${roundFloat(Status.volume)}よ！${Status.mode ? '(DevMode)' : ''}`)
 }
 
 /**
@@ -133,8 +133,8 @@ export const VolumeChange = (msg: Message, volume: number, content: string): num
  * @return 変更した音量
  */
 export const VolumeReset = (msg: Message): number => {
-  msg.reply('音量をリセットしたわよ！(0.3)')
-  return 0.3
+  msg.reply('音量をリセットしたわよ！(0.2)')
+  return 0.2
 }
 
 /**
@@ -165,7 +165,7 @@ export const AddWhiteList = async (msg: Message, name: string) => {
  * @param msg DiscordからのMessage
  * @param mode キャルのMode
  */
-export const Help = (msg: Message, mode: Mode) => {
+export const Help = (msg: Message, mode: Option<Mode>) => {
   const help = mode
     ? `高度な魔法一覧よ！\`\`\`
 /cal        キャルの状態を表示

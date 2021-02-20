@@ -40,14 +40,12 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 exports.__esModule = true;
 var const_settings_1 = __importDefault(require("const-settings"));
-var index_1 = require("../index");
-var getTextChannel = function (id) { return index_1.Client.channels.cache.get(id); };
-exports.VcChannelList = function () { return __awaiter(void 0, void 0, void 0, function () {
+exports.VcChannelList = function (client) { return __awaiter(void 0, void 0, void 0, function () {
     var channel, msg;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
-                channel = getTextChannel(const_settings_1["default"].VC_CHANNEL.ID);
+                channel = getTextChannel(const_settings_1["default"].VC_CHANNEL.ID, client);
                 return [4, channel.messages.fetch(const_settings_1["default"].VC_CHANNEL.MESSAGE)];
             case 1:
                 msg = _a.sent();
@@ -55,3 +53,7 @@ exports.VcChannelList = function () { return __awaiter(void 0, void 0, void 0, f
         }
     });
 }); };
+var getTextChannel = function (id, client) {
+    return client.channels.cache.get(id);
+};
+exports.GetVcWithCal = function (msg, client) { var _a; return (_a = client.voice) === null || _a === void 0 ? void 0 : _a.connections.map(function (v) { return v; }).find(function (v) { var _a; return v.channel.guild.id === ((_a = msg.guild) === null || _a === void 0 ? void 0 : _a.id); }); };

@@ -4,7 +4,7 @@ import {Ready} from './client/ready'
 import {VoiceStateUpdate} from './client/voiceStateUpdate'
 import {Message} from './client/message'
 
-export const Client = new Discord.Client({
+const Client = new Discord.Client({
   partials: ['MESSAGE', 'CHANNEL', 'REACTION'],
   ws: {intents: Discord.Intents.ALL},
 })

@@ -51,6 +51,10 @@ var __read = (this && this.__read) || function (o, n) {
     }
     return ar;
 };
+var __spread = (this && this.__spread) || function () {
+    for (var ar = [], i = 0; i < arguments.length; i++) ar = ar.concat(__read(arguments[i]));
+    return ar;
+};
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
@@ -63,14 +67,15 @@ var __importStar = (this && this.__importStar) || function (mod) {
 };
 exports.__esModule = true;
 var const_settings_1 = __importDefault(require("const-settings"));
-var aloud = __importStar(require("../message/aloud"));
+var etc = __importStar(require("../config/etc"));
 var cal = __importStar(require("../message/cal"));
 var speak = __importStar(require("../message/speak"));
 var spreadsheet = __importStar(require("../message/spreadsheet"));
-var etc_1 = require("../config/etc");
-var status = {
-    Volume: 0.3,
-    Mode: 0
+exports.Status = {
+    content: '',
+    url: '',
+    volume: 0.2,
+    mode: 0
 };
 exports.Message = function (msg, client) { return __awaiter(void 0, void 0, void 0, function () {
     var comment, command;
@@ -80,7 +85,7 @@ exports.Message = function (msg, client) { return __awaiter(void 0, void 0, void
             case 0:
                 if (((_a = msg.member) === null || _a === void 0 ? void 0 : _a.user.username) === 'キャル')
                     return [2];
-                return [4, aloud.RemoveMessage(msg)];
+                return [4, removeMessage(msg)];
             case 1:
                 comment = _b.sent();
                 if (comment)
@@ -91,21 +96,19 @@ exports.Message = function (msg, client) { return __awaiter(void 0, void 0, void
                 comment = _b.sent();
                 if (comment)
                     return [2, console.log(comment)];
-                return [4, speakCommands(command, msg)];
+                return [4, speakCommands(command, msg, client)];
             case 3:
                 comment = _b.sent();
                 if (comment)
                     return [2, console.log(comment)];
-                return [4, notExistCommands(command, msg)];
+                return [4, notExistCommands(command, msg, client)];
             case 4:
                 comment = _b.sent();
                 if (comment)
                     return [2, console.log(comment)];
-                return [4, aloud.Read(msg, client)];
+                return [4, speak.Read(msg, client)];
             case 5:
-                comment = _b.sent();
-                if (comment)
-                    return [2, console.log(comment)];
+                _b.sent();
                 return [2];
         }
     });
@@ -116,14 +119,14 @@ var calCommands = function (command, msg, client) { return __awaiter(void 0, voi
         switch (_b.label) {
             case 0:
                 channel = msg.channel;
-                return [4, etc_1.VcChannelList()];
+                return [4, etc.VcChannelList(client)];
             case 1:
                 if (!(_b.sent()).some(function (c) { return c === (channel === null || channel === void 0 ? void 0 : channel.name); }))
                     return [2];
                 switch (command.split(' ')[0]) {
                     case '/cal':
                     case '/cal.status':
-                        cal.ShowStatus(msg, client.voice, status);
+                        cal.ShowStatus(msg, client.voice, exports.Status);
                         return [2, 'cal show status'];
                     case '/cal.in':
                     case '/cal.join':
@@ -136,21 +139,21 @@ var calCommands = function (command, msg, client) { return __awaiter(void 0, voi
                         cal.Disconnect(msg, client.voice);
                         return [2, 'cal disconnect channel'];
                     case '/cal.up':
-                        status.Volume = cal.VolumeUp(msg, status.Volume);
+                        exports.Status.volume = cal.VolumeUp(msg, exports.Status.volume);
                         return [2, 'cal volume up'];
                     case '/cal.down':
-                        status.Volume = cal.VolumeDown(msg, status.Volume);
+                        exports.Status.volume = cal.VolumeDown(msg, exports.Status.volume);
                         return [2, 'cal volume down'];
                     case '/cal.vol':
                     case '/cal.volume':
                         content = command.split(' ')[1];
-                        status.Volume = cal.VolumeChange(msg, status.Volume, content);
+                        exports.Status.volume = cal.VolumeChange(msg, exports.Status.volume, content);
                         return [2, 'cal volume change'];
                     case '/cal.reset':
-                        status.Volume = cal.VolumeReset(msg);
+                        exports.Status.volume = cal.VolumeReset(msg);
                         return [2, 'cal reset'];
                     case '/cal.help':
-                        cal.Help(msg, status.Mode);
+                        cal.Help(msg, exports.Status.mode);
                         return [2, 'cal help'];
                     case '/cal.list':
                     case '/cal.wl':
@@ -164,7 +167,7 @@ var calCommands = function (command, msg, client) { return __awaiter(void 0, voi
                             return [2, "add whitelist " + name_1];
                         }
                     case '/cal.mode':
-                        status.Mode = cal.SwitchMode(msg, status.Mode);
+                        exports.Status.mode = cal.SwitchMode(msg, exports.Status.mode);
                         return [2, 'switch devMode'];
                 }
                 switch (true) {
@@ -178,13 +181,13 @@ var calCommands = function (command, msg, client) { return __awaiter(void 0, voi
         }
     });
 }); };
-var speakCommands = function (command, msg) { return __awaiter(void 0, void 0, void 0, function () {
-    var channel, value;
+var speakCommands = function (command, msg, client) { return __awaiter(void 0, void 0, void 0, function () {
+    var channel, value, vc;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
                 channel = msg.channel;
-                return [4, etc_1.VcChannelList()];
+                return [4, etc.VcChannelList(client)];
             case 1:
                 if (!(_a.sent()).some(function (c) { return c === (channel === null || channel === void 0 ? void 0 : channel.name); }))
                     return [2];
@@ -194,42 +197,42 @@ var speakCommands = function (command, msg) { return __awaiter(void 0, void 0, v
                         case '/yab':
                             return {
                                 url: const_settings_1["default"].URL.YABAI,
-                                text: 'ヤバイわよ！',
+                                content: 'ヤバイわよ！',
                                 comment: 'speak yabai'
                             };
                         case '/yabai.desu':
                         case '/yabd':
                             return {
                                 url: const_settings_1["default"].URL.YABAIDESU,
-                                text: 'やばいですね☆',
+                                content: 'やばいですね☆',
                                 comment: 'speak yabai.desu'
                             };
                         case '/yabai.wayo':
                         case '/yabw':
                             return {
                                 url: const_settings_1["default"].URL.YABAIWAYO,
-                                text: 'プリコネの年末年始はヤバイわよ！',
+                                content: 'プリコネの年末年始はヤバイわよ！',
                                 comment: 'speak yabai.wayo'
                             };
                         case '/yabai.yaba':
                         case '/yaby':
                             return {
                                 url: const_settings_1["default"].URL.YABAIYABA,
-                                text: 'ヤバイヤバイヤバイヤバイヤバイやばいですね☆',
+                                content: 'ヤバイヤバイヤバイヤバイヤバイやばいですね☆',
                                 comment: 'speak yabai.yaba'
                             };
                         case 'jinai':
                         case 'jinnai':
                             return {
                                 url: const_settings_1["default"].URL.JINNAI,
-                                text: '笑いのニューウェーブ\n陣 内 智 則',
+                                content: '笑いのニューウェーブ\n陣 内 智 則',
                                 comment: 'speak jinnai'
                             };
                         case 'jinaitomonori':
                         case 'jinnaitomonori':
                             return {
                                 url: const_settings_1["default"].URL.JINNAITOMONORI,
-                                text: '次々に、新しい仕掛けを繰り出すのは、この男〜！\n笑いのニューウェーブ\n陣 内 智 則',
+                                content: '次々に、新しい仕掛けを繰り出すのは、この男〜！\n笑いのニューウェーブ\n陣 内 智 則',
                                 comment: 'speak jinnaitomonori'
                             };
                         case 'hikakin':
@@ -237,7 +240,7 @@ var speakCommands = function (command, msg) { return __awaiter(void 0, void 0, v
                         case 'HIKAKIN':
                             return {
                                 url: const_settings_1["default"].URL.HIKAKIN,
-                                text: 'HIKAKIN TV Everyday',
+                                content: 'HIKAKIN TV Everyday',
                                 comment: 'speak HIKAKIN'
                             };
                         case 'helloyoutube':
@@ -245,7 +248,7 @@ var speakCommands = function (command, msg) { return __awaiter(void 0, void 0, v
                         case 'HelloYouTube':
                             return {
                                 url: const_settings_1["default"].URL.HELLOYOUTUBE,
-                                text: 'ブンブンハローYouTube',
+                                content: 'ブンブンハローYouTube',
                                 comment: 'speak helloYouTube'
                             };
                         case 'hikakintv':
@@ -253,145 +256,151 @@ var speakCommands = function (command, msg) { return __awaiter(void 0, void 0, v
                         case 'HIKAKINTV':
                             return {
                                 url: const_settings_1["default"].URL.HIKAKINTV,
-                                text: 'HIKAKIN TV Everyday\nブンブンハローYouTube\nどうもHIKAKINです',
+                                content: 'HIKAKIN TV Everyday\nブンブンハローYouTube\nどうもHIKAKINです',
                                 comment: 'speak HIKAKINTV'
                             };
                         case 'setokouji':
                             return {
                                 url: const_settings_1["default"].URL.SETOKOUJI,
-                                text: 'ﾃﾞｰｰｰｰｰﾝ\n瀬戸弘司の動画',
+                                content: 'ﾃﾞｰｰｰｰｰﾝ\n瀬戸弘司の動画',
                                 comment: 'speak setokouji'
                             };
                         case 'misuzu':
                             return {
                                 url: const_settings_1["default"].URL.MISUZU,
-                                text: '怒涛の合格 みすず学苑 怒涛の合格 みすず学苑 怒涛の合格',
+                                content: '怒涛の合格 みすず学苑 怒涛の合格 みすず学苑 怒涛の合格',
                                 comment: 'speak misuzu'
                             };
                         case 'スシロー':
                             return {
                                 url: const_settings_1["default"].URL.SUSHIRO,
-                                text: 'スシロー スシロー',
+                                content: 'スシロー スシロー',
                                 comment: 'speak sushiro'
                             };
                         case 'usamaru':
                             return {
                                 url: const_settings_1["default"].URL.USAMARU,
-                                text: 'ｷﾞｶﾞｷﾞｶﾞﾌﾝﾌﾝｶﾞｶﾞｶﾞｶﾞｶﾞｶﾞｶﾞｶﾞｶﾞ',
+                                content: 'ｷﾞｶﾞｷﾞｶﾞﾌﾝﾌﾝｶﾞｶﾞｶﾞｶﾞｶﾞｶﾞｶﾞｶﾞｶﾞ',
                                 comment: 'speak usamaru'
                             };
                         case 'ニューイヤーバースト':
                             return {
                                 url: const_settings_1["default"].URL.NYARU,
-                                text: '何発でも打ち込むわ！ニューイヤーバースト！！！',
+                                content: '何発でも打ち込むわ！ニューイヤーバースト！！！',
                                 comment: 'speak nyaru'
                             };
                         case 'heero':
                             return {
                                 url: const_settings_1["default"].URL.HEERO,
-                                text: 'ヒイロ・ユイ',
+                                content: 'ヒイロ・ユイ',
                                 comment: 'speak heero'
                             };
                         case 'deden':
                             return {
                                 url: const_settings_1["default"].URL.DEDEN,
-                                text: 'ﾃﾞﾃﾞﾝ',
+                                content: 'ﾃﾞﾃﾞﾝ',
                                 comment: 'speak deden'
                             };
                         case 'gi':
                             return {
                                 url: const_settings_1["default"].URL.GI,
-                                text: 'ギラティナ',
+                                content: 'ギラティナ',
                                 comment: 'speak gi'
                             };
                         case '船越':
                             return {
                                 url: const_settings_1["default"].URL.FUNAKOSHI,
-                                text: '火曜サスペンス劇場 フラッシュバックテーマ',
+                                content: '火曜サスペンス劇場 フラッシュバックテーマ',
                                 comment: 'speak funakoshi'
                             };
                         case '片平':
                             return {
                                 url: const_settings_1["default"].URL.KATAHIRA,
-                                text: '火曜サスペンス劇場 アイキャッチ',
+                                content: '火曜サスペンス劇場 アイキャッチ',
                                 comment: 'speak katahira'
                             };
                         case '<.reichan:778714208954220586>':
                             return {
                                 url: const_settings_1["default"].URL.REITYAN,
-                                text: 'れいちゃん',
+                                content: 'れいちゃん',
                                 comment: 'speak reityan'
                             };
                         case '素敵な仲間が増えますよ':
                             return {
                                 url: const_settings_1["default"].URL.KARIN,
-                                text: 'クソメガネ',
+                                content: 'クソメガネ',
                                 comment: 'speak karin'
                             };
                         case 'ざわざわ':
                         case 'ざわ…ざわ…':
                             return {
                                 url: const_settings_1["default"].URL.ZAWAZAWA,
-                                text: 'ざわ…ざわ…',
+                                content: 'ざわ…ざわ…',
                                 comment: 'speak zawazawa'
                             };
                         case 'お願いマッスル':
                             return {
                                 url: const_settings_1["default"].URL.MUSCLE,
-                                text: 'お願いマッスル\nめっちゃモテたい',
+                                content: 'お願いマッスル\nめっちゃモテたい',
                                 comment: 'speak muscle'
                             };
                         case 'ﾈｺﾁｬﾝ':
                             return {
                                 url: const_settings_1["default"].URL.NEKO,
-                                text: 'あ～あ\nGUCCIの7万円もするﾈｺﾁｬﾝのTシャツがほしいよ～',
+                                content: 'あ～あ GUCCIの7万円もするﾈｺﾁｬﾝのTシャツがほしいよ～',
                                 comment: 'speak neko'
                             };
                     }
-                    if (!status.Mode)
+                    if (!exports.Status.mode)
                         return;
                     switch (command) {
                         case '/yabai.full':
                         case '/yabf':
                             return {
                                 url: const_settings_1["default"].URL.YABAIFULL,
-                                text: 'プリコネの年末年始はヤバイわよ！(Full)',
+                                content: 'プリコネの年末年始はヤバイわよ！(Full)',
                                 comment: 'speak yabai.full'
                             };
                         case '/yabai.yabai':
                             return {
                                 url: const_settings_1["default"].URL.YABAIYABAI,
-                                text: 'ヤバイヤバイヤバイヤバイヤバイヤバイ',
+                                content: 'ヤバイヤバイヤバイヤバイヤバイヤバイ',
                                 comment: 'speak yabai.yabai'
                             };
                         case '/yabai.slow':
                             return {
                                 url: const_settings_1["default"].URL.YABAISLOW,
-                                text: 'ヤバイヤバイヤバイヤバイヤバイやばいですね☆(slow)',
+                                content: 'ヤバイヤバイヤバイヤバイヤバイやばいですね☆(slow)',
                                 comment: 'speak yabai.slow'
                             };
                         case '/yabai.otwr':
                             return {
                                 url: const_settings_1["default"].URL.YABAIOTWR,
-                                text: 'ヤバイヤバイヤバイヤバイヤバイやばいですね☆(otwr)',
+                                content: 'ヤバイヤバイヤバイヤバイヤバイやばいですね☆(otwr)',
                                 comment: 'speak yabai.otwr'
                             };
                     }
                 })();
                 if (!value)
                     return [2];
-                speak.Play(msg, value.url, status.Volume, value.text);
+                vc = etc.GetVcWithCal(msg, client);
+                if (!vc)
+                    return [2];
+                return [4, speak.Add({ content: value.content, url: value.url, volume: exports.Status.volume }, vc)];
+            case 2:
+                _a.sent();
+                msg.reply(value.content);
                 return [2, value.comment];
         }
     });
 }); };
-var notExistCommands = function (command, msg) { return __awaiter(void 0, void 0, void 0, function () {
+var notExistCommands = function (command, msg, client) { return __awaiter(void 0, void 0, void 0, function () {
     var channel, list, cmd;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
                 channel = msg.channel;
-                return [4, etc_1.VcChannelList()];
+                return [4, etc.VcChannelList(client)];
             case 1:
                 if (!(_a.sent()).some(function (c) { return c === (channel === null || channel === void 0 ? void 0 : channel.name); }))
                     return [2];
@@ -405,6 +414,39 @@ var notExistCommands = function (command, msg) { return __awaiter(void 0, void 0
                     return [2];
                 msg.reply('そんなコマンドないんだけど！');
                 return [2, 'missing command'];
+        }
+    });
+}); };
+var removeMessage = function (msg) { return __awaiter(void 0, void 0, void 0, function () {
+    var roles, _a, match, msgList_1, n;
+    var _b;
+    return __generator(this, function (_c) {
+        switch (_c.label) {
+            case 0:
+                roles = (_b = msg.member) === null || _b === void 0 ? void 0 : _b.roles.cache.map(function (r) { return r.name; });
+                if (!const_settings_1["default"].DEVELOP_ROLE.some(function (r) { return roles === null || roles === void 0 ? void 0 : roles.find(function (v) { return v === r; }); }))
+                    return [2, ''];
+                _a = true;
+                switch (_a) {
+                    case /rm/.test(msg.content): return [3, 1];
+                }
+                return [3, 3];
+            case 1:
+                match = msg.content.replace(/・/g, '/').match(/\//);
+                if (!match)
+                    return [2, ''];
+                return [4, msg.channel.messages.fetch()];
+            case 2:
+                msgList_1 = (_c.sent()).map(function (v) { return v; });
+                n = (function (arg) { return (/\d/.test(arg) ? Number(arg) : 1); })(msg.content.replace('/rm ', ''));
+                __spread(Array(n + 1)).forEach(function (_, i) { return setTimeout(function () { return msgList_1[i]["delete"](); }, 100); });
+                return [2, 'delete message'];
+            case 3:
+                {
+                    return [2, ''];
+                }
+                _c.label = 4;
+            case 4: return [2];
         }
     });
 }); };
