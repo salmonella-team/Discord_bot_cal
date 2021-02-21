@@ -251,6 +251,22 @@ const speakCommands = async (
           comment: 'speak sushiro',
         }
 
+      case 'たべるんご':
+        return {
+          url: Settings.URL.TABERUNGO,
+          content:
+            'たーべるんごー たべるんごー\nやまがたりんごをたべるんごー\nおいしいりんごをたべるんごー\nいっぱいたべるんごー（ﾝｺﾞｰ）',
+          comment: 'speak taberungo',
+        }
+
+      case 'たべるんごのうた':
+        return {
+          url: Settings.URL.TABERUNGONOUTA,
+          content:
+            'たーべるんごー たべるんごー\nやまがたりんごをたべるんごー\nおいしいりんごをたべるんごー\nいっぱいたべるんごー（ﾝｺﾞｰ）\n以下略',
+          comment: 'speak taberungonouta',
+        }
+
       case 'usamaru':
         return {
           url: Settings.URL.USAMARU,

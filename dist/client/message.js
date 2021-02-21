@@ -277,6 +277,18 @@ var speakCommands = function (command, msg, client) { return __awaiter(void 0, v
                                 content: 'スシロー スシロー',
                                 comment: 'speak sushiro'
                             };
+                        case 'たべるんご':
+                            return {
+                                url: const_settings_1["default"].URL.TABERUNGO,
+                                content: 'たーべるんごー たべるんごー\nやまがたりんごをたべるんごー\nおいしいりんごをたべるんごー\nいっぱいたべるんごー（ﾝｺﾞｰ）',
+                                comment: 'speak taberungo'
+                            };
+                        case 'たべるんごのうた':
+                            return {
+                                url: const_settings_1["default"].URL.TABERUNGONOUTA,
+                                content: 'たーべるんごー たべるんごー\nやまがたりんごをたべるんごー\nおいしいりんごをたべるんごー\nいっぱいたべるんごー（ﾝｺﾞｰ）\n以下略',
+                                comment: 'speak taberungonouta'
+                            };
                         case 'usamaru':
                             return {
                                 url: const_settings_1["default"].URL.USAMARU,
