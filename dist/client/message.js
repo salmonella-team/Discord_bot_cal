@@ -350,6 +350,12 @@ var speakCommands = function (command, msg, client) { return __awaiter(void 0, v
                                 content: 'あ～あ GUCCIの7万円もするﾈｺﾁｬﾝのTシャツがほしいよ～',
                                 comment: 'speak neko'
                             };
+                        case '物乞いサンバ':
+                            return {
+                                url: const_settings_1["default"].URL.NEKO_FULL,
+                                content: 'あ～あ GUCCIの7万円もするﾈｺﾁｬﾝのTシャツがほしいよ～ 以下略',
+                                comment: 'speak neko full'
+                            };
                     }
                     if (!exports.Status.mode)
                         return;
