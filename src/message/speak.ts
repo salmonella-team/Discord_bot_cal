@@ -53,8 +53,8 @@ export const Read = async (msg: Discord.Message, client: Discord.Client) => {
   const vc = etc.GetVcWithCal(msg, client)
   if (!vc) return
 
-  // `/skip`or`/next`が入力された際は次の音声を再生
-  if (msg.content === '/skip' || msg.content === '/next') return skip(msg, vc)
+  // `fs`か`/skip`か`/next`が入力された際は次の音声を再生
+  if (/^(fs|\/fs|\/skip|\/next)$/.test(msg.content)) return skip(msg, vc)
 
   // コードブロックの場合は終了
   if (/\`\`\`/.test(msg.content)) return

@@ -84,7 +84,7 @@ exports.Read = function (msg, client) { return __awaiter(void 0, void 0, void 0,
                 vc = etc.GetVcWithCal(msg, client);
                 if (!vc)
                     return [2];
-                if (msg.content === '/skip' || msg.content === '/next')
+                if (/^(fs|\/fs|\/skip|\/next)$/.test(msg.content))
                     return [2, skip(msg, vc)];
                 if (/\`\`\`/.test(msg.content))
                     return [2];
