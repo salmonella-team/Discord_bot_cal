@@ -34,13 +34,8 @@ export const Read = async (msg: Discord.Message, client: Discord.Client) => {
   const channel = msg.channel as Discord.TextChannel
   if (!(await etc.VcChannelList(client)).some((c: string) => c === channel?.name)) return
 
-  // 全角文字は打った人は中華なのでロールを付与して中国語で喋らせる
+  // 全角文字は打った人は中華なので中国語で喋らせる
   if (/[Ａ-Ｚ]+|[ａ-ｚ]+|[０-９]+|　/.test(msg.content)) {
-    // べろばあのサーバーなら中華ロールを付与する
-    if (msg.guild?.id === Settings.BEROBA_ID) {
-      msg.member?.roles.add(Settings.CHINA_ROLE)
-    }
-
     // 強制的に中国語に変換する
     msg.content = `cn ${msg.content
       .replace(/^(おはなし|お話し|お話)/, '') // おはなしを除去
@@ -65,6 +60,10 @@ export const Read = async (msg: Discord.Message, client: Discord.Client) => {
       case /^(en|us)/i.test(str):
         return 'en-US'
       case /^(zh|cn)/i.test(str):
+        // べろばあのサーバーなら中華ロールを付与する
+        if (msg.guild?.id === Settings.BEROBA_ID) {
+          msg.member?.roles.add(Settings.CHINA_ROLE)
+        }
         return 'zh-CN'
       case /^es/i.test(str):
         return 'es-ES'

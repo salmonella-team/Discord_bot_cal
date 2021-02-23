@@ -60,21 +60,17 @@ var voice = {
 };
 exports.Read = function (msg, client) { return __awaiter(void 0, void 0, void 0, function () {
     var channel, vc, lang, content, options, res, url;
-    var _a, _b;
-    return __generator(this, function (_c) {
-        switch (_c.label) {
+    return __generator(this, function (_a) {
+        switch (_a.label) {
             case 0:
                 if (msg.author.bot)
                     return [2];
                 channel = msg.channel;
                 return [4, etc.VcChannelList(client)];
             case 1:
-                if (!(_c.sent()).some(function (c) { return c === (channel === null || channel === void 0 ? void 0 : channel.name); }))
+                if (!(_a.sent()).some(function (c) { return c === (channel === null || channel === void 0 ? void 0 : channel.name); }))
                     return [2];
                 if (/[Ａ-Ｚ]+|[ａ-ｚ]+|[０-９]+|　/.test(msg.content)) {
-                    if (((_a = msg.guild) === null || _a === void 0 ? void 0 : _a.id) === const_settings_1["default"].BEROBA_ID) {
-                        (_b = msg.member) === null || _b === void 0 ? void 0 : _b.roles.add(const_settings_1["default"].CHINA_ROLE);
-                    }
                     msg.content = "cn " + msg.content
                         .replace(/^(おはなし|お話し|お話)/, '')
                         .trim()
@@ -89,10 +85,14 @@ exports.Read = function (msg, client) { return __awaiter(void 0, void 0, void 0,
                 if (/\`\`\`/.test(msg.content))
                     return [2];
                 lang = (function (str) {
+                    var _a, _b;
                     switch (true) {
                         case /^(en|us)/i.test(str):
                             return 'en-US';
                         case /^(zh|cn)/i.test(str):
+                            if (((_a = msg.guild) === null || _a === void 0 ? void 0 : _a.id) === const_settings_1["default"].BEROBA_ID) {
+                                (_b = msg.member) === null || _b === void 0 ? void 0 : _b.roles.add(const_settings_1["default"].CHINA_ROLE);
+                            }
                             return 'zh-CN';
                         case /^es/i.test(str):
                             return 'es-ES';
@@ -127,7 +127,7 @@ exports.Read = function (msg, client) { return __awaiter(void 0, void 0, void 0,
                 return [4, axios_1["default"](options)
                         .then(function (r) { return r.data; })["catch"](function (e) { return console.log(e); })];
             case 2:
-                res = _c.sent();
+                res = _a.sent();
                 url = google_tts_api_1.getAudioUrl(res.converted.slice(0, 200), { lang: lang });
                 exports.Add({ content: content, url: url, volume: 0.5 }, vc);
                 return [2];
