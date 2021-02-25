@@ -41,7 +41,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 exports.__esModule = true;
 var const_settings_1 = __importDefault(require("const-settings"));
 exports.VoiceStateUpdate = function (oldState, newState, client) {
-    if ([const_settings_1["default"].SALMONELLA_ID, const_settings_1["default"].BEROBA_ID].every(function (id) { return id !== oldState.guild.id; }))
+    if ([const_settings_1["default"].SALMONELLA_ID, const_settings_1["default"].BEROBA_ID, const_settings_1["default"].EXCEED_ID].every(function (id) { return id !== oldState.guild.id; }))
         return;
     sendVCLog(oldState, newState, client);
     if (newState.channel)

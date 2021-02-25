@@ -13,8 +13,8 @@ export const VoiceStateUpdate = (
   newState: Discord.VoiceState,
   client: Discord.Client
 ) => {
-  // サルモネラ菌とべろばあ以外でキャルがvcに入らないようにする
-  if ([Settings.SALMONELLA_ID, Settings.BEROBA_ID].every(id => id !== oldState.guild.id)) return
+  // vcで喋るサーバー以外でキャルがvcに入らないようにする
+  if ([Settings.SALMONELLA_ID, Settings.BEROBA_ID, Settings.EXCEED_ID].every(id => id !== oldState.guild.id)) return
 
   // vcのログ出力する
   sendVCLog(oldState, newState, client)
