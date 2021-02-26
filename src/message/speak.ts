@@ -48,8 +48,12 @@ export const Read = async (msg: Discord.Message, client: Discord.Client) => {
   const vc = etc.GetVcWithCal(msg, client)
   if (!vc) return
 
-  // `fs`か`/skip`か`/next`が入力された際は次の音声を再生
-  if (/^(fs|\/fs|\/skip|\/next)$/.test(msg.content)) return skip(msg, vc)
+  // vcとメッセージが別のサーバーなら喋らない
+  if (vc.channel.guild.id !== msg.guild?.id) return
+
+  if (/^(fs|\/fs|\/skip|\/next)$/.test(msg.content))
+    // `fs`か`/skip`か`/next`が入力された際は次の音声を再生
+    return skip(msg, vc)
 
   // コードブロックの場合は終了
   if (/\`\`\`/.test(msg.content)) return

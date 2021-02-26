@@ -60,15 +60,16 @@ var voice = {
 };
 exports.Read = function (msg, client) { return __awaiter(void 0, void 0, void 0, function () {
     var channel, vc, lang, content, options, res, url;
-    return __generator(this, function (_a) {
-        switch (_a.label) {
+    var _a;
+    return __generator(this, function (_b) {
+        switch (_b.label) {
             case 0:
                 if (msg.author.bot)
                     return [2];
                 channel = msg.channel;
                 return [4, etc.VcChannelList(client)];
             case 1:
-                if (!(_a.sent()).some(function (c) { return c === (channel === null || channel === void 0 ? void 0 : channel.name); }))
+                if (!(_b.sent()).some(function (c) { return c === (channel === null || channel === void 0 ? void 0 : channel.name); }))
                     return [2];
                 if (/[Ａ-Ｚ]+|[ａ-ｚ]+|[０-９]+|　/.test(msg.content)) {
                     msg.content = "cn " + msg.content
@@ -80,6 +81,8 @@ exports.Read = function (msg, client) { return __awaiter(void 0, void 0, void 0,
                 vc = etc.GetVcWithCal(msg, client);
                 if (!vc)
                     return [2];
+                console.log(vc.channel.guild.id);
+                console.log((_a = msg.guild) === null || _a === void 0 ? void 0 : _a.id);
                 if (/^(fs|\/fs|\/skip|\/next)$/.test(msg.content))
                     return [2, skip(msg, vc)];
                 if (/\`\`\`/.test(msg.content))
@@ -127,7 +130,7 @@ exports.Read = function (msg, client) { return __awaiter(void 0, void 0, void 0,
                 return [4, axios_1["default"](options)
                         .then(function (r) { return r.data; })["catch"](function (e) { return console.log(e); })];
             case 2:
-                res = _a.sent();
+                res = _b.sent();
                 url = google_tts_api_1.getAudioUrl(res.converted.slice(0, 200), { lang: lang });
                 exports.Add({ content: content, url: url, volume: 0.5 }, vc);
                 return [2];
