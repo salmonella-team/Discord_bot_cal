@@ -35,13 +35,16 @@ export const Read = async (msg: Discord.Message, client: Discord.Client) => {
   if (!(await etc.VcChannelList(client)).some((c: string) => c === channel?.name)) return
 
   // 全角文字は打った人は中華なので中国語で喋らせる
-  if (/[Ａ-Ｚ]+|[ａ-ｚ]+|[０-９]+|　/.test(msg.content)) {
-    // 強制的に中国語に変換する
-    msg.content = `cn ${msg.content
-      .replace(/^(おはなし|お話し|お話)/, '') // おはなしを除去
-      .trim() // 余分な空白を除去
-      .replace(/^(en|us|zh|cn|es|ru|de|it|vi|vn|gb|ja|jp)/i, '') // 先頭の言語を除去
-      .trim()}` // 余分な空白を除去
+  if (/[Ａ-Ｚ]+|[ａ-ｚ]+|[０-９]+/.test(msg.content)) {
+    // クラバトのチャンネルでは動かさないようにする
+    if (msg.channel.id !== Settings.EXCEPTION_CHANNEL) {
+      // 強制的に中国語に変換する
+      msg.content = `cn ${msg.content
+        .replace(/^(おはなし|お話し|お話)/, '') // おはなしを除去
+        .trim() // 余分な空白を除去
+        .replace(/^(en|us|zh|cn|es|ru|de|it|vi|vn|gb|ja|jp)/i, '') // 先頭の言語を除去
+        .trim()}` // 余分な空白を除去
+    }
   }
 
   // キャルがvcに居ない場合は終了

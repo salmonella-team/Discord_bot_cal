@@ -71,18 +71,20 @@ exports.Read = function (msg, client) { return __awaiter(void 0, void 0, void 0,
             case 1:
                 if (!(_b.sent()).some(function (c) { return c === (channel === null || channel === void 0 ? void 0 : channel.name); }))
                     return [2];
-                if (/[Ａ-Ｚ]+|[ａ-ｚ]+|[０-９]+|　/.test(msg.content)) {
-                    msg.content = "cn " + msg.content
-                        .replace(/^(おはなし|お話し|お話)/, '')
-                        .trim()
-                        .replace(/^(en|us|zh|cn|es|ru|de|it|vi|vn|gb|ja|jp)/i, '')
-                        .trim();
+                if (/[Ａ-Ｚ]+|[ａ-ｚ]+|[０-９]+/.test(msg.content)) {
+                    if (msg.channel.id !== const_settings_1["default"].EXCEPTION_CHANNEL) {
+                        msg.content = "cn " + msg.content
+                            .replace(/^(おはなし|お話し|お話)/, '')
+                            .trim()
+                            .replace(/^(en|us|zh|cn|es|ru|de|it|vi|vn|gb|ja|jp)/i, '')
+                            .trim();
+                    }
                 }
                 vc = etc.GetVcWithCal(msg, client);
                 if (!vc)
                     return [2];
-                console.log(vc.channel.guild.id);
-                console.log((_a = msg.guild) === null || _a === void 0 ? void 0 : _a.id);
+                if (vc.channel.guild.id !== ((_a = msg.guild) === null || _a === void 0 ? void 0 : _a.id))
+                    return [2];
                 if (/^(fs|\/fs|\/skip|\/next)$/.test(msg.content))
                     return [2, skip(msg, vc)];
                 if (/\`\`\`/.test(msg.content))
