@@ -281,6 +281,14 @@ const speakCommands = async (
           comment: 'speak nyaru',
         }
 
+      case 'バジリスクタイム':
+        return {
+          url: Settings.URL.BASILISK,
+          content:
+            'https://tenor.com/view/%E3%83%90%E3%82%B8%E3%83%AA%E3%82%B9%E3%82%AF%E3%82%BF%E3%82%A4%E3%83%A0-%E3%83%90%E3%82%B8%E3%83%AA%E3%82%B9%E3%82%AF-%E3%83%90%E3%82%B8%E3%83%AA%E3%82%B9%E3%82%AF%E7%94%B2%E8%B3%80%E5%BF%8D%E6%B3%95%E5%B8%96-%E7%94%B2%E8%B3%80%E5%BF%8D%E6%B3%95%E5%B8%96-dance-gif-11980015',
+          comment: 'speak basilisk',
+        }
+
       case 'heero':
         return {
           url: Settings.URL.HEERO,
