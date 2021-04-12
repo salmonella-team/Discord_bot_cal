@@ -51,6 +51,15 @@ API_URL:
   # ひらがな化APIのURL
   HIRAGANA: 'https://labs.goo.ne.jp/api/hiragana'
 
+# 修正する読み
+FIX_READING:
+  - before: 白鳥
+    after: しらとり
+  - before: 流石
+    after: さすが
+  - before: 水瀬
+    after: みなせ
+
 # 音声のURL
 URL:
   YABAI: https://firebasestorage.googleapis.com/v0/b/practice-smicle.appspot.com/o/cal-bot%2Fyabai.wav?alt=media&token=2822b79e-3a96-4ba1-b41b-faf08c8dc83a

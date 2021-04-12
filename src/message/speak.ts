@@ -197,10 +197,12 @@ export const Play = async (status: Option<CalStatus>, vc: Discord.VoiceConnectio
  * @return 整形した後の文字列
  */
 const aloudFormat = (content: string): string => {
+  // 履歴埋めの例外処理を書く
   if (content.replace(/^(en|us|zh|cn|es|ru|de|it|vi|vn|gb|ja|jp)/i, '').trim() === '履歴埋め')
     return '君プリコネ上手いね？誰推し？てかアリーナやってる？履歴埋めってのがあってさ、一瞬！1回だけやってみない？大丈夫すぐやめれるし気持ちよくなれるよ'
 
-  content = content.replace('白鳥', 'しらとり')
+  // 文字の読みを修正する
+  content = fixReading(content)
 
   /**
    * 行末wをワラに変える
@@ -270,4 +272,16 @@ const aloudFormat = (content: string): string => {
     .join('') // 分解した文字を結合
     .replace(/<[^<>]*>/g, '') // <>に囲まれている文字を全て除去
     .slice(0, 200) // 200文字以上は喋れないので切り捨てる
+}
+
+/**
+ * 特定の文字列の読みを修正する
+ * @param content 修正する前の文字列
+ * @return 修正した後の文字列
+ */
+const fixReading = (content: string): string => {
+  Settings.FIX_READING.forEach((tag: any) => {
+    content = content.replace(tag.before, tag.after)
+  })
+  return content
 }

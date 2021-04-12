@@ -214,7 +214,7 @@ exports.Play = function (status, vc) { return __awaiter(void 0, void 0, void 0, 
 var aloudFormat = function (content) {
     if (content.replace(/^(en|us|zh|cn|es|ru|de|it|vi|vn|gb|ja|jp)/i, '').trim() === '履歴埋め')
         return '君プリコネ上手いね？誰推し？てかアリーナやってる？履歴埋めってのがあってさ、一瞬！1回だけやってみない？大丈夫すぐやめれるし気持ちよくなれるよ';
-    content = content.replace('白鳥', 'しらとり');
+    content = fixReading(content);
     var replaceWara = function (str) {
         var flag = false;
         return str
@@ -269,4 +269,10 @@ var aloudFormat = function (content) {
         .join('')
         .replace(/<[^<>]*>/g, '')
         .slice(0, 200);
+};
+var fixReading = function (content) {
+    const_settings_1["default"].FIX_READING.forEach(function (tag) {
+        content = content.replace(tag.before, tag.after);
+    });
+    return content;
 };
