@@ -59,6 +59,11 @@ FIX_READING:
     after: さすが
   - before: 水瀬
     after: みなせ
+  - before: 石見舞菜香
+    after: いわみまなか
+  - before: 甜花
+    after: てんか
+
 
 # 音声のURL
 URL:
