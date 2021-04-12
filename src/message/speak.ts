@@ -197,6 +197,9 @@ export const Play = async (status: Option<CalStatus>, vc: Discord.VoiceConnectio
  * @return 整形した後の文字列
  */
 const aloudFormat = (content: string): string => {
+  if (content.replace(/^(en|us|zh|cn|es|ru|de|it|vi|vn|gb|ja|jp)/i, '').trim() === '履歴埋め')
+    return '君プリコネ上手いね？誰推し？てかアリーナやってる？履歴埋めってのがあってさ、一瞬！1回だけやってみない？大丈夫すぐやめれるし気持ちよくなれるよ'
+
   /**
    * 行末wをワラに変える
    * @param str 変換する文字列
