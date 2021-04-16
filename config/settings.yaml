@@ -67,6 +67,8 @@ FIX_READING:
     after: あまな
   - before: 真乃
     after: まの
+  - before: make
+    after: まけ
 
 # 音声のURL
 URL:
