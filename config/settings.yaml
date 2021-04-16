@@ -69,6 +69,10 @@ FIX_READING:
     after: まの
   - before: make
     after: まけ
+  - before: a_
+    after: ア
+  - before: oissu
+    after: おいっすー
 
 # 音声のURL
 URL:
