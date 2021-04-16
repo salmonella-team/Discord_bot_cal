@@ -63,7 +63,10 @@ FIX_READING:
     after: いわみまなか
   - before: 甜花
     after: てんか
-
+  - before: 甘奈
+    after: あまな
+  - before: 真乃
+    after: まの
 
 # 音声のURL
 URL:
