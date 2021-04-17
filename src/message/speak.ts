@@ -281,7 +281,7 @@ const aloudFormat = (content: string): string => {
  */
 const fixReading = (content: string): string => {
   Settings.FIX_READING.forEach((tag: any) => {
-    content = content.replace(tag.before, tag.after)
+    content = content.replace(`/${tag.before}/g`, tag.after)
   })
   return content
 }
