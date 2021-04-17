@@ -73,6 +73,8 @@ FIX_READING:
     after: ア
   - before: oissu
     after: おいっすー
+  - before: smicle
+    after: すまいる
 
 # 音声のURL
 URL:
