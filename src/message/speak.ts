@@ -271,6 +271,7 @@ const aloudFormat = (content: string): string => {
     .map(emojiTrim) // :を><に変換
     .join('') // 分解した文字を結合
     .replace(/<[^<>]*>/g, '') // <>に囲まれている文字を全て除去
+    .replace(/_/g, '') // _を全て取り除く
     .slice(0, 200) // 200文字以上は喋れないので切り捨てる
 }
 
