@@ -75,6 +75,10 @@ FIX_READING:
     after: おいっすー
   - before: smicle
     after: すまいる
+  - before: tte
+    after: って
+  - before: gaitteta
+    after: がいってた
 
 # 音声のURL
 URL:
