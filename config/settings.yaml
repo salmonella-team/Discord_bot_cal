@@ -79,6 +79,8 @@ FIX_READING:
     after: って
   - before: gaitteta
     after: がいってた
+  - before: mattyadesuyo
+    after: まっちゃですよ
 
 # 音声のURL
 URL:
