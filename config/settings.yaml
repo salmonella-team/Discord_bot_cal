@@ -103,6 +103,8 @@ FIX_READING:
     after: が
   - before: _da
     after: だ
+  - before: _to
+    after: と
 
 # 音声のURL
 URL:
