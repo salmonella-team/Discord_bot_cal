@@ -34,12 +34,20 @@ export const Read = async (msg: Discord.Message, client: Discord.Client) => {
   const channel = msg.channel as Discord.TextChannel
   if (!(await etc.VcChannelList(client)).some((c: string) => c === channel?.name)) return
 
-  // 全角文字は打った人は中華なので中国語で喋らせる
+  // 全角文字は打った人はガイジなので日本語以外を喋らせる
   if (/[Ａ-Ｚ]+|[ａ-ｚ]+|[０-９]+/.test(msg.content)) {
     // クラバトのチャンネルでは動かさないようにする
     if (msg.channel.id !== Settings.EXCEPTION_CHANNEL) {
-      // 強制的に中国語に変換する
-      msg.content = `cn ${msg.content
+      // 乱数を生成する関数
+      const rand = (min: number, max: number) => Math.floor(Math.random() * (max - min + 1) + min)
+
+      // ランダムで読ませる言語を指定
+      const table = 'en,cn,es,ru,de,it,vn,gb'.split(',')
+      // 読ませる言語を決定する
+      const lang = table[rand(0, table.length - 1)]
+
+      // 強制的に別の言語に変換する
+      msg.content = `${lang} ${msg.content
         .replace(/^(おはなし|お話し|お話)/, '') // おはなしを除去
         .trim() // 余分な空白を除去
         .replace(/^(en|us|zh|cn|es|ru|de|it|vi|vn|gb|ja|jp)/i, '') // 先頭の言語を除去
@@ -67,10 +75,6 @@ export const Read = async (msg: Discord.Message, client: Discord.Client) => {
       case /^(en|us)/i.test(str):
         return 'en-US'
       case /^(zh|cn)/i.test(str):
-        // べろばあのサーバーなら中華ロールを付与する
-        if (msg.guild?.id === Settings.BEROBA_ID) {
-          msg.member?.roles.add(Settings.CHINA_ROLE)
-        }
         return 'zh-CN'
       case /^es/i.test(str):
         return 'es-ES'

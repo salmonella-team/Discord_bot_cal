@@ -59,7 +59,7 @@ var voice = {
     queue: []
 };
 exports.Read = function (msg, client) { return __awaiter(void 0, void 0, void 0, function () {
-    var channel, vc, lang, content, options, res, url;
+    var channel, rand, table, lang_1, vc, lang, content, options, res, url;
     var _a;
     return __generator(this, function (_b) {
         switch (_b.label) {
@@ -73,7 +73,10 @@ exports.Read = function (msg, client) { return __awaiter(void 0, void 0, void 0,
                     return [2];
                 if (/[Ａ-Ｚ]+|[ａ-ｚ]+|[０-９]+/.test(msg.content)) {
                     if (msg.channel.id !== const_settings_1["default"].EXCEPTION_CHANNEL) {
-                        msg.content = "cn " + msg.content
+                        rand = function (min, max) { return Math.floor(Math.random() * (max - min + 1) + min); };
+                        table = 'en,cn,es,ru,de,it,vn,gb'.split(',');
+                        lang_1 = table[rand(0, table.length - 1)];
+                        msg.content = lang_1 + " " + msg.content
                             .replace(/^(おはなし|お話し|お話)/, '')
                             .trim()
                             .replace(/^(en|us|zh|cn|es|ru|de|it|vi|vn|gb|ja|jp)/i, '')
@@ -90,14 +93,10 @@ exports.Read = function (msg, client) { return __awaiter(void 0, void 0, void 0,
                 if (/\`\`\`/.test(msg.content))
                     return [2];
                 lang = (function (str) {
-                    var _a, _b;
                     switch (true) {
                         case /^(en|us)/i.test(str):
                             return 'en-US';
                         case /^(zh|cn)/i.test(str):
-                            if (((_a = msg.guild) === null || _a === void 0 ? void 0 : _a.id) === const_settings_1["default"].BEROBA_ID) {
-                                (_b = msg.member) === null || _b === void 0 ? void 0 : _b.roles.add(const_settings_1["default"].CHINA_ROLE);
-                            }
                             return 'zh-CN';
                         case /^es/i.test(str):
                             return 'es-ES';
@@ -268,11 +267,12 @@ var aloudFormat = function (content) {
         .map(emojiTrim)
         .join('')
         .replace(/<[^<>]*>/g, '')
+        .replace(/_/g, '')
         .slice(0, 200);
 };
 var fixReading = function (content) {
     const_settings_1["default"].FIX_READING.forEach(function (tag) {
-        content = content.replace(tag.before, tag.after);
+        content = content.replace(new RegExp(tag.before, 'g'), tag.after);
     });
     return content;
 };
