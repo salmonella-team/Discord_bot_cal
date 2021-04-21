@@ -83,6 +83,20 @@ FIX_READING:
     after: いってた
   - before: mattyadesuyo
     after: まっちゃですよ
+  - before: _wo
+    after: を
+  - before: _no
+    after: の
+  - before: _ni
+    after: に
+  - before: _mo
+    after: も
+  - before: _ha
+    after: は
+  - before: _ga
+    after: が
+  - before: _da
+    after: だ
 
 # 音声のURL
 URL:
