@@ -61,6 +61,8 @@ FIX_READING:
     after: ついったー
   - before: 水瀬
     after: みなせ
+  - before: 夏織
+    after: かおり
   - before: 石見舞菜香
     after: いわみまなか
   - before: 甜花
@@ -73,6 +75,10 @@ FIX_READING:
     after: ひさかわ
   - before: make
     after: まけ
+  - before: 離席
+    after: りせき
+  - before: yattane
+    after: やったね
   - before: a_
     after: ア
   - before: oissu
