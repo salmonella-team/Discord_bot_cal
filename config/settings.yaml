@@ -97,6 +97,10 @@ FIX_READING:
     after: さむらい
   - before: tatamixxx
     after: たたみっくす
+  - before: 星
+    after: ほし
+  - before: 方
+    after: かた
   - before: _wo
     after: を
   - before: _no
