@@ -223,6 +223,7 @@ var speakCommands = function (command, msg, client) { return __awaiter(void 0, v
                             };
                         case 'jinai':
                         case 'jinnai':
+                        case '笑いのニューウェーブ':
                             return {
                                 url: const_settings_1["default"].URL.JINNAI,
                                 content: '笑いのニューウェーブ\n陣 内 智 則',
@@ -230,10 +231,38 @@ var speakCommands = function (command, msg, client) { return __awaiter(void 0, v
                             };
                         case 'jinaitomonori':
                         case 'jinnaitomonori':
+                        case '笑いのニューウェーブ陣内智則':
                             return {
                                 url: const_settings_1["default"].URL.JINNAITOMONORI,
                                 content: '次々に、新しい仕掛けを繰り出すのは、この男〜！\n笑いのニューウェーブ\n陣 内 智 則',
                                 comment: 'speak jinnaitomonori'
+                            };
+                        case '<.revolution:831354490367770624>':
+                        case 'レボリューション':
+                            return {
+                                url: const_settings_1["default"].URL.REVOLUTION,
+                                content: 'Want You! 君のハートに、レボ☆リューション!',
+                                comment: 'speak jinnaitomonori'
+                            };
+                        case '音割れD4DJ':
+                            return {
+                                url: const_settings_1["default"].URL.D4DJ,
+                                content: "1 2 3 Let's go!",
+                                comment: 'speak D4DJ'
+                            };
+                        case 'スッコココ':
+                        case 'ｽｯｺｺｺ':
+                            return {
+                                url: const_settings_1["default"].URL.KNOCK_BRUSH,
+                                content: 'ｽｯｺｺｺ',
+                                comment: 'speak knock brush'
+                            };
+                        case 'レスキュー開始':
+                        case 'モーニングレスキュー':
+                            return {
+                                url: const_settings_1["default"].URL.RESCUE,
+                                content: 'レスキュー開始',
+                                comment: 'speak rescue'
                             };
                         case 'hikakin':
                         case 'Hikakin':
@@ -252,12 +281,23 @@ var speakCommands = function (command, msg, client) { return __awaiter(void 0, v
                                 comment: 'speak helloYouTube'
                             };
                         case 'hikakintv':
-                        case 'HikakinTv':
+                        case 'HikakinTV':
                         case 'HIKAKINTV':
                             return {
                                 url: const_settings_1["default"].URL.HIKAKINTV,
                                 content: 'HIKAKIN TV Everyday\nブンブンハローYouTube\nどうもHIKAKINです',
                                 comment: 'speak HIKAKINTV'
+                            };
+                        case 'seikin':
+                        case 'Seikin':
+                        case 'SEIKIN':
+                        case 'seikintv':
+                        case 'SeikinTV':
+                        case 'SEIKINTV':
+                            return {
+                                url: const_settings_1["default"].URL.SEIKIN,
+                                content: 'Seikin Music Ah Seikin TV Oh Yeah',
+                                comment: 'speak SEIKIN'
                             };
                         case 'setokouji':
                             return {
@@ -266,6 +306,7 @@ var speakCommands = function (command, msg, client) { return __awaiter(void 0, v
                                 comment: 'speak setokouji'
                             };
                         case 'misuzu':
+                        case 'みすず学院':
                             return {
                                 url: const_settings_1["default"].URL.MISUZU,
                                 content: '怒涛の合格 みすず学苑 怒涛の合格 みすず学苑 怒涛の合格',
@@ -337,11 +378,18 @@ var speakCommands = function (command, msg, client) { return __awaiter(void 0, v
                                 content: '火曜サスペンス劇場 アイキャッチ',
                                 comment: 'speak katahira'
                             };
+                        case '暴れん坊将軍':
                         case '<.reichan:778714208954220586>':
                             return {
                                 url: const_settings_1["default"].URL.REITYAN,
                                 content: 'れいちゃん',
                                 comment: 'speak reityan'
+                            };
+                        case 'CR戦姫絶唱シンフォギア':
+                            return {
+                                url: const_settings_1["default"].URL.SYMPHOGEAR,
+                                content: 'CR戦姫絶唱シンフォギア',
+                                comment: 'speak symphogear'
                             };
                         case '素敵な仲間が増えますよ':
                             return {
@@ -373,6 +421,12 @@ var speakCommands = function (command, msg, client) { return __awaiter(void 0, v
                                 url: const_settings_1["default"].URL.NEKO_FULL,
                                 content: 'あ～あ GUCCIの7万円もするﾈｺﾁｬﾝのTシャツがほしいよ～ 以下略',
                                 comment: 'speak neko full'
+                            };
+                        case '全て込め撃ち抜くストライク':
+                            return {
+                                url: const_settings_1["default"].URL.OGURAYUI,
+                                content: '全て込め撃ち抜くストライク',
+                                comment: 'speak ogurayui'
                             };
                     }
                     if (!exports.Status.mode)

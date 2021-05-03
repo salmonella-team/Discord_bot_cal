@@ -267,12 +267,12 @@ var aloudFormat = function (content) {
         .map(emojiTrim)
         .join('')
         .replace(/<[^<>]*>/g, '')
-        .replace(/_/g, '')
+        .replace(/_|＿|／|￣|＞|\||\`|x|＼|ヽ|\*|\^/g, '')
         .slice(0, 200);
 };
 var fixReading = function (content) {
     const_settings_1["default"].FIX_READING.forEach(function (tag) {
-        content = content.replace(new RegExp(tag.before, 'g'), tag.after);
+        content = content.replace(new RegExp(tag.before, 'ig'), tag.after);
     });
     return content;
 };

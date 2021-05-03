@@ -209,7 +209,7 @@ const speakCommands = async (
       case 'レボリューション':
         return {
           url: Settings.URL.REVOLUTION,
-          content: '次々に、新しい仕掛けを繰り出すのは、この男〜！\n笑いのニューウェーブ\n陣 内 智 則',
+          content: 'Want You! 君のハートに、レボ☆リューション!',
           comment: 'speak jinnaitomonori',
         }
 
