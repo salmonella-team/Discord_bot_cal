@@ -189,6 +189,7 @@ const speakCommands = async (
 
       case 'jinai':
       case 'jinnai':
+      case '笑いのニューウェーブ':
         return {
           url: Settings.URL.JINNAI,
           content: '笑いのニューウェーブ\n陣 内 智 則',
@@ -197,10 +198,42 @@ const speakCommands = async (
 
       case 'jinaitomonori':
       case 'jinnaitomonori':
+      case '笑いのニューウェーブ陣内智則':
         return {
           url: Settings.URL.JINNAITOMONORI,
           content: '次々に、新しい仕掛けを繰り出すのは、この男〜！\n笑いのニューウェーブ\n陣 内 智 則',
           comment: 'speak jinnaitomonori',
+        }
+
+      case '<.revolution:831354490367770624>':
+      case 'レボリューション':
+        return {
+          url: Settings.URL.REVOLUTION,
+          content: '次々に、新しい仕掛けを繰り出すのは、この男〜！\n笑いのニューウェーブ\n陣 内 智 則',
+          comment: 'speak jinnaitomonori',
+        }
+
+      case '音割れD4DJ':
+        return {
+          url: Settings.URL.D4DJ,
+          content: "1 2 3 Let's go!",
+          comment: 'speak D4DJ',
+        }
+
+      case 'スッコココ':
+      case 'ｽｯｺｺｺ':
+        return {
+          url: Settings.URL.KNOCK_BRUSH,
+          content: 'ｽｯｺｺｺ',
+          comment: 'speak knock brush',
+        }
+
+      case 'レスキュー開始':
+      case 'モーニングレスキュー':
+        return {
+          url: Settings.URL.RESCUE,
+          content: 'レスキュー開始',
+          comment: 'speak rescue',
         }
 
       case 'hikakin':
@@ -222,12 +255,24 @@ const speakCommands = async (
         }
 
       case 'hikakintv':
-      case 'HikakinTv':
+      case 'HikakinTV':
       case 'HIKAKINTV':
         return {
           url: Settings.URL.HIKAKINTV,
           content: 'HIKAKIN TV Everyday\nブンブンハローYouTube\nどうもHIKAKINです',
           comment: 'speak HIKAKINTV',
+        }
+
+      case 'seikin':
+      case 'Seikin':
+      case 'SEIKIN':
+      case 'seikintv':
+      case 'SeikinTV':
+      case 'SEIKINTV':
+        return {
+          url: Settings.URL.SEIKIN,
+          content: 'Seikin Music Ah Seikin TV Oh Yeah',
+          comment: 'speak SEIKIN',
         }
 
       case 'setokouji':
@@ -238,6 +283,7 @@ const speakCommands = async (
         }
 
       case 'misuzu':
+      case 'みすず学院':
         return {
           url: Settings.URL.MISUZU,
           content: '怒涛の合格 みすず学苑 怒涛の合格 みすず学苑 怒涛の合格',
@@ -324,11 +370,19 @@ const speakCommands = async (
           comment: 'speak katahira',
         }
 
+      case '暴れん坊将軍':
       case '<.reichan:778714208954220586>':
         return {
           url: Settings.URL.REITYAN,
           content: 'れいちゃん',
           comment: 'speak reityan',
+        }
+
+      case 'CR戦姫絶唱シンフォギア':
+        return {
+          url: Settings.URL.SYMPHOGEAR,
+          content: 'CR戦姫絶唱シンフォギア',
+          comment: 'speak symphogear',
         }
 
       case '素敵な仲間が増えますよ':
@@ -365,6 +419,13 @@ const speakCommands = async (
           url: Settings.URL.NEKO_FULL,
           content: 'あ～あ GUCCIの7万円もするﾈｺﾁｬﾝのTシャツがほしいよ～ 以下略',
           comment: 'speak neko full',
+        }
+
+      case '全て込め撃ち抜くストライク':
+        return {
+          url: Settings.URL.OGURAYUI,
+          content: '全て込め撃ち抜くストライク',
+          comment: 'speak ogurayui',
         }
     }
 
