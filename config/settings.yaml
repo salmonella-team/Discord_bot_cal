@@ -101,6 +101,10 @@ FIX_READING:
     after: したぶれ
   - before: 上振れ
     after: うわぶれ
+  - before: cal
+    after: キャル
+  - before: 大富豪
+    after: だいふごう
   - before: 星
     after: ほし
   - before: 方
