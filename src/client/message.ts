@@ -284,7 +284,7 @@ const speakCommands = async (
         }
 
       case 'misuzu':
-      case 'みすず学院':
+      case 'みすず学苑':
         return {
           url: Settings.URL.MISUZU,
           content: '怒涛の合格 みすず学苑 怒涛の合格 みすず学苑 怒涛の合格',
