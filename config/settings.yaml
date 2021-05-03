@@ -55,8 +55,6 @@ FIX_READING:
     after: しらとり
   - before: 流石
     after: さすが
-  - before: Twitter
-    after: ついったー
   - before: twitter
     after: ついったー
   - before: 水瀬
