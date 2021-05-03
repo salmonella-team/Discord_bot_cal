@@ -207,6 +207,7 @@ const speakCommands = async (
 
       case '<.revolution:831354490367770624>':
       case 'レボリューション':
+      case 'レボ☆リューション':
         return {
           url: Settings.URL.REVOLUTION,
           content: 'Want You! 君のハートに、レボ☆リューション!',
