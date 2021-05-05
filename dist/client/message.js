@@ -239,6 +239,7 @@ var speakCommands = function (command, msg, client) { return __awaiter(void 0, v
                             };
                         case '<.revolution:831354490367770624>':
                         case 'レボリューション':
+                        case 'レボ☆リューション':
                             return {
                                 url: const_settings_1["default"].URL.REVOLUTION,
                                 content: 'Want You! 君のハートに、レボ☆リューション!',
@@ -306,7 +307,7 @@ var speakCommands = function (command, msg, client) { return __awaiter(void 0, v
                                 comment: 'speak setokouji'
                             };
                         case 'misuzu':
-                        case 'みすず学院':
+                        case 'みすず学苑':
                             return {
                                 url: const_settings_1["default"].URL.MISUZU,
                                 content: '怒涛の合格 みすず学苑 怒涛の合格 みすず学苑 怒涛の合格',
