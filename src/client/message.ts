@@ -205,7 +205,6 @@ const speakCommands = async (
           comment: 'speak jinnaitomonori',
         }
 
-      case '<.revolution:831354490367770624>':
       case 'レボリューション':
         return {
           url: Settings.URL.REVOLUTION,
@@ -213,6 +212,7 @@ const speakCommands = async (
           comment: 'speak RevoLution',
         }
 
+      case '<.revolution:831354490367770624>':
       case 'レボ☆リューション':
         return {
           url: Settings.URL.REVO_LUTION,
