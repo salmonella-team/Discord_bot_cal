@@ -207,11 +207,26 @@ const speakCommands = async (
 
       case '<.revolution:831354490367770624>':
       case 'レボリューション':
-      case 'レボ☆リューション':
         return {
           url: Settings.URL.REVOLUTION,
+          content: '君のハートに、レボ☆リューション!',
+          comment: 'speak RevoLution',
+        }
+
+      case 'レボ☆リューション':
+        return {
+          url: Settings.URL.REVO_LUTION,
           content: 'Want You! 君のハートに、レボ☆リューション!',
-          comment: 'speak jinnaitomonori',
+          comment: 'speak Revo☆Lution',
+        }
+
+      case 'なんでだろ':
+      case 'なんでだろ～':
+      case 'なんでだろう':
+        return {
+          url: Settings.URL.NANDEDARO,
+          content: 'なんでだろ～♪なんでだろ～♪',
+          comment: 'speak nandedaro',
         }
 
       case '音割れD4DJ':

@@ -239,11 +239,24 @@ var speakCommands = function (command, msg, client) { return __awaiter(void 0, v
                             };
                         case '<.revolution:831354490367770624>':
                         case 'レボリューション':
-                        case 'レボ☆リューション':
                             return {
                                 url: const_settings_1["default"].URL.REVOLUTION,
+                                content: '君のハートに、レボ☆リューション!',
+                                comment: 'speak RevoLution'
+                            };
+                        case 'レボ☆リューション':
+                            return {
+                                url: const_settings_1["default"].URL.REVO_LUTION,
                                 content: 'Want You! 君のハートに、レボ☆リューション!',
-                                comment: 'speak jinnaitomonori'
+                                comment: 'speak Revo☆Lution'
+                            };
+                        case 'なんでだろ':
+                        case 'なんでだろ～':
+                        case 'なんでだろう':
+                            return {
+                                url: const_settings_1["default"].URL.NANDEDARO,
+                                content: 'なんでだろ～♪なんでだろ～♪',
+                                comment: 'speak nandedaro'
                             };
                         case '音割れD4DJ':
                             return {
