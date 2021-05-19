@@ -237,13 +237,13 @@ var speakCommands = function (command, msg, client) { return __awaiter(void 0, v
                                 content: '次々に、新しい仕掛けを繰り出すのは、この男〜！\n笑いのニューウェーブ\n陣 内 智 則',
                                 comment: 'speak jinnaitomonori'
                             };
-                        case '<.revolution:831354490367770624>':
                         case 'レボリューション':
                             return {
                                 url: const_settings_1["default"].URL.REVOLUTION,
                                 content: '君のハートに、レボ☆リューション!',
                                 comment: 'speak RevoLution'
                             };
+                        case '<.revolution:831354490367770624>':
                         case 'レボ☆リューション':
                             return {
                                 url: const_settings_1["default"].URL.REVO_LUTION,
@@ -343,6 +343,18 @@ var speakCommands = function (command, msg, client) { return __awaiter(void 0, v
                                 url: const_settings_1["default"].URL.TABERUNGONOUTA,
                                 content: 'たーべるんごー たべるんごー\nやまがたりんごをたべるんごー\nおいしいりんごをたべるんごー\nいっぱいたべるんごー（ﾝｺﾞｰ）\n以下略',
                                 comment: 'speak taberungonouta'
+                            };
+                        case '楽天モバイル':
+                            return {
+                                url: const_settings_1["default"].URL.RAKUTEN_MOBILE,
+                                content: '楽天モバイル',
+                                comment: 'speak rakuten mobile'
+                            };
+                        case 'fbi':
+                            return {
+                                url: const_settings_1["default"].URL.FBI,
+                                content: 'fbi open door',
+                                comment: 'speak fbi open door'
                             };
                         case 'usamaru':
                             return {

@@ -329,6 +329,20 @@ const speakCommands = async (
           comment: 'speak taberungonouta',
         }
 
+      case '楽天モバイル':
+        return {
+          url: Settings.URL.RAKUTEN_MOBILE,
+          content: '楽天モバイル',
+          comment: 'speak rakuten mobile',
+        }
+
+      case 'fbi':
+        return {
+          url: Settings.URL.FBI,
+          content: 'fbi open door',
+          comment: 'speak fbi open door',
+        }
+
       case 'usamaru':
         return {
           url: Settings.URL.USAMARU,
