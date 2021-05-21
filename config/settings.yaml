@@ -75,6 +75,8 @@ FIX_READING:
     after: まけ
   - before: 離席
     after: りせき
+  - before: 来い
+    after: らい
   - before: yattane
     after: やったね
   - before: a_

@@ -554,14 +554,19 @@ const removeMessage = async (msg: Discord.Message): Promise<Option<string>> => {
       const match = msg.content.replace(/・/g, '/').match(/\//)
       if (!match) return ''
 
+      console.log(/\/rm|\/rm \d/.test(msg.content))
+
       // `/rm`か`/rm \d`以外は終了
-      if (/\/rm|\/rm \d/.test(msg.content)) return ''
+      if (!/\/rm|\/rm \d/.test(msg.content)) return ''
 
       // メッセージを削除する数を取得
-      const n = /\/rm/.test(msg.content) ? 1 : Number(msg.content.replace(/\s/g, '').replace('/rm', ''))
+      const n = /^\/rm$/.test(msg.content) ? 1 : Number(msg.content.replace(/\s/g, '').replace('/rm', ''))
 
       // 11件以上同時に消すのは危ないので実行しない
-      if (n >= 11) return ''
+      if (n >= 11 || n < 0) {
+        msg.delete()
+        return ''
+      }
 
       // メッセージを削除
       const channel = msg.channel as Discord.TextChannel

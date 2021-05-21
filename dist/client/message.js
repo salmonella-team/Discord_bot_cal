@@ -529,11 +529,14 @@ var removeMessage = function (msg) { return __awaiter(void 0, void 0, void 0, fu
                 match = msg.content.replace(/・/g, '/').match(/\//);
                 if (!match)
                     return [2, ''];
-                if (/\/rm|\/rm \d/.test(msg.content))
+                console.log(/\/rm|\/rm \d/.test(msg.content));
+                if (!/\/rm|\/rm \d/.test(msg.content))
                     return [2, ''];
-                n = /\/rm/.test(msg.content) ? 1 : Number(msg.content.replace(/\s/g, '').replace('/rm', ''));
-                if (n >= 11)
+                n = /^\/rm$/.test(msg.content) ? 1 : Number(msg.content.replace(/\s/g, '').replace('/rm', ''));
+                if (n >= 11 || n < 0) {
+                    msg["delete"]();
                     return [2, ''];
+                }
                 channel = msg.channel;
                 channel.bulkDelete(n + 1);
                 return [2, 'delete message'];
