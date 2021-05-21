@@ -51,10 +51,6 @@ var __read = (this && this.__read) || function (o, n) {
     }
     return ar;
 };
-var __spread = (this && this.__spread) || function () {
-    for (var ar = [], i = 0; i < arguments.length; i++) ar = ar.concat(__read(arguments[i]));
-    return ar;
-};
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
@@ -522,35 +518,30 @@ var notExistCommands = function (command, msg, client) { return __awaiter(void 0
     });
 }); };
 var removeMessage = function (msg) { return __awaiter(void 0, void 0, void 0, function () {
-    var roles, _a, match, msgList_1, n;
-    var _b;
-    return __generator(this, function (_c) {
-        switch (_c.label) {
-            case 0:
-                roles = (_b = msg.member) === null || _b === void 0 ? void 0 : _b.roles.cache.map(function (r) { return r.name; });
-                if (!const_settings_1["default"].DEVELOP_ROLE.some(function (r) { return roles === null || roles === void 0 ? void 0 : roles.find(function (v) { return v === r; }); }))
-                    return [2, ''];
-                _a = true;
-                switch (_a) {
-                    case /rm/.test(msg.content): return [3, 1];
-                }
-                return [3, 3];
-            case 1:
+    var roles, match, n, channel;
+    var _a;
+    return __generator(this, function (_b) {
+        roles = (_a = msg.member) === null || _a === void 0 ? void 0 : _a.roles.cache.map(function (r) { return r.name; });
+        if (!const_settings_1["default"].DEVELOP_ROLE.some(function (r) { return roles === null || roles === void 0 ? void 0 : roles.find(function (v) { return v === r; }); }))
+            return [2, ''];
+        switch (true) {
+            case /rm/.test(msg.content): {
                 match = msg.content.replace(/・/g, '/').match(/\//);
                 if (!match)
                     return [2, ''];
-                return [4, msg.channel.messages.fetch()];
-            case 2:
-                msgList_1 = (_c.sent()).map(function (v) { return v; });
-                n = (function (arg) { return (/\d/.test(arg) ? Number(arg) : 1); })(msg.content.replace('/rm ', ''));
-                __spread(Array(n + 1)).forEach(function (_, i) { return setTimeout(function () { return msgList_1[i]["delete"](); }, 100); });
-                return [2, 'delete message'];
-            case 3:
-                {
+                if (/\/rm|\/rm \d/.test(msg.content))
                     return [2, ''];
-                }
-                _c.label = 4;
-            case 4: return [2];
+                n = /\/rm/.test(msg.content) ? 1 : Number(msg.content.replace(/\s/g, '').replace('/rm', ''));
+                if (n >= 11)
+                    return [2, ''];
+                channel = msg.channel;
+                channel.bulkDelete(n + 1);
+                return [2, 'delete message'];
+            }
+            default: {
+                return [2, ''];
+            }
         }
+        return [2];
     });
 }); };
