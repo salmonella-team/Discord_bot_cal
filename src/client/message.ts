@@ -570,7 +570,7 @@ const removeMessage = async (msg: Discord.Message): Promise<Option<string>> => {
 
       // メッセージを削除
       const channel = msg.channel as Discord.TextChannel
-      channel.bulkDelete(n + 1)
+      setTimeout(() => channel.bulkDelete(n + 1), 500)
 
       return 'delete message'
     }

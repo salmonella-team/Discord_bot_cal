@@ -518,7 +518,7 @@ var notExistCommands = function (command, msg, client) { return __awaiter(void 0
     });
 }); };
 var removeMessage = function (msg) { return __awaiter(void 0, void 0, void 0, function () {
-    var roles, match, n, channel;
+    var roles, match, n_1, channel_1;
     var _a;
     return __generator(this, function (_b) {
         roles = (_a = msg.member) === null || _a === void 0 ? void 0 : _a.roles.cache.map(function (r) { return r.name; });
@@ -532,13 +532,13 @@ var removeMessage = function (msg) { return __awaiter(void 0, void 0, void 0, fu
                 console.log(/\/rm|\/rm \d/.test(msg.content));
                 if (!/\/rm|\/rm \d/.test(msg.content))
                     return [2, ''];
-                n = /^\/rm$/.test(msg.content) ? 1 : Number(msg.content.replace(/\s/g, '').replace('/rm', ''));
-                if (n >= 11 || n < 0) {
+                n_1 = /^\/rm$/.test(msg.content) ? 1 : Number(msg.content.replace(/\s/g, '').replace('/rm', ''));
+                if (n_1 >= 11 || n_1 < 0) {
                     msg["delete"]();
                     return [2, ''];
                 }
-                channel = msg.channel;
-                channel.bulkDelete(n + 1);
+                channel_1 = msg.channel;
+                setTimeout(function () { return channel_1.bulkDelete(n_1 + 1); }, 500);
                 return [2, 'delete message'];
             }
             default: {
