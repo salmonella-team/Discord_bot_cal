@@ -155,3 +155,4 @@ assets
 .vscode
 
 memo.md
+dist/
