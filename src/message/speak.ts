@@ -2,6 +2,7 @@ import * as Discord from 'discord.js'
 import * as fs from 'fs'
 import moji from 'moji'
 import axios from 'axios'
+import fetch from 'node-fetch'
 import {AxiosRequestConfig} from 'axios'
 import {getAudioUrl} from 'google-tts-api'
 import throwEnv from 'throw-env'
@@ -133,9 +134,12 @@ const skip = async (msg: Discord.Message, vc: Discord.VoiceConnection) => {
   // 現在再生してる音声を破棄
   voice.dispatcher?.destroy()
 
+  // 最初の行だけ取得
+  const content = Status.content?.split('\n')[0]
+
   // 破棄した音声を出力
-  msg.reply(`> ${Status.content}`)
-  console.log(`skip ${Status.content}`)
+  msg.reply(`> ${content}`)
+  console.log(`skip ${content}`)
 
   // キューが残っている場合は次の音声を流す
   if (voice.queue.length > 0) {
@@ -171,24 +175,51 @@ export const Play = async (status: Option<CalStatus>, vc: Discord.VoiceConnectio
   // キャルの状態を更新
   Status.content = status?.content
 
-  // urlから再生させるために`./tmp.mp3`を更新
-  const res = await axios.get(status?.url || '', {responseType: 'arraybuffer'})
-  fs.writeFileSync(`./tmp.mp3`, Buffer.from(res.data), 'binary')
-
-  // 現在キャルが入っているチャンネルで音声を再生
+  // 現在キャルが入っているチャンネルに接続
   const connect = await vc.voice?.channel?.join()
-  voice.dispatcher = connect?.play(fs.createReadStream('./tmp.mp3'), {volume: status?.volume})
+
+  // urlから再生させるために`./tmp.mp3`を更新
+  let tmp: string
+
+  // 1つ目の音声ファイルをダウンロード
+  const res1 = await fetch(status?.url ?? '').then(res => res.arrayBuffer())
+  fs.writeFileSync(`./tmp1.mp3`, Buffer.from(res1), 'binary')
+
+  for (;;) {
+    // 2つ目の音声ファイルをダウンロード
+    const res2 = await fetch(status?.url ?? '').then(res => res.arrayBuffer())
+    fs.writeFileSync(`./tmp2.mp3`, Buffer.from(res2), 'binary')
+
+    // 両方のファイルサイズを取得
+    const size1 = fs.statSync('./tmp1.mp3').size
+    const size2 = fs.statSync('./tmp2.mp3').size
+
+    // 小さい方を再生、サイズが同じならもう一度ダウンロード
+    if (size1 < size2) {
+      tmp = './tmp1.mp3'
+      break
+    } else if (size1 > size2) {
+      tmp = './tmp2.mp3'
+      break
+    }
+  }
+
+  // 音声を再生
+  voice.dispatcher = connect?.play(fs.createReadStream(tmp), {volume: status?.volume})
+
   // 再生が開始したら、再生中状態にする
   voice.dispatcher?.on('start', () => {
     voice.stream = true
     console.log(`start: ${status?.content}`)
   })
+
   // 再生が終了した際、キューに値が入っている場合は次の値を再生。
   // ない場合は終了する
   voice.dispatcher?.on('finish', async () => {
     if (voice.queue.length > 0) {
       await Play(voice.queue.shift(), vc)
     }
+
     // 再生を終了
     voice.stream = false
     console.log(`finish: ${status?.content}`)

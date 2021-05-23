@@ -125,6 +125,8 @@ FIX_READING:
     after: だ
   - before: _to
     after: と
+  - before: _de
+    after: で
 
 # 音声のURL
 URL:
