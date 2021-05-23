@@ -96,7 +96,7 @@ export const Read = async (msg: Discord.Message, client: Discord.Client) => {
   })(msg.content.replace(/^(おはなし|お話し|お話)/, '').trim()) // 予めおはなしは消しておく
 
   // 入力された文字を読み上げられる形に整形
-  const content = aloudFormat(msg.content)
+  const content = aloudFormat(msg.content, msg)
 
   // 文字が空の場合は終了
   if (!content) return
@@ -231,13 +231,10 @@ export const Play = async (status: Option<CalStatus>, vc: Discord.VoiceConnectio
  * @param content 整形する前の文字列
  * @return 整形した後の文字列
  */
-const aloudFormat = (content: string): string => {
+const aloudFormat = (content: string, msg: Discord.Message): string => {
   // 履歴埋めの例外処理を書く
   if (content.replace(/^(en|us|zh|cn|es|ru|de|it|vi|vn|gb|ja|jp)/i, '').trim() === '履歴埋め')
     return '君プリコネ上手いね？誰推し？てかアリーナやってる？履歴埋めってのがあってさ、一瞬！1回だけやってみない？大丈夫すぐやめれるし気持ちよくなれるよ'
-
-  // 文字の読みを修正する
-  content = fixReading(content)
 
   /**
    * 行末wをワラに変える
@@ -262,36 +259,37 @@ const aloudFormat = (content: string): string => {
       .join('')
   }
 
-  // callする毎に><が切り替わるObjectを作成
-  const separat = {
-    char: ['>', '<'],
-    count: 0,
-    call: () => separat.char[separat.count ? separat.count-- : separat.count++],
-  }
-
-  // 絵文字トリム用のカウンタ
-  const counter = {
-    count: 0,
-    call: () => (counter.count = counter.count === 2 ? 0 : counter.count + 1),
-  }
-
   /**
-   * 絵文字の余計な部分を消す為に:を<>に変換する
-   * @param c 文字
-   * @param i インデックス
-   * @param str 配列
-   * @return 変換した文字
+   * 引数に渡されたリストを順番に取り出すクラスを作成する
+   * @param list リスト
+   * @returns リストを順番に取り出すクラス
    */
-  const emojiTrim = (c: string, i: number, str: string[]): string => {
-    if (counter.count) {
-      return c === ':' ? (counter.call(), separat.call()) : c
-    } else {
-      if (c === '<' && str[i + 1] === ':') counter.call()
-      return c
+  const order = (list: string[]) => {
+    class Order {
+      list: string[]
+      count: number
+
+      /**
+       * 秒数を順番に取り出すクラス
+       * @param list 秒数のリスト
+       */
+      constructor(list: string[]) {
+        this.list = list
+        this.count = 0
+      }
+
+      /**
+       * リストを順番に取り出し、カウントを進める
+       * @returns リスト
+       */
+      pop() {
+        return this.list[this.count++]
+      }
     }
+    return new Order(list)
   }
 
-  return moji(content)
+  content = moji(content)
     .convert('HK', 'ZK') // 半角カナを全角カナに変換
     .toString() // String型に戻す
     .replace(/^(おはなし|お話し|お話)/, '') // おはなしを除去
@@ -302,10 +300,50 @@ const aloudFormat = (content: string): string => {
     .split('\n') // 一行ずつに分解
     .map(replaceWara) // 文末のwをワラに変える
     .join('') // 分解した文字を結合
-    .split('') // 一文字ずつに分解
-    .map(emojiTrim) // :を><に変換
-    .join('') // 分解した文字を結合
-    .replace(/<[^<>]*>/g, '') // <>に囲まれている文字を全て除去
+
+  // <>に囲まれた値のリストを取得
+  const list = content.match(/<[^<>]*>/g)?.map(e => {
+    if (/@!/.test(e)) {
+      // メンション
+      const member = msg.guild?.members.cache.get(e.replace(/[^\d]/g, ''))
+      // ニックネームがある場合はニックネームを優先
+      return member?.nickname ? `@${member?.nickname}` : `@${member?.user.username}` ?? ''
+    } else if (/@&/.test(e)) {
+      // ロール
+      const role = msg.guild?.roles.cache.get(e.replace(/[^\d]/g, ''))
+      return `@${role?.name}` ?? ''
+    } else if (/@/.test(e)) {
+      // メンション
+      const member = msg.guild?.members.cache.get(e.replace(/[^\d]/g, ''))
+      return member?.nickname ? `@${member?.nickname}` : `@${member?.user.username}` ?? ''
+    } else if (/#/.test(e)) {
+      // チャンネル
+      const channel = msg.guild?.channels.cache.get(e.replace(/[^\d]/g, ''))
+      return `#${channel?.name}` ?? ''
+    } else if (/<:/.test(e)) {
+      // 絵文字
+      return e.split(':')[1]
+    } else {
+      return e
+    }
+  })
+
+  if (list) {
+    // 埋め込みを順番に取り出すクラスを作成
+    const embedded = order(list)
+
+    // 埋め込みを元に戻す
+    content = content
+      .replace(/<[^<>]*>/g, '１') // 埋め込みの場所を存在しない１に一時的に置き換える
+      .split('') // 1文字づつ分解
+      .map(tl => (/１/.test(tl) ? embedded.pop() : tl)) // １を埋め込みに置き換える
+      .join('') // 全ての行を結合
+  }
+
+  // 文字の読みを修正する
+  content = fixReading(content)
+
+  return content
     .replace(/_|＿|／|￣|＞|\||\`|x|＼|ヽ|\*|\^/g, '') // 余計な記号を全て取り除く
     .slice(0, 200) // 200文字以上は喋れないので切り捨てる
 }
