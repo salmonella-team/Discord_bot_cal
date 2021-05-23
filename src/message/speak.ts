@@ -121,7 +121,7 @@ export const Read = async (msg: Discord.Message, client: Discord.Client) => {
   const url = getAudioUrl(res.converted.slice(0, 200), {lang: lang})
 
   // 再生させる音声をキューに追加する
-  Add({content: content, url: url, volume: 0.5}, vc)
+  Add({content: content, url: url, volume: 0.4}, vc)
 }
 
 /**
