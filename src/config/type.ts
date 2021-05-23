@@ -20,6 +20,7 @@ export interface CalStatus {
   url: string
   volume: number
   mode?: Mode
+  flag?: boolean
 }
 
 /**

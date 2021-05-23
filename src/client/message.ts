@@ -451,6 +451,7 @@ const speakCommands = async (
           comment: 'speak neko full',
         }
 
+      case 'ストライク':
       case '全て込め撃ち抜くストライク':
         return {
           url: Settings.URL.OGURAYUI,
