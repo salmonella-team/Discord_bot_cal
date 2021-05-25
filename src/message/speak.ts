@@ -347,7 +347,7 @@ const aloudFormat = (content: string, msg: Discord.Message): string => {
   content = fixReading(content)
 
   return content
-    .replace(/_|＿|／|￣|＞|\||\`|x|＼|ヽ|\*|\^/g, '') // 余計な記号を全て取り除く
+    .replace(/_|＿|／|￣|＞|\||\`|x|＼|ヽ|\*|\^|´|ω|ก/g, '') // 余計な記号を全て取り除く
     .slice(0, 200) // 200文字以上は喋れないので切り捨てる
 }
 
