@@ -109,8 +109,12 @@ FIX_READING:
     after: ほし
   - before: HP
     after: えいちぴー
-  - before: 方
-    after: かた
+  - before: Vo
+    after: ぼ
+  - before: Da
+    after: だ
+  - before: Vi
+    after: び
   - before: _wo
     after: を
   - before: _no
