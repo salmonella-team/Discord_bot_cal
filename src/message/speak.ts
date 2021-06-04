@@ -187,7 +187,8 @@ export const Play = async (status: Option<CalStatus>, vc: Discord.VoiceConnectio
 
   // 読み上げの場合は低い音声になるまでダウンロードする
   if (status?.flag) {
-    for (;;) {
+    // 10回超えたら諦めて音声を再生する
+    for (let i = 0; i < 10; i++) {
       // 2つ目の音声ファイルをダウンロード
       const res2 = await fetch(status?.url ?? '').then(res => res.arrayBuffer())
       fs.writeFileSync(`./tmp2.mp3`, Buffer.from(res2), 'binary')
