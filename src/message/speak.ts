@@ -122,7 +122,7 @@ export const Read = async (msg: Discord.Message, client: Discord.Client) => {
   const url = getAudioUrl(res.converted.slice(0, 200), {lang: lang})
 
   // 再生させる音声をキューに追加する
-  Add({content: content, url: url, volume: 0.4, flag: true}, vc)
+  Add({content: content, url: url, volume: 0.3, flag: true}, vc)
 }
 
 /**
@@ -187,25 +187,23 @@ export const Play = async (status: Option<CalStatus>, vc: Discord.VoiceConnectio
 
   // 読み上げの場合は低い音声になるまでダウンロードする
   if (status?.flag) {
-    // 10回超えたら諦めて音声を再生する
-    for (let i = 0; i < 10; i++) {
-      // 2つ目の音声ファイルをダウンロード
-      const res2 = await fetch(status?.url ?? '').then(res => res.arrayBuffer())
-      fs.writeFileSync(`./tmp2.mp3`, Buffer.from(res2), 'binary')
-
-      // 両方のファイルサイズを取得
-      const size1 = fs.statSync('./tmp1.mp3').size
-      const size2 = fs.statSync('./tmp2.mp3').size
-
-      // 小さい方を再生、サイズが同じならもう一度ダウンロード
-      if (size1 < size2) {
-        tmp = './tmp1.mp3'
-        break
-      } else if (size1 > size2) {
-        tmp = './tmp2.mp3'
-        break
-      }
-    }
+    //   // 10回超えたら諦めて音声を再生する
+    //   for (let i = 0; i < 10; i++) {
+    //     // 2つ目の音声ファイルをダウンロード
+    //     const res2 = await fetch(status?.url ?? '').then(res => res.arrayBuffer())
+    //     fs.writeFileSync(`./tmp2.mp3`, Buffer.from(res2), 'binary')
+    //     // 両方のファイルサイズを取得
+    //     const size1 = fs.statSync('./tmp1.mp3').size
+    //     const size2 = fs.statSync('./tmp2.mp3').size
+    //     // 小さい方を再生、サイズが同じならもう一度ダウンロード
+    //     if (size1 < size2) {
+    //       tmp = './tmp1.mp3'
+    //       break
+    //     } else if (size1 > size2) {
+    //       tmp = './tmp2.mp3'
+    //       break
+    //     }
+    //   }
   }
 
   // 音声を再生
