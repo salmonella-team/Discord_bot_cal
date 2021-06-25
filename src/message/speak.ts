@@ -96,7 +96,7 @@ export const Read = async (msg: Discord.Message, client: Discord.Client) => {
   })(msg.content.replace(/^(おはなし|お話し|お話)/, '').trim()) // 予めおはなしは消しておく
 
   // 入力された文字を読み上げられる形に整形
-  const content = aloudFormat(msg.content, msg)
+  const content = await aloudFormat(msg.content, msg, client)
 
   // 文字が空の場合は終了
   if (!content) return
@@ -231,9 +231,11 @@ export const Play = async (status: Option<CalStatus>, vc: Discord.VoiceConnectio
 /**
  * 入力された文字を読み上げられる形に整形する
  * @param content 整形する前の文字列
+ * @param msg DiscordからのMessage
+ * @param client bot(キャル)のclient
  * @return 整形した後の文字列
  */
-const aloudFormat = (content: string, msg: Discord.Message): string => {
+const aloudFormat = async (content: string, msg: Discord.Message, client: Discord.Client): Promise<string> => {
   // 履歴埋めの例外処理を書く
   if (content.replace(/^(en|us|zh|cn|es|ru|de|it|vi|vn|gb|ja|jp)/i, '').trim() === '履歴埋め')
     return '君プリコネ上手いね？誰推し？てかアリーナやってる？履歴埋めってのがあってさ、一瞬！1回だけやってみない？大丈夫すぐやめれるし気持ちよくなれるよ'
@@ -343,7 +345,7 @@ const aloudFormat = (content: string, msg: Discord.Message): string => {
   }
 
   // 文字の読みを修正する
-  content = fixReading(content)
+  content = await fixReading(content, client)
 
   return content
     .replace(/_|＿|／|￣|＞|\||\`|x|＼|ヽ|\*|\^|´|ω|ก/g, '') // 余計な記号を全て取り除く
@@ -353,11 +355,22 @@ const aloudFormat = (content: string, msg: Discord.Message): string => {
 /**
  * 特定の文字列の読みを修正する
  * @param content 修正する前の文字列
+ * @param client bot(キャル)のclient
  * @return 修正した後の文字列
  */
-const fixReading = (content: string): string => {
-  Settings.FIX_READING.forEach((tag: any) => {
-    content = content.replace(new RegExp(tag.before, 'ig'), tag.after)
-  })
+const fixReading = async (content: string, client: Discord.Client): Promise<string> => {
+  // TL修正で使うチャンネルを取得
+  const channel = client.channels.cache.get(Settings.FIX_READING_ID) as Discord.TextChannel
+  const msgs = (await channel.messages.fetch()).map(m => m)
+
+  const list = await Promise.all(msgs.map(m => m.content.replace(/\`\`\`\n?/g, '')))
+  list
+    .join('\n') // 複数のリストを結合
+    .split('\n') // 改行で分割
+    .filter(l => l) // 空の行を取り除く
+    .map(l => l.replace(/:\s*/, ':').split(':')) // `:`で分割
+    .forEach(l => {
+      content = content.replace(new RegExp(l[0], 'ig'), l[1])
+    })
   return content
 }
