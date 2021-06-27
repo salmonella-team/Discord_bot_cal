@@ -65,7 +65,7 @@ export const Read = async (msg: Discord.Message, client: Discord.Client) => {
 
   if (/^(fs|\/fs|\/skip|\/next)$/.test(msg.content))
     // `fs`か`/skip`か`/next`が入力された際は次の音声を再生
-    return skip(vc)
+    return skip(msg, vc)
 
   // コードブロックの場合は終了
   if (/\`\`\`/.test(msg.content)) return
@@ -133,12 +133,15 @@ export const Read = async (msg: Discord.Message, client: Discord.Client) => {
  * @param msg DiscordからのMessage
  * @param vc 再生するボイスチャンネル
  */
-const skip = async (vc: Discord.VoiceConnection) => {
+const skip = async (msg: Discord.Message, vc: Discord.VoiceConnection) => {
   // 現在再生してる音声を破棄
   voice.dispatcher?.destroy()
 
   // 最初の行だけ取得
   const content = Status.content?.split('\n')[0]
+
+  // 済の絵文字を付ける
+  msg.react(Settings.SUMI_EMOJI)
 
   // 破棄した音声を出力
   console.log(`skip ${content}`)
