@@ -65,10 +65,13 @@ export const Read = async (msg: Discord.Message, client: Discord.Client) => {
 
   if (/^(fs|\/fs|\/skip|\/next)$/.test(msg.content))
     // `fs`か`/skip`か`/next`が入力された際は次の音声を再生
-    return skip(msg, vc)
+    return skip(vc)
 
   // コードブロックの場合は終了
   if (/\`\`\`/.test(msg.content)) return
+
+  // 5行以上は読み上げないようにする
+  if (msg.content.split('\n').length > 4) return
 
   // 言語を判別
   const lang: any = ((str: string) => {
@@ -130,7 +133,7 @@ export const Read = async (msg: Discord.Message, client: Discord.Client) => {
  * @param msg DiscordからのMessage
  * @param vc 再生するボイスチャンネル
  */
-const skip = async (msg: Discord.Message, vc: Discord.VoiceConnection) => {
+const skip = async (vc: Discord.VoiceConnection) => {
   // 現在再生してる音声を破棄
   voice.dispatcher?.destroy()
 
@@ -138,7 +141,6 @@ const skip = async (msg: Discord.Message, vc: Discord.VoiceConnection) => {
   const content = Status.content?.split('\n')[0]
 
   // 破棄した音声を出力
-  msg.reply(`> ${content}`)
   console.log(`skip ${content}`)
 
   // キューが残っている場合は次の音声を流す
