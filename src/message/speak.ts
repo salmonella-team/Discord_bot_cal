@@ -70,8 +70,8 @@ export const Read = async (msg: Discord.Message, client: Discord.Client) => {
   // コードブロックの場合は終了
   if (/\`\`\`/.test(msg.content)) return
 
-  // 5行以上は読み上げないようにする
-  if (msg.content.split('\n').length > 4) return
+  // 6行以上は読み上げないようにする
+  if (msg.content.split('\n').length > 5) return
 
   // 言語を判別
   const lang: any = ((str: string) => {
@@ -329,7 +329,7 @@ const aloudFormat = async (content: string, msg: Discord.Message, client: Discor
       // チャンネル
       const channel = msg.guild?.channels.cache.get(e.replace(/[^\d]/g, ''))
       return `#${channel?.name}` ?? ''
-    } else if (/<:/.test(e)) {
+    } else if (/<a?:/.test(e)) {
       // 絵文字
       return e.split(':')[1]
     } else {
