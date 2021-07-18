@@ -366,7 +366,7 @@ const aloudFormat = async (content: string, msg: Discord.Message, client: Discor
 const fixReading = async (content: string, client: Discord.Client): Promise<string> => {
   // TL修正で使うチャンネルを取得
   const channel = client.channels.cache.get(Settings.FIX_READING_ID) as Discord.TextChannel
-  const msgs = (await channel.messages.fetch()).map(m => m)
+  const msgs = (await channel.messages.fetch()).map(m => m).reverse()
 
   const list = await Promise.all(msgs.map(m => m.content.replace(/\`\`\`\n?/g, '')))
   list
