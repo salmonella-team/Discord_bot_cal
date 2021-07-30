@@ -29,7 +29,7 @@ const voice: Voice = {
  */
 export const Read = async (msg: Discord.Message, client: Discord.Client) => {
   // botのメッセージは喋らない
-  if (msg.author.bot) return
+  if (/:heavy_check_mark:/.test(msg.content)) return
 
   // 読み上げするチャンネル以外では喋らない
   const channel = msg.channel as Discord.TextChannel

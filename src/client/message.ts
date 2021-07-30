@@ -27,9 +27,6 @@ export const Status: CalStatus = {
  * @param client bot(キャル)のclient
  */
 export const Message = async (msg: Discord.Message, client: Discord.Client) => {
-  // キャルのメッセージはコマンド実行しない
-  if (msg.member?.user.username === 'キャル') return
-
   let comment: Option<string>
 
   // 直前のメッセージを削除
@@ -160,14 +157,14 @@ const speakCommands = async (
       case '/yab':
         return {
           url: Settings.URL.YABAI,
-          content: 'ヤバイわよ！',
+          content: ':heavy_check_mark:ヤバイわよ！',
           comment: 'speak yabai',
         }
       case '/yabai.desu':
       case '/yabd':
         return {
           url: Settings.URL.YABAIDESU,
-          content: 'やばいですね☆',
+          content: ':heavy_check_mark:やばいですね☆',
           comment: 'speak yabai.desu',
         }
 
@@ -175,7 +172,7 @@ const speakCommands = async (
       case '/yabw':
         return {
           url: Settings.URL.YABAIWAYO,
-          content: 'プリコネの年末年始はヤバイわよ！',
+          content: ':heavy_check_mark:プリコネの年末年始はヤバイわよ！',
           comment: 'speak yabai.wayo',
         }
 
@@ -183,7 +180,7 @@ const speakCommands = async (
       case '/yaby':
         return {
           url: Settings.URL.YABAIYABA,
-          content: 'ヤバイヤバイヤバイヤバイヤバイやばいですね☆',
+          content: ':heavy_check_mark:ヤバイヤバイヤバイヤバイヤバイやばいですね☆',
           comment: 'speak yabai.yaba',
         }
 
@@ -192,7 +189,7 @@ const speakCommands = async (
       case '笑いのニューウェーブ':
         return {
           url: Settings.URL.JINNAI,
-          content: '笑いのニューウェーブ\n陣 内 智 則',
+          content: ':heavy_check_mark:笑いのニューウェーブ\n陣 内 智 則',
           comment: 'speak jinnai',
         }
 
@@ -201,14 +198,15 @@ const speakCommands = async (
       case '笑いのニューウェーブ陣内智則':
         return {
           url: Settings.URL.JINNAITOMONORI,
-          content: '次々に、新しい仕掛けを繰り出すのは、この男〜！\n笑いのニューウェーブ\n陣 内 智 則',
+          content:
+            ':heavy_check_mark:次々に、新しい仕掛けを繰り出すのは、この男〜！\n笑いのニューウェーブ\n陣 内 智 則',
           comment: 'speak jinnaitomonori',
         }
 
       case 'レボリューション':
         return {
           url: Settings.URL.REVOLUTION,
-          content: '君のハートに、レボ☆リューション!',
+          content: ':heavy_check_mark:君のハートに、レボ☆リューション!',
           comment: 'speak RevoLution',
         }
 
@@ -216,7 +214,7 @@ const speakCommands = async (
       case 'レボ☆リューション':
         return {
           url: Settings.URL.REVO_LUTION,
-          content: 'Want You! 君のハートに、レボ☆リューション!',
+          content: ':heavy_check_mark:Want You! 君のハートに、レボ☆リューション!',
           comment: 'speak Revo☆Lution',
         }
 
@@ -225,7 +223,7 @@ const speakCommands = async (
       case 'なんでだろう':
         return {
           url: Settings.URL.NANDEDARO,
-          content: 'なんでだろ～♪なんでだろ～♪',
+          content: ':heavy_check_mark:なんでだろ～♪なんでだろ～♪',
           comment: 'speak nandedaro',
         }
 
@@ -240,7 +238,7 @@ const speakCommands = async (
       case 'ｽｯｺｺｺ':
         return {
           url: Settings.URL.KNOCK_BRUSH,
-          content: 'ｽｯｺｺｺ',
+          content: ':heavy_check_mark:ｽｯｺｺｺ',
           comment: 'speak knock brush',
         }
 
@@ -248,7 +246,7 @@ const speakCommands = async (
       case 'モーニングレスキュー':
         return {
           url: Settings.URL.RESCUE,
-          content: 'レスキュー開始',
+          content: ':heavy_check_mark:レスキュー開始',
           comment: 'speak rescue',
         }
 
@@ -257,7 +255,7 @@ const speakCommands = async (
       case 'HIKAKIN':
         return {
           url: Settings.URL.HIKAKIN,
-          content: 'HIKAKIN TV Everyday',
+          content: ':heavy_check_mark:HIKAKIN TV Everyday',
           comment: 'speak HIKAKIN',
         }
 
@@ -266,7 +264,7 @@ const speakCommands = async (
       case 'HelloYouTube':
         return {
           url: Settings.URL.HELLOYOUTUBE,
-          content: 'ブンブンハローYouTube',
+          content: ':heavy_check_mark:ブンブンハローYouTube',
           comment: 'speak helloYouTube',
         }
 
@@ -275,7 +273,7 @@ const speakCommands = async (
       case 'HIKAKINTV':
         return {
           url: Settings.URL.HIKAKINTV,
-          content: 'HIKAKIN TV Everyday\nブンブンハローYouTube\nどうもHIKAKINです',
+          content: ':heavy_check_mark:HIKAKIN TV Everyday\nブンブンハローYouTube\nどうもHIKAKINです',
           comment: 'speak HIKAKINTV',
         }
 
@@ -287,14 +285,14 @@ const speakCommands = async (
       case 'SEIKINTV':
         return {
           url: Settings.URL.SEIKIN,
-          content: 'Seikin Music Ah Seikin TV Oh Yeah',
+          content: ':heavy_check_mark:Seikin Music Ah Seikin TV Oh Yeah',
           comment: 'speak SEIKIN',
         }
 
       case 'setokouji':
         return {
           url: Settings.URL.SETOKOUJI,
-          content: 'ﾃﾞｰｰｰｰｰﾝ\n瀬戸弘司の動画',
+          content: ':heavy_check_mark:ﾃﾞｰｰｰｰｰﾝ\n瀬戸弘司の動画',
           comment: 'speak setokouji',
         }
 
@@ -302,14 +300,14 @@ const speakCommands = async (
       case 'みすず学苑':
         return {
           url: Settings.URL.MISUZU,
-          content: '怒涛の合格 みすず学苑 怒涛の合格 みすず学苑 怒涛の合格',
+          content: ':heavy_check_mark:怒涛の合格 みすず学苑 怒涛の合格 みすず学苑 怒涛の合格',
           comment: 'speak misuzu',
         }
 
       case 'スシロー':
         return {
           url: Settings.URL.SUSHIRO,
-          content: 'スシロー スシロー',
+          content: ':heavy_check_mark:スシロー スシロー',
           comment: 'speak sushiro',
         }
 
@@ -332,28 +330,28 @@ const speakCommands = async (
       case '楽天モバイル':
         return {
           url: Settings.URL.RAKUTEN_MOBILE,
-          content: '楽天モバイル',
+          content: ':heavy_check_mark:楽天モバイル',
           comment: 'speak rakuten mobile',
         }
 
       case 'fbi':
         return {
           url: Settings.URL.FBI,
-          content: 'fbi open door',
+          content: ':heavy_check_mark:fbi open door',
           comment: 'speak fbi open door',
         }
 
       case 'usamaru':
         return {
           url: Settings.URL.USAMARU,
-          content: 'ｷﾞｶﾞｷﾞｶﾞﾌﾝﾌﾝｶﾞｶﾞｶﾞｶﾞｶﾞｶﾞｶﾞｶﾞｶﾞ',
+          content: ':heavy_check_mark:ｷﾞｶﾞｷﾞｶﾞﾌﾝﾌﾝｶﾞｶﾞｶﾞｶﾞｶﾞｶﾞｶﾞｶﾞｶﾞ',
           comment: 'speak usamaru',
         }
 
       case 'ニューイヤーバースト':
         return {
           url: Settings.URL.NYARU,
-          content: '何発でも打ち込むわ！ニューイヤーバースト！！！',
+          content: ':heavy_check_mark:何発でも打ち込むわ！ニューイヤーバースト！！！',
           comment: 'speak nyaru',
         }
 
@@ -368,35 +366,35 @@ const speakCommands = async (
       case 'heero':
         return {
           url: Settings.URL.HEERO,
-          content: 'ヒイロ・ユイ',
+          content: ':heavy_check_mark:ヒイロ・ユイ',
           comment: 'speak heero',
         }
 
       case 'deden':
         return {
           url: Settings.URL.DEDEN,
-          content: 'ﾃﾞﾃﾞﾝ',
+          content: ':heavy_check_mark:ﾃﾞﾃﾞﾝ',
           comment: 'speak deden',
         }
 
       case 'gi':
         return {
           url: Settings.URL.GI,
-          content: 'ギラティナ',
+          content: ':heavy_check_mark:ギラティナ',
           comment: 'speak gi',
         }
 
       case '船越':
         return {
           url: Settings.URL.FUNAKOSHI,
-          content: '火曜サスペンス劇場 フラッシュバックテーマ',
+          content: ':heavy_check_mark:火曜サスペンス劇場 フラッシュバックテーマ',
           comment: 'speak funakoshi',
         }
 
       case '片平':
         return {
           url: Settings.URL.KATAHIRA,
-          content: '火曜サスペンス劇場 アイキャッチ',
+          content: ':heavy_check_mark:火曜サスペンス劇場 アイキャッチ',
           comment: 'speak katahira',
         }
 
@@ -404,21 +402,21 @@ const speakCommands = async (
       case '<.reichan:778714208954220586>':
         return {
           url: Settings.URL.REITYAN,
-          content: 'れいちゃん',
+          content: ':heavy_check_mark:れいちゃん',
           comment: 'speak reityan',
         }
 
       case 'CR戦姫絶唱シンフォギア':
         return {
           url: Settings.URL.SYMPHOGEAR,
-          content: 'CR戦姫絶唱シンフォギア',
+          content: ':heavy_check_mark:CR戦姫絶唱シンフォギア',
           comment: 'speak symphogear',
         }
 
       case '素敵な仲間が増えますよ':
         return {
           url: Settings.URL.KARIN,
-          content: 'クソメガネ',
+          content: ':heavy_check_mark:クソメガネ',
           comment: 'speak karin',
         }
 
@@ -426,28 +424,28 @@ const speakCommands = async (
       case 'ざわ…ざわ…':
         return {
           url: Settings.URL.ZAWAZAWA,
-          content: 'ざわ…ざわ…',
+          content: ':heavy_check_mark:ざわ…ざわ…',
           comment: 'speak zawazawa',
         }
 
       case 'お願いマッスル':
         return {
           url: Settings.URL.MUSCLE,
-          content: 'お願いマッスル\nめっちゃモテたい',
+          content: ':heavy_check_mark:お願いマッスル\nめっちゃモテたい',
           comment: 'speak muscle',
         }
 
       case 'ﾈｺﾁｬﾝ':
         return {
           url: Settings.URL.NEKO,
-          content: 'あ～あ GUCCIの7万円もするﾈｺﾁｬﾝのTシャツがほしいよ～',
+          content: ':heavy_check_mark:あ～あ GUCCIの7万円もするﾈｺﾁｬﾝのTシャツがほしいよ～',
           comment: 'speak neko',
         }
 
       case '物乞いサンバ':
         return {
           url: Settings.URL.NEKO_FULL,
-          content: 'あ～あ GUCCIの7万円もするﾈｺﾁｬﾝのTシャツがほしいよ～ 以下略',
+          content: ':heavy_check_mark:あ～あ GUCCIの7万円もするﾈｺﾁｬﾝのTシャツがほしいよ～ 以下略',
           comment: 'speak neko full',
         }
 
@@ -455,7 +453,7 @@ const speakCommands = async (
       case '全て込め撃ち抜くストライク':
         return {
           url: Settings.URL.OGURAYUI,
-          content: '全て込め撃ち抜くストライク',
+          content: ':heavy_check_mark:全て込め撃ち抜くストライク',
           comment: 'speak ogurayui',
         }
     }
@@ -468,28 +466,28 @@ const speakCommands = async (
       case '/yabf':
         return {
           url: Settings.URL.YABAIFULL,
-          content: 'プリコネの年末年始はヤバイわよ！(Full)',
+          content: ':heavy_check_mark:プリコネの年末年始はヤバイわよ！(Full)',
           comment: 'speak yabai.full',
         }
 
       case '/yabai.yabai':
         return {
           url: Settings.URL.YABAIYABAI,
-          content: 'ヤバイヤバイヤバイヤバイヤバイヤバイ',
+          content: ':heavy_check_mark:ヤバイヤバイヤバイヤバイヤバイヤバイ',
           comment: 'speak yabai.yabai',
         }
 
       case '/yabai.slow':
         return {
           url: Settings.URL.YABAISLOW,
-          content: 'ヤバイヤバイヤバイヤバイヤバイやばいですね☆(slow)',
+          content: ':heavy_check_mark:ヤバイヤバイヤバイヤバイヤバイやばいですね☆(slow)',
           comment: 'speak yabai.slow',
         }
 
       case '/yabai.otwr':
         return {
           url: Settings.URL.YABAIOTWR,
-          content: 'ヤバイヤバイヤバイヤバイヤバイやばいですね☆(otwr)',
+          content: ':heavy_check_mark:ヤバイヤバイヤバイヤバイヤバイやばいですね☆(otwr)',
           comment: 'speak yabai.otwr',
         }
     }
