@@ -65,6 +65,8 @@ const calCommands = async (command: string, msg: Discord.Message, client: Discor
   const channel = msg.channel as Discord.TextChannel
   if (!(await etc.VcChannelList(client)).some((c: string) => c === channel?.name)) return
 
+  console.log(msg.content)
+
   switch (command.split(' ')[0]) {
     case '/cal':
     case '/cal.status':
@@ -123,8 +125,8 @@ const calCommands = async (command: string, msg: Discord.Message, client: Discor
 
   switch (true) {
     case /bpm/.test(command): {
-      const [, former, ahead, bpm] = command.replace('.', ' ').split(' ').map(Number)
-      msg.channel.send((former / ahead) * bpm)
+      const [, bpm, former, ahead] = command.replace('.', ' ').split(' ').map(Number)
+      msg.channel.send(bpm * (former / ahead))
       return 'bpm calc'
     }
   }
