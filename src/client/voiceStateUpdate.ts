@@ -34,46 +34,73 @@ export const VoiceStateUpdate = (
  */
 const sendVCLog = (oldState: Discord.VoiceState, newState: Discord.VoiceState, client: Discord.Client) => {
   // サルモネラ菌のサーバーじゃなければ終了
-  if (oldState.guild.id !== Settings.SALMONELLA_ID) return
+  if (oldState.guild.id === Settings.SALMONELLA_ID) {
+    // #ログのチャンネル情報
+    const channel = client.channels.cache.get(Settings.VC_LOG_CHANNEL) as Discord.TextChannel
 
-  // #ログのチャンネル情報
-  const channel = client.channels.cache.get(Settings.VC_LOG_CHANNEL) as Discord.TextChannel
-
-  // 新旧のチャンネルが同じの場合、画面共有の開始・終了かミュートの切り替えをしている
-  if (oldState.channel?.id === newState.channel?.id) {
-    // botは画面共有やミュートをしないので省く
-    if (!oldState.member?.user.bot) {
-      const msg = streamingSndMute(oldState.member)
-      if (!msg) return
-      channel.send(msg), console.log(msg)
-      return
+    // 新旧のチャンネルが同じの場合、画面共有の開始・終了かミュートの切り替えをしている
+    if (oldState.channel?.id === newState.channel?.id) {
+      // botは画面共有やミュートをしないので省く
+      if (!oldState.member?.user.bot) {
+        const msg = streamingSndMute(oldState.member)
+        if (!msg) return
+        channel.send(msg), console.log(msg)
+        return
+      }
     }
-  }
 
-  // ニックネームを優先してユーザーネームを取得
-  const name = getUserName(oldState.member)
+    // ニックネームを優先してユーザーネームを取得
+    const name = getUserName(oldState.member)
 
-  // チャンネルを入出した際の処理
-  if (newState.channel) {
-    // ロールを外す
-    newState.member?.roles.remove(Settings.STREAMING_ROLE)
-    newState.member?.roles.remove(Settings.VIDEO_ROLE)
-    // スピーカーミュート状態ならロールを付与する
-    if (newState.member?.voice.deaf) newState.member?.roles.add(Settings.DEAF_ROLE)
+    // チャンネルを入出した際の処理
+    if (newState.channel) {
+      // ロールを外す
+      newState.member?.roles.remove(Settings.STREAMING_ROLE)
+      newState.member?.roles.remove(Settings.VIDEO_ROLE)
+      // スピーカーミュート状態ならロールを付与する
+      if (newState.member?.voice.deaf) newState.member?.roles.add(Settings.DEAF_ROLE)
 
-    const msg = `${name} が ${newState.channel.name} に入室しました`
-    channel.send(msg), console.log(msg)
-  }
+      const msg = `${name} が \`${newState.channel.name}\` に入室しました`
+      channel.send(msg), console.log(msg)
+    }
 
-  // チャンネルから退出した際の処理
-  if (oldState.channel) {
-    // ロールを外す
-    oldState.member?.roles.remove(Settings.STREAMING_ROLE)
-    oldState.member?.roles.remove(Settings.VIDEO_ROLE)
-    oldState.member?.roles.remove(Settings.DEAF_ROLE)
+    // チャンネルから退出した際の処理
+    if (oldState.channel) {
+      // ロールを外す
+      oldState.member?.roles.remove(Settings.STREAMING_ROLE)
+      oldState.member?.roles.remove(Settings.VIDEO_ROLE)
+      oldState.member?.roles.remove(Settings.DEAF_ROLE)
 
-    const msg = `${name} が ${oldState.channel.name} から退出しました`
-    channel.send(msg), console.log(msg)
+      const msg = `${name} が \`${oldState.channel.name}\` から退出しました`
+      channel.send(msg), console.log(msg)
+    }
+  } else if (oldState.guild.id === Settings.BEROBA_ID) {
+    // botの場合は終了
+    if (oldState.member?.user.bot) return
+
+    // 新旧のチャンネルがない場合、終了
+    if (!oldState.channel?.id && !newState.channel?.id) return
+
+    // 新旧のチャンネルが同じの場合、画面共有の開始・終了かミュートの切り替えをしているので終了
+    if (oldState.channel?.id === newState.channel?.id) return
+
+    // #ログのチャンネル情報
+    const channel = client.channels.cache.get(Settings.BEROBA_LOG_CHANNEL) as Discord.TextChannel
+
+    // ニックネームを優先してユーザーネームを取得
+    const name = getUserName(oldState.member)
+
+    // 入退出を検知して通知する
+    if (oldState.channel?.id === undefined) {
+      const msg = `${name} が \`${newState.channel?.name}\` に入室しました`
+      channel.send(msg), console.log(msg)
+    } else if (newState.channel?.id === undefined) {
+      const msg = `${name} が \`${oldState.channel.name}\` から退出しました`
+      channel.send(msg), console.log(msg)
+    } else {
+      const msg = `${name} が \`${oldState.channel.name}\` から \`${newState.channel.name}\` に移動しました`
+      channel.send(msg), console.log(msg)
+    }
   }
 }
 
@@ -211,7 +238,8 @@ const newStateChannel = async (channel: Discord.VoiceChannel) => {
  * @param m Userの情報
  * @return Userの名前
  */
-const getUserName = (m: Option<Discord.GuildMember>): string => (m?.nickname ? m?.nickname : m?.user.username || '')
+const getUserName = (m: Option<Discord.GuildMember>): string =>
+  m?.nickname ? `\`${m?.nickname}\`` : `\`${m?.user.username || ' '}\``
 
 /**
  * 引数で渡したロールが付与されているか確認する
