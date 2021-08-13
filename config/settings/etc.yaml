@@ -1,0 +1,9 @@
+# ホワイトリストのシート名とセルの範囲
+WHITE_LIST:
+  SHEET: ホワイトリスト
+  CELLS: A2:A100
+
+# APIのURL
+API_URL:
+  # ひらがな化APIのURL
+  HIRAGANA: 'https://labs.goo.ne.jp/api/hiragana'
