@@ -27,6 +27,6 @@
     "throw-env": "^1.0.1",
     "ts-node": "8.6.2",
     "type-of-option": "^1.0.1",
-    "typescript": "3.8.3"
+    "typescript": "^4.3.5"
   }
 }
