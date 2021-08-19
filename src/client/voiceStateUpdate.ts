@@ -240,7 +240,7 @@ const newStateChannel = async (channel: Discord.VoiceChannel) => {
  */
 const getUserName = (m: Option<Discord.GuildMember>): string => {
   const name = m?.nickname ? `\`${m?.nickname.replace(/`/g, '')}\`` : `\`${m?.user.username.replace(/`/g, '') || ' '}\``
-  return name !== '``' ? name : ' '
+  return name !== '``' ? name : '` `'
 }
 
 /**
