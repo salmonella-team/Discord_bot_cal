@@ -60,7 +60,7 @@ const sendVCLog = (oldState: Discord.VoiceState, newState: Discord.VoiceState, c
       // スピーカーミュート状態ならロールを付与する
       if (newState.member?.voice.deaf) newState.member?.roles.add(Settings.DEAF_ROLE)
 
-      const msg = `${name} が ${getChannelName(newState)} に入室しました`
+      const msg = `${name} が \`${newState.channel.name}\` に入室しました`
       channel.send(msg), console.log(msg)
     }
 
@@ -71,7 +71,7 @@ const sendVCLog = (oldState: Discord.VoiceState, newState: Discord.VoiceState, c
       oldState.member?.roles.remove(Settings.VIDEO_ROLE)
       oldState.member?.roles.remove(Settings.DEAF_ROLE)
 
-      const msg = `${name} が ${getChannelName(oldState)} から退出しました`
+      const msg = `${name} が \`${oldState.channel.name}\` から退出しました`
       channel.send(msg), console.log(msg)
     }
   } else if (oldState.guild.id === Settings.BEROBA_ID) {
@@ -92,13 +92,13 @@ const sendVCLog = (oldState: Discord.VoiceState, newState: Discord.VoiceState, c
 
     // 入退出を検知して通知する
     if (oldState.channel?.id === undefined) {
-      const msg = `${name} が ${getChannelName(newState)} に入室しました`
+      const msg = `${name} が \`${newState.channel?.name}\` に入室しました`
       channel.send(msg), console.log(msg)
     } else if (newState.channel?.id === undefined) {
-      const msg = `${name} が ${getChannelName(oldState)} から退出しました`
+      const msg = `${name} が \`${oldState.channel.name}\` から退出しました`
       channel.send(msg), console.log(msg)
     } else {
-      const msg = `${name} が ${getChannelName(oldState)} から ${getChannelName(newState)} に移動しました`
+      const msg = `${name} が \`${oldState.channel.name}\` から \`${newState.channel.name}\` に移動しました`
       channel.send(msg), console.log(msg)
     }
   }
@@ -238,15 +238,10 @@ const newStateChannel = async (channel: Discord.VoiceChannel) => {
  * @param m Userの情報
  * @return Userの名前
  */
-const getUserName = (m: Option<Discord.GuildMember>): string =>
-  m?.nickname ? `\`${m?.nickname.replace(/`/g, '')}\`` : `\`${m?.user.username.replace(/`/g, '') || ' '}\``
-
-/**
- * Channelの名前を取得する
- * @param state Channelの情報
- * @returns Channelの名前
- */
-const getChannelName = (state: Option<Discord.VoiceState>): string => `\`${state?.channel?.name.replace(/`/g, '')}\``
+const getUserName = (m: Option<Discord.GuildMember>): string => {
+  const name = m?.nickname ? `\`${m?.nickname.replace(/`/g, '')}\`` : `\`${m?.user.username.replace(/`/g, '') || ' '}\``
+  return name.length ? name : ' '
+}
 
 /**
  * 引数で渡したロールが付与されているか確認する
