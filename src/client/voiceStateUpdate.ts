@@ -50,7 +50,7 @@ const sendVCLog = (oldState: Discord.VoiceState, newState: Discord.VoiceState, c
     }
 
     // ニックネームを優先してユーザーネームを取得
-    const name = getUserName(oldState.member)
+    const name = getUserName(oldState.member).replace(/``/g, '`')
 
     // チャンネルを入出した際の処理
     if (newState.channel) {
@@ -60,7 +60,7 @@ const sendVCLog = (oldState: Discord.VoiceState, newState: Discord.VoiceState, c
       // スピーカーミュート状態ならロールを付与する
       if (newState.member?.voice.deaf) newState.member?.roles.add(Settings.DEAF_ROLE)
 
-      const msg = `${name} が \`${newState.channel.name}\` に入室しました`
+      const msg = `${name} が \`${newState.channel.name.replace(/``/g, '`')}\` に入室しました`
       channel.send(msg), console.log(msg)
     }
 
@@ -71,7 +71,7 @@ const sendVCLog = (oldState: Discord.VoiceState, newState: Discord.VoiceState, c
       oldState.member?.roles.remove(Settings.VIDEO_ROLE)
       oldState.member?.roles.remove(Settings.DEAF_ROLE)
 
-      const msg = `${name} が \`${oldState.channel.name}\` から退出しました`
+      const msg = `${name} が \`${oldState.channel.name.replace(/``/g, '`')}\` から退出しました`
       channel.send(msg), console.log(msg)
     }
   } else if (oldState.guild.id === Settings.BEROBA_ID) {
@@ -88,17 +88,19 @@ const sendVCLog = (oldState: Discord.VoiceState, newState: Discord.VoiceState, c
     const channel = client.channels.cache.get(Settings.BEROBA_LOG_CHANNEL) as Discord.TextChannel
 
     // ニックネームを優先してユーザーネームを取得
-    const name = getUserName(oldState.member)
+    const name = getUserName(oldState.member).replace(/``/g, '`')
+    const newName = newState.channel?.name.replace(/``/g, '`')
+    const oldName = oldState.channel?.name.replace(/``/g, '`')
 
     // 入退出を検知して通知する
     if (oldState.channel?.id === undefined) {
-      const msg = `${name} が \`${newState.channel?.name}\` に入室しました`
+      const msg = `${name} が \`${newName}\` に入室しました`
       channel.send(msg), console.log(msg)
     } else if (newState.channel?.id === undefined) {
-      const msg = `${name} が \`${oldState.channel.name}\` から退出しました`
+      const msg = `${name} が \`${oldName}\` から退出しました`
       channel.send(msg), console.log(msg)
     } else {
-      const msg = `${name} が \`${oldState.channel.name}\` から \`${newState.channel.name}\` に移動しました`
+      const msg = `${name} が \`${oldName}\` から \`${newName}\` に移動しました`
       channel.send(msg), console.log(msg)
     }
   }
@@ -111,7 +113,7 @@ const sendVCLog = (oldState: Discord.VoiceState, newState: Discord.VoiceState, c
  */
 const streamingSndMute = (member: Option<Discord.GuildMember>): string => {
   // ニックネームを優先してユーザーネームを取得
-  const name = getUserName(member)
+  const name = getUserName(member).replace(/``/g, '`')
 
   // ロールが付いているか確認
   const streamRole = getIsRole(Settings.STREAMING_ROLE, member)
