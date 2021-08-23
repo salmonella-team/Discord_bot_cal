@@ -244,7 +244,9 @@ const newStateChannel = async (channel: Discord.VoiceChannel) => {
  * @return Userの名前
  */
 const getUserName = (m: Option<Discord.GuildMember>): string => {
-  const name = m?.nickname ? `\`${m?.nickname.replace(/`/g, '')}\`` : `\`${m?.user.username.replace(/`/g, '') || ' '}\``
+  const name = m?.nickname
+    ? `\`${m?.nickname.replace(/`/g, '').trim()}\``
+    : `\`${m?.user.username.replace(/`/g, '').trim() || ' '}\``
   return name !== '``' ? name : '` `'
 }
 
@@ -263,5 +265,5 @@ const getIsRole = (id: string, m: Option<Discord.GuildMember>): Option<boolean> 
 const getCurrentDate = (): string => {
   const p0 = (n: number): string => (n + '').padStart(2, '0')
   const d = new Date()
-  return `${p0(d.getHours())}:${p0(d.getMinutes())}`
+  return `\`${p0(d.getHours())}:${p0(d.getMinutes())}\``
 }
