@@ -63,7 +63,7 @@ const sendVCLog = (oldState: Discord.VoiceState, newState: Discord.VoiceState, c
       // スピーカーミュート状態ならロールを付与する
       if (newState.member?.voice.deaf) newState.member?.roles.add(Settings.DEAF_ROLE)
 
-      const msg = `${getCurrentDate}\n${name} が \`${newState.channel.name}\` に入室しました`
+      const msg = `${getCurrentDate()}\n${name} が \`${newState.channel.name}\` に入室しました`
       channel.send(msg), console.log(msg)
     }
 
@@ -74,7 +74,7 @@ const sendVCLog = (oldState: Discord.VoiceState, newState: Discord.VoiceState, c
       oldState.member?.roles.remove(Settings.VIDEO_ROLE)
       oldState.member?.roles.remove(Settings.DEAF_ROLE)
 
-      const msg = `${getCurrentDate}\n${name} が \`${oldState.channel.name}\` から退出しました`
+      const msg = `${getCurrentDate()}\n${name} が \`${oldState.channel.name}\` から退出しました`
       channel.send(msg), console.log(msg)
     }
   } else if (oldState.guild.id === Settings.BEROBA_ID) {
@@ -95,13 +95,15 @@ const sendVCLog = (oldState: Discord.VoiceState, newState: Discord.VoiceState, c
 
     // 入退出を検知して通知する
     if (oldState.channel?.id === undefined) {
-      const msg = `${getCurrentDate}\n${name} が \`${newState.channel?.name}\` に入室しました`
+      const msg = `${getCurrentDate()}\n${name} が \`${newState.channel?.name}\` に入室しました`
       channel.send(msg), console.log(msg)
     } else if (newState.channel?.id === undefined) {
-      const msg = `${getCurrentDate}\n${name} が \`${oldState.channel.name}\` から退出しました`
+      const msg = `${getCurrentDate()}\n${name} が \`${oldState.channel.name}\` から退出しました`
       channel.send(msg), console.log(msg)
     } else {
-      const msg = `${getCurrentDate}\n${name} が \`${oldState.channel.name}\` から \`${newState.channel.name}\` に移動しました`
+      const msg = `${getCurrentDate()}\n${name} が \`${oldState.channel.name}\` から \`${
+        newState.channel.name
+      }\` に移動しました`
       channel.send(msg), console.log(msg)
     }
   }
@@ -129,34 +131,34 @@ const streamingSndMute = (member: Option<Discord.GuildMember>): string => {
   // 戻り値の定義
   const streamStart = (): string => {
     member?.roles.add(Settings.STREAMING_ROLE)
-    return `${getCurrentDate}\n${name} が画面共有を開始しました`
+    return `${getCurrentDate()}\n${name} が画面共有を開始しました`
   }
   const streamEnd = (): string => {
     member?.roles.remove(Settings.STREAMING_ROLE)
-    return `${getCurrentDate}\n${name} が画面共有を終了しました`
+    return `${getCurrentDate()}\n${name} が画面共有を終了しました`
   }
   const videoOn = (): string => {
     member?.roles.add(Settings.VIDEO_ROLE)
-    return `${getCurrentDate}\n${name} がカメラをオンにしました`
+    return `${getCurrentDate()}\n${name} がカメラをオンにしました`
   }
   const videoOff = (): string => {
     member?.roles.remove(Settings.VIDEO_ROLE)
-    return `${getCurrentDate}\n${name} がカメラをオフにしました`
+    return `${getCurrentDate()}\n${name} がカメラをオフにしました`
   }
   const mute = (): string => {
     if (deafRole) {
       if (deafFlag) {
-        return `${getCurrentDate}\n${name} がマイクミュート${member?.voice.mute ? '' : 'を解除'}しました`
+        return `${getCurrentDate()}\n${name} がマイクミュート${member?.voice.mute ? '' : 'を解除'}しました`
       } else {
         member?.roles.remove(Settings.DEAF_ROLE)
-        return `${getCurrentDate}\n${name} がスピーカーミュートを解除しました`
+        return `${getCurrentDate()}\n${name} がスピーカーミュートを解除しました`
       }
     } else {
       if (deafFlag) {
         member?.roles.add(Settings.DEAF_ROLE)
-        return `${getCurrentDate}\n${name} がスピーカーミュートしました`
+        return `${getCurrentDate()}\n${name} がスピーカーミュートしました`
       } else {
-        return `${getCurrentDate}\n${name} がマイクミュート${member?.voice.mute ? '' : 'を解除'}しました`
+        return `${getCurrentDate()}\n${name} がマイクミュート${member?.voice.mute ? '' : 'を解除'}しました`
       }
     }
   }
