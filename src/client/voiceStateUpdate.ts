@@ -20,7 +20,7 @@ export const VoiceStateUpdate = (
   sendVCLog(oldState, newState, client)
 
   // 入出前のチャンネルがあった場合、処理をする
-  if (newState.channel) newStateChannel(newState.channel)
+  if (newState.channel) newStateChannel(newState.channel, client)
 
   // 退出前のチャンネルがあった場合、処理をする
   if (oldState.channel) oldStateChannel(oldState.channel, client)
@@ -225,10 +225,15 @@ const oldStateChannel = async (channel: Discord.VoiceChannel, client: Discord.Cl
  * イベントが発生したチャンネルにキャルを入出させる。
  * botしか居ない場合、または宿屋の場合入出しない
  * @param channel 状態遷移後にイベントがあったチャンネル
+ * @param client bot(キャル)のclient
  */
-const newStateChannel = async (channel: Discord.VoiceChannel) => {
+const newStateChannel = async (channel: Discord.VoiceChannel, client: Discord.Client) => {
   // 宿屋の場合はキャルを接続させない
   if (Settings.AFK_CHANNEL.some((c: string) => c === channel.name)) return
+
+  // 進行用にキャルが居る場合キャルを移動させない
+  const c = client.voice.connections.map(v => v.channel.name).find(n => /進行用/.test(n))
+  if (c) return
 
   const users: Discord.User[] = channel.members.map(m => m.user)
   if (users.every(u => u.bot)) return
