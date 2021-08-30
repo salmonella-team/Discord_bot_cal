@@ -503,7 +503,7 @@ const speakCommands = async (
 
   // 再生させる音声をキューに追加する
   await speak.Add({content: value.content, url: `${Settings.URL.BASE}${value.url}`, volume: Status.volume}, vc)
-  msg.reply(`${value.content}\:heavy_check_mark\:`)
+  msg.reply(`${value.content} \:heavy_check_mark\:`)
 
   return value.comment
 }
