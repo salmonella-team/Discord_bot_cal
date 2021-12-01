@@ -4,6 +4,7 @@ import throwEnv from 'throw-env'
 import {Ready} from './client/ready'
 import {VoiceStateUpdate} from './client/voiceStateUpdate'
 import {Message} from './client/message'
+import {MessageReactionAdd} from './client/messageReactionAdd'
 import * as twitter from './config/twitter'
 
 export const Client = new Discord.Client({
@@ -11,16 +12,13 @@ export const Client = new Discord.Client({
   ws: {intents: Discord.Intents.ALL},
 })
 
-// botの起動時に実行
 Client.on('ready', () => Ready(Client))
 
-// ボイスチャンネルの状態が変わったら実行
-Client.on('voiceStateUpdate', (oldState: Discord.VoiceState, newState: Discord.VoiceState) =>
-  VoiceStateUpdate(oldState, newState, Client)
-)
+Client.on('voiceStateUpdate', (oldState, newState) => VoiceStateUpdate(oldState, newState, Client))
 
-// メッセージが送信された際に実行
-Client.on('message', async (msg: Discord.Message) => await Message(msg, Client))
+Client.on('message', msg => Message(msg, Client))
+
+Client.on('messageReactionAdd', (react, user) => MessageReactionAdd(<Discord.MessageReaction>react, user))
 
 cron.schedule('0 1,2,3,4,5,7,9,11,16,21,26,31,32,33,34,35,37,39,41,46,51,56 * * * *', () => twitter.Post())
 
