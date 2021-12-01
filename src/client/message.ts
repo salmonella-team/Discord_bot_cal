@@ -6,6 +6,7 @@ import {Mode, CalStatus} from '../config/type'
 import * as cal from '../message/cal'
 import * as speak from '../message/speak'
 import * as spreadsheet from '../message/spreadsheet'
+import * as twitter from '../config/twitter'
 
 /**
  * キャルの状態を管理
@@ -28,6 +29,10 @@ export const Status: CalStatus = {
  */
 export const Message = async (msg: Discord.Message, client: Discord.Client) => {
   let comment: Option<string>
+
+  if (msg.content === 'tweet') {
+    await twitter.Post()
+  }
 
   // 直前のメッセージを削除
   comment = await removeMessage(msg)
@@ -64,8 +69,6 @@ const calCommands = async (command: string, msg: Discord.Message, client: Discor
   // 指定のチャンネル以外でキャルが動かないようにする
   const channel = msg.channel as Discord.TextChannel
   if (!(await etc.VcChannelList(client)).some((c: string) => c === channel?.name)) return
-
-  console.log(msg.content)
 
   switch (command.split(' ')[0]) {
     case '/cal':
