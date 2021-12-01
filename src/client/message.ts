@@ -6,7 +6,7 @@ import {Mode, CalStatus} from '../config/type'
 import * as cal from '../message/cal'
 import * as speak from '../message/speak'
 import * as spreadsheet from '../message/spreadsheet'
-import * as twitter from '../twitter'
+import * as twitter from '../config/twitter'
 
 /**
  * キャルの状態を管理

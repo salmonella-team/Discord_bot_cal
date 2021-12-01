@@ -15,6 +15,8 @@ const client = new Twitter({
  * 公式情報に更新があった場合に投稿する
  */
 export const Post = async () => {
+  const now = getCurrentDate()
+  console.log(`Tweet: ${now}`)
   const tweet = await client.get('statuses/user_timeline', {screen_name: 'priconne_redive', count: 5})
   const idList1: string[] = tweet.map((t: any) => t.id_str).reverse()
 
@@ -26,7 +28,7 @@ export const Post = async () => {
     const result = idList2.find(i => i === id)
     if (result) continue
 
-    const text = `${getCurrentDate()}\nhttps://twitter.com/priconne_redive/status/${id}`
+    const text = `${now}\nhttps://twitter.com/priconne_redive/status/${id}`
     await channel.send(text)
     console.log('Send Tweet')
   }
