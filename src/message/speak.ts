@@ -375,7 +375,7 @@ const fixReading = async (content: string, client: Discord.Client): Promise<stri
     .filter(l => l) // 空の行を取り除く
     .map(l => l.replace(/:\s*/, ':').split(':')) // `:`で分割
     .forEach(l => {
-      content = content.replace(new RegExp(l[0], 'ig'), l[1])
+      content = content.replace(new RegExp(l[0], `${!l[2] ? 'i' : ''}g`), l[1])
     })
   return content
 }
