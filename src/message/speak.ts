@@ -76,23 +76,23 @@ export const Read = async (msg: Discord.Message, client: Discord.Client) => {
   // 言語を判別
   const lang: any = ((str: string) => {
     switch (true) {
-      case /^(en|us)/i.test(str):
+      case /^(en|us)\s*/i.test(str):
         return 'en-US'
-      case /^(zh|cn)/i.test(str):
+      case /^(zh|cn)\s*/i.test(str):
         return 'zh-CN'
-      case /^es/i.test(str):
+      case /^es\s*/i.test(str):
         return 'es-ES'
-      case /^ru/i.test(str):
+      case /^ru\s*/i.test(str):
         return 'ru-RU'
-      case /^de/i.test(str):
+      case /^de\s*/i.test(str):
         return 'de-DE'
-      case /^it/i.test(str):
+      case /^it\s*/i.test(str):
         return 'it-IT'
-      case /^(vi|vn)/i.test(str):
+      case /^(vi|vn)\s*/i.test(str):
         return 'vi-VN'
-      case /^gb/i.test(str):
+      case /^gb\s*/i.test(str):
         return 'en-GB'
-      case /^(ja|jp)/i.test(str):
+      case /^(ja|jp)\s*/i.test(str):
       default:
         return 'ja-JP'
     }
@@ -242,7 +242,7 @@ export const Play = async (status: Option<CalStatus>, vc: Discord.VoiceConnectio
  */
 const aloudFormat = async (content: string, msg: Discord.Message, client: Discord.Client): Promise<string> => {
   // 履歴埋めの例外処理を書く
-  if (content.replace(/^(en|us|zh|cn|es|ru|de|it|vi|vn|gb|ja|jp)/i, '').trim() === '履歴埋め')
+  if (content.replace(/^(en|us|zh|cn|es|ru|de|it|vi|vn|gb|ja|jp)\s*/i, '').trim() === '履歴埋め')
     return '君プリコネ上手いね？誰推し？てかアリーナやってる？履歴埋めってのがあってさ、一瞬！1回だけやってみない？大丈夫すぐやめれるし気持ちよくなれるよ'
 
   /**
@@ -303,7 +303,7 @@ const aloudFormat = async (content: string, msg: Discord.Message, client: Discor
     .toString() // String型に戻す
     .replace(/^(おはなし|お話し|お話)/, '') // おはなしを除去
     .trim() // 余分な空白を除去
-    .replace(/^(en|us|zh|cn|es|ru|de|it|vi|vn|gb|ja|jp)/i, '') // 先頭の言語を除去
+    .replace(/^(en|us|zh|cn|es|ru|de|it|vi|vn|gb|ja|jp)\s*/i, '') // 先頭の言語を除去
     .trim() // 余分な空白を除去
     .replace(/https?:\/\/\S+/g, '') // URLを除去
     .split('\n') // 一行ずつに分解
