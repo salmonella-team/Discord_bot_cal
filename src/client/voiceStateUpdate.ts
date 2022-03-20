@@ -232,7 +232,7 @@ const newStateChannel = async (channel: Discord.VoiceChannel, client: Discord.Cl
   if (Settings.AFK_CHANNEL.some((c: string) => c === channel.name)) return
 
   // 進行用にキャルが居る場合キャルを移動させない
-  const c = client.voice.connections.map(v => v.channel.name).find(n => /進行用/.test(n))
+  const c = client.voice.connections.map(v => v.channel.name).find(n => /進行用|固定/.test(n))
   if (c) return
 
   const users: Discord.User[] = channel.members.map(m => m.user)
