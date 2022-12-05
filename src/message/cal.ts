@@ -1,6 +1,5 @@
 import {ClientVoiceManager, Message, VoiceConnection, VoiceChannel} from 'discord.js'
 import Option from 'type-of-option'
-import * as spreadsheet from './spreadsheet'
 import {Mode, CalStatus} from '../config/type'
 
 /**
@@ -138,28 +137,6 @@ export const VolumeReset = (msg: Message): number => {
 }
 
 /**
- * ホワイトリストの一覧をDiscordのメッセージへ送信する
- * @param msg DiscordからのMessage
- */
-export const GetWhiteList = async (msg: Message) => {
-  const whiteList = await spreadsheet.GetWhiteList()
-  msg.reply(`コマンド用のホワイトリスト一覧よ！\n${whiteList.join('\n')}`)
-}
-
-/**
- * スプレッドシートのホワイトリストに値を追加する
- * @param msg DiscordからのMessage
- * @param name 追加したい値
- */
-export const AddWhiteList = async (msg: Message, name: string) => {
-  if (await spreadsheet.AddWhiteList(name)) {
-    msg.reply(`コマンド用のホワイトリストに${name}を追加したわよ！`)
-  } else {
-    msg.reply(`そのコマンドは既に追加されているわ`)
-  }
-}
-
-/**
  * キャルのコマンド一覧をDiscordのメッセージへ送信する。
  * キャルの状態に応じて表示量も変化する
  * @param msg DiscordからのMessage
@@ -175,8 +152,6 @@ export const Help = (msg: Message, mode: Option<Mode>) => {
 /cal.down   キャルの声量を下げる
 /cal.volume <0.1~1.0> キャルの声量を指定の音量にする
 /cal.reset  キャルの音量をリセットする
-/cal.list   コマンド用のホワイトリストを表示
-/cal.list <name> ホワイトリストに値を追加
 /cal.help   キャルのコマンド一覧
 /cal.mode   キャルのモードを切り替える
 
@@ -198,8 +173,6 @@ export const Help = (msg: Message, mode: Option<Mode>) => {
 /cal.down   キャルの声量を下げる
 /cal.volume <0.1~1.0> キャルの声量を指定の音量にする
 /cal.reset  キャルの音量をリセットする
-/cal.list   コマンド用のホワイトリストを表示
-/cal.list <name> ホワイトリストに値を追加
 /cal.help   キャルのコマンド一覧
 
 /yabai      ヤバいわよ！

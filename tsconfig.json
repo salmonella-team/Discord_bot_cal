@@ -22,7 +22,6 @@
     "src/config/etc.ts",
     "src/config/type.ts",
     "src/message/cal.ts",
-    "src/message/speak.ts",
-    "src/message/spreadsheet.ts"
+    "src/message/speak.ts"
   ]
 }

@@ -22,7 +22,6 @@
     "discord.js": "github:smicle/discord.js",
     "dotenv": "^8.2.0",
     "ffmpeg-static": "^4.2.7",
-    "google-spreadsheet-as-promised": "^0.2.12",
     "google-tts-api": "^2.0.1",
     "moji": "^0.5.1",
     "node-cron": "^3.0.0",
