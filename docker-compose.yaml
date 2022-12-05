@@ -6,3 +6,4 @@ services:
     command: npm run start
     env_file:
       - .env
+      
