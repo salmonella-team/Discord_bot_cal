@@ -52,6 +52,9 @@ export const Read = async (msg: Discord.Message, client: Discord.Client) => {
   // 6行以上は読み上げないようにする
   if (msg.content.split('\n').length > 5) return
 
+  // 5文字以上の数字のみは読み上げない
+  if (/^\d{5,}$/i.test(msg.content)) return
+
   // 言語を判別
   const lang: any = ((str: string) => {
     switch (true) {
@@ -232,6 +235,7 @@ const aloudFormat = async (content: string, msg: Discord.Message, client: Discor
   const replaceWara = (str: string): string => {
     let flag = false
     return str
+      .replace(/w{2,}/gi, 'w')
       .split('')
       .reverse()
       .map(s => {
