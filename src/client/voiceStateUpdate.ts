@@ -78,35 +78,6 @@ const sendVCLog = (oldState: Discord.VoiceState, newState: Discord.VoiceState, c
       const msg = `${getCurrentDate()}\n${name} が \`${oldState.channel.name}\` から退出しました`
       channel.send(msg), console.log(msg)
     }
-  } else if (oldState.guild.id === Settings.BEROBA_ID) {
-    // botの場合は終了
-    if (oldState.member?.user.bot) return
-
-    // 新旧のチャンネルがない場合、終了
-    if (!oldState.channel?.id && !newState.channel?.id) return
-
-    // 新旧のチャンネルが同じの場合、画面共有の開始・終了かミュートの切り替えをしているので終了
-    if (oldState.channel?.id === newState.channel?.id) return
-
-    // #ログのチャンネル情報
-    const channel = client.channels.cache.get(Settings.BEROBA_LOG_CHANNEL) as Discord.TextChannel
-
-    // ニックネームを優先してユーザーネームを取得
-    const name = getUserName(oldState.member)
-
-    // 入退出を検知して通知する
-    if (oldState.channel?.id === undefined) {
-      const msg = `${getCurrentDate()}\n${name} が \`${newState.channel?.name}\` に入室しました`
-      channel.send(msg), console.log(msg)
-    } else if (newState.channel?.id === undefined) {
-      const msg = `${getCurrentDate()}\n${name} が \`${oldState.channel.name}\` から退出しました`
-      channel.send(msg), console.log(msg)
-    } else {
-      const msg = `${getCurrentDate()}\n${name} が \`${oldState.channel.name}\` から \`${
-        newState.channel.name
-      }\` に移動しました`
-      channel.send(msg), console.log(msg)
-    }
   }
 }
 
@@ -232,8 +203,8 @@ const newStateChannel = async (channel: Discord.VoiceChannel, client: Discord.Cl
   // 宿屋の場合はキャルを接続させない
   if ((await etc.AfkChannelList(client)).some((c: string) => c === channel.name)) return
 
-  // 進行用にキャルが居る場合キャルを移動させない
-  const c = client.voice.connections.map(v => v.channel.name).find(n => /進行用|固定/.test(n))
+  // 固定にキャルが居る場合キャルを移動させない
+  const c = client.voice.connections.map(v => v.channel.name).find(n => /固定/.test(n))
   if (c) return
 
   const users: Discord.User[] = channel.members.map(m => m.user)
