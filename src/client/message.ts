@@ -5,7 +5,6 @@ import * as etc from '../config/etc'
 import {Mode, CalStatus} from '../config/type'
 import * as cal from '../message/cal'
 import * as speak from '../message/speak'
-import * as spreadsheet from '../message/spreadsheet'
 import * as twitter from '../config/twitter'
 
 /**
@@ -47,10 +46,6 @@ export const Message = async (msg: Discord.Message, client: Discord.Client) => {
 
   // 音声再生のコマンドを実行
   comment = await speakCommands(command, msg, client)
-  if (comment) return console.log(comment)
-
-  // 存在しないコマンドの処理
-  comment = await notExistCommands(command, msg, client)
   if (comment) return console.log(comment)
 
   // 入力された文字を読み上げる処理
@@ -109,17 +104,6 @@ const calCommands = async (command: string, msg: Discord.Message, client: Discor
     case '/cal.help':
       cal.Help(msg, Status.mode)
       return 'cal help'
-
-    case '/cal.list':
-    case '/cal.wl':
-      const name = command.split(' ')[1]
-      if (!name) {
-        cal.GetWhiteList(msg)
-        return 'get whitelist'
-      } else {
-        cal.AddWhiteList(msg, name)
-        return `add whitelist ${name}`
-      }
 
     case '/cal.mode':
       Status.mode = cal.SwitchMode(msg, Status.mode as Mode)
@@ -509,35 +493,6 @@ const speakCommands = async (
   msg.reply(`${value.content} \:heavy_check_mark\:`)
 
   return value.comment
-}
-
-/**
- * 存在しないコマンドの処理をする。
- * 実行した場合はコメントを返し、しなかった場合は何も返さない
- * @param command 入力されたコマンド
- * @param msg DiscordからのMessage
- * @param client bot(キャル)のclient
- * @return 実行したコマンドの結果
- */
-const notExistCommands = async (
-  command: string,
-  msg: Discord.Message,
-  client: Discord.Client
-): Promise<Option<string>> => {
-  // 指定のチャンネル以外でキャルが動かないようにする
-  const channel = msg.channel as Discord.TextChannel
-  if (!(await etc.VcChannelList(client)).some((c: string) => c === channel?.name)) return
-
-  // コマンドじゃない場合終了
-  if (command.charAt(0) !== '/') return
-
-  // ホワイトリストにコマンドがある場合は終了
-  const list = await spreadsheet.GetWhiteList()
-  const cmd = command.slice(1).split('.')[0]
-  if (list.find(l => l === cmd)) return
-
-  msg.reply('そんなコマンドないんだけど！')
-  return 'missing command'
 }
 
 /**
