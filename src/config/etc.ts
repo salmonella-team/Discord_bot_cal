@@ -3,7 +3,7 @@ import Settings from 'const-settings'
 import Option from 'type-of-option'
 
 /**
- * vc用扱いのチャンネル一覧を取得する
+ * vc用チャンネルの一覧を取得する
  * @param client bot(キャル)のclient
  * @return チャンネル一覧
  */
@@ -11,6 +11,19 @@ export const VcChannelList = async (client: Discord.Client): Promise<string[]> =
   // チャンネル一覧が書いてあるメッセージを取得
   const channel = getTextChannel(Settings.VC_CHANNEL.ID, client)
   const msg = await channel.messages.fetch(Settings.VC_CHANNEL.MESSAGE)
+
+  return msg.content.split('\n')
+}
+
+/**
+ * 寝落ちチャンネルの一覧を取得する
+ * @param client bot(キャル)のclient
+ * @return チャンネル一覧
+ */
+export const AfkChannelList = async (client: Discord.Client): Promise<string[]> => {
+  // チャンネル一覧が書いてあるメッセージを取得
+  const channel = getTextChannel(Settings.AFK_CHANNEL.ID, client)
+  const msg = await channel.messages.fetch(Settings.AFK_CHANNEL.MESSAGE)
 
   return msg.content.split('\n')
 }

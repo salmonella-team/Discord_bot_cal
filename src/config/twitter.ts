@@ -15,6 +15,8 @@ const client = new Twitter({
  * 公式情報に更新があった場合に投稿する
  */
 export const Post = async () => {
+  return
+
   const now = getCurrentDate()
   console.log(`Tweet: ${now}`)
   const tweet = await client.get('statuses/user_timeline', {screen_name: 'priconne_redive', count: 5})
@@ -30,7 +32,7 @@ export const Post = async () => {
 
     const text = `${now}\nhttps://twitter.com/priconne_redive/status/${id}`
     await channel.send(text)
-    console.log('Send Tweet')
+    console.log(`Send Tweet ${text}`)
   }
 }
 

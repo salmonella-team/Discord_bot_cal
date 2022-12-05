@@ -35,27 +35,6 @@ export const Read = async (msg: Discord.Message, client: Discord.Client) => {
   const channel = msg.channel as Discord.TextChannel
   if (!(await etc.VcChannelList(client)).some((c: string) => c === channel?.name)) return
 
-  // 全角文字は打った人はガイジなので日本語以外を喋らせる
-  if (/[Ａ-Ｚ]+|[ａ-ｚ]+|[０-９]+/.test(msg.content)) {
-    // クラバトのチャンネルでは動かさないようにする
-    if (msg.channel.id !== Settings.EXCEPTION_CHANNEL) {
-      // 乱数を生成する関数
-      const rand = (min: number, max: number) => Math.floor(Math.random() * (max - min + 1) + min)
-
-      // ランダムで読ませる言語を指定
-      const table = 'en,cn,es,ru,de,it,vn,gb'.split(',')
-      // 読ませる言語を決定する
-      const lang = table[rand(0, table.length - 1)]
-
-      // 強制的に別の言語に変換する
-      msg.content = `${lang} ${msg.content
-        .replace(/^(おはなし|お話し|お話)/, '') // おはなしを除去
-        .trim() // 余分な空白を除去
-        .replace(/^(en|us|zh|cn|es|ru|de|it|vi|vn|gb|ja|jp)/i, '') // 先頭の言語を除去
-        .trim()}` // 余分な空白を除去
-    }
-  }
-
   // キャルがvcに居ない場合は終了
   const vc = etc.GetVcWithCal(msg, client)
   if (!vc) return

@@ -1,6 +1,7 @@
 import * as Discord from 'discord.js'
 import Option from 'type-of-option'
 import Settings from 'const-settings'
+import * as etc from '../config/etc'
 
 /**
  * ボイスチャンネルの状態が変わった際に、キャルの自動入退出をする
@@ -229,7 +230,7 @@ const oldStateChannel = async (channel: Discord.VoiceChannel, client: Discord.Cl
  */
 const newStateChannel = async (channel: Discord.VoiceChannel, client: Discord.Client) => {
   // 宿屋の場合はキャルを接続させない
-  if (Settings.AFK_CHANNEL.some((c: string) => c === channel.name)) return
+  if ((await etc.AfkChannelList(client)).some((c: string) => c === channel.name)) return
 
   // 進行用にキャルが居る場合キャルを移動させない
   const c = client.voice.connections.map(v => v.channel.name).find(n => /進行用|固定/.test(n))
