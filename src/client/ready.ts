@@ -3,7 +3,7 @@ import Settings from 'const-settings'
 
 /**
  * キャルが起動した際に通知を送る
- * @param client bot(キャル)のclient
+ * @param client botのClient情報
  */
 export const Ready = async (client: Discord.Client) => {
   const channel = client.channels.cache.get(Settings.CHANNEL_CALL_ID) as Discord.TextChannel

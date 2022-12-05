@@ -2,7 +2,7 @@ import * as Discord from 'discord.js'
 import Option from 'type-of-option'
 import Settings from 'const-settings'
 import * as etc from '../config/etc'
-import {Mode, CalStatus} from '../config/type'
+import {CalStatus} from '../config/type'
 import * as cal from '../message/cal'
 import * as speak from '../message/speak'
 import * as twitter from '../config/twitter'
@@ -12,23 +12,22 @@ import * as twitter from '../config/twitter'
  * @property Content: string - 再生するテキスト
  * @property Url: string - 再生するテキスト
  * @property Volume: Number - キャルの音量
- * @property Mode: Mode - キャルのDevMode
  */
 export const Status: CalStatus = {
   content: '',
   url: '',
   volume: 0.2,
-  mode: Mode.Off,
 }
 
 /**
  * 入力されたメッセージに応じて適切なコマンドを実行する
- * @param msg DiscordからのMessage
- * @param client bot(キャル)のclient
+ * @param msg DiscordのMessage情報
+ * @param client botのClient情報
  */
 export const Message = async (msg: Discord.Message, client: Discord.Client) => {
   let comment: Option<string>
 
+  // プリコネの公式ツイートを投稿する
   if (msg.content === 'tweet') {
     await twitter.Post()
   }
@@ -56,8 +55,8 @@ export const Message = async (msg: Discord.Message, client: Discord.Client) => {
  * キャルに関するコマンドを実行する。
  * 実行した場合はコメントを返し、しなかった場合は何も返さない
  * @param command 入力されたコマンド
- * @param msg DiscordからのMessage
- * @param client bot(キャル)のclient
+ * @param msg DiscordのMessage情報
+ * @param client botのClient情報
  * @return 実行したコマンドの結果
  */
 const calCommands = async (command: string, msg: Discord.Message, client: Discord.Client): Promise<Option<string>> => {
@@ -102,12 +101,8 @@ const calCommands = async (command: string, msg: Discord.Message, client: Discor
       return 'cal reset'
 
     case '/cal.help':
-      cal.Help(msg, Status.mode)
+      cal.Help(msg)
       return 'cal help'
-
-    case '/cal.mode':
-      Status.mode = cal.SwitchMode(msg, Status.mode as Mode)
-      return 'switch devMode'
   }
 
   switch (true) {
@@ -123,8 +118,8 @@ const calCommands = async (command: string, msg: Discord.Message, client: Discor
  * 音声再生のコマンドを実行する。
  * 実行した場合はコメントを返し、しなかった場合は何も返さない
  * @param command 入力されたコマンド
- * @param msg DiscordからのMessage
- * @param client bot(キャル)のclient
+ * @param msg DiscordのMessage情報
+ * @param client botのClient情報
  * @return 実行したコマンドの結果
  */
 const speakCommands = async (
@@ -444,12 +439,7 @@ const speakCommands = async (
           content: '全て込め撃ち抜くストライク',
           comment: 'speak ogurayui',
         }
-    }
 
-    // DevModeでない場合、下の処理は行わない
-    if (!Status.mode) return
-
-    switch (command) {
       case '/yabai.full':
       case '/yabf':
         return {
@@ -498,7 +488,7 @@ const speakCommands = async (
 /**
  * 直前のメッセージを削除。
  * 引数で数を指定できる
- * @param msg DiscordからのMessage
+ * @param msg DiscordのMessage情報
  * @return 実行したコマンドの結果
  */
 const removeMessage = async (msg: Discord.Message): Promise<Option<string>> => {

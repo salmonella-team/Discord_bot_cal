@@ -1,14 +1,6 @@
 import * as Discord from 'discord.js'
 
 /**
- * On・Offの2種類
- */
-export const enum Mode {
-  Off,
-  On,
-}
-
-/**
  * キャルの状態を管理
  * @property content: string - 再生するテキスト
  * @property url: string - 再生するテキスト
@@ -19,7 +11,6 @@ export interface CalStatus {
   content?: string
   url: string
   volume: number
-  mode?: Mode
   flag?: boolean
 }
 

@@ -23,8 +23,8 @@ const voice: Voice = {
 
 /**
  * 入力された文字を読み上げる処理、先頭にenが付いていたら英語で日本語を喋る
- * @param msg DiscordからのMessage
- * @param client bot(キャル)のclient
+ * @param msg DiscordのMessage情報
+ * @param client botのClient情報
  * @return 読み上げた文字の内容
  */
 export const Read = async (msg: Discord.Message, client: Discord.Client) => {
@@ -112,7 +112,7 @@ export const Read = async (msg: Discord.Message, client: Discord.Client) => {
 
 /**
  * 現在流している音声を破棄して次の音声へ進める
- * @param msg DiscordからのMessage
+ * @param msg DiscordのMessage情報
  * @param vc 再生するボイスチャンネル
  */
 const skip = async (msg: Discord.Message, vc: Discord.VoiceConnection) => {
@@ -218,8 +218,8 @@ export const Play = async (status: Option<CalStatus>, vc: Discord.VoiceConnectio
 /**
  * 入力された文字を読み上げられる形に整形する
  * @param content 整形する前の文字列
- * @param msg DiscordからのMessage
- * @param client bot(キャル)のclient
+ * @param msg DiscordのMessage情報
+ * @param client botのClient情報
  * @return 整形した後の文字列
  */
 const aloudFormat = async (content: string, msg: Discord.Message, client: Discord.Client): Promise<string> => {
@@ -343,7 +343,7 @@ const aloudFormat = async (content: string, msg: Discord.Message, client: Discor
 /**
  * 特定の文字列の読みを修正する
  * @param content 修正する前の文字列
- * @param client bot(キャル)のclient
+ * @param client botのClient情報
  * @return 修正した後の文字列
  */
 const fixReading = async (content: string, client: Discord.Client): Promise<string> => {

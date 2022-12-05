@@ -4,7 +4,7 @@ import Option from 'type-of-option'
 
 /**
  * vc用チャンネルの一覧を取得する
- * @param client bot(キャル)のclient
+ * @param client botのClient情報
  * @return チャンネル一覧
  */
 export const VcChannelList = async (client: Discord.Client): Promise<string[]> => {
@@ -17,7 +17,7 @@ export const VcChannelList = async (client: Discord.Client): Promise<string[]> =
 
 /**
  * 寝落ちチャンネルの一覧を取得する
- * @param client bot(キャル)のclient
+ * @param client botのClient情報
  * @return チャンネル一覧
  */
 export const AfkChannelList = async (client: Discord.Client): Promise<string[]> => {
@@ -31,7 +31,7 @@ export const AfkChannelList = async (client: Discord.Client): Promise<string[]> 
 /**
  * 渡されたidのテキストチャンネルを取得
  * @param id チャンネルのid
- * @param client bot(キャル)のclient
+ * @param client botのClient情報
  * @return テキストチャンネル
  */
 const getTextChannel = (id: string, client: Discord.Client): Discord.TextChannel =>
@@ -39,8 +39,8 @@ const getTextChannel = (id: string, client: Discord.Client): Discord.TextChannel
 
 /**
  * メッセージからキャルの居るサーバーの接続しているvcを取得
- * @param msg DiscordからのMessage
- * @param client bot(キャル)のclient
+ * @param msg DiscordのMessage情報
+ * @param client botのClient情報
  * @return vcの一覧
  */
 export const GetVcWithCal = (msg: Discord.Message, client: Discord.Client): Option<Discord.VoiceConnection> =>

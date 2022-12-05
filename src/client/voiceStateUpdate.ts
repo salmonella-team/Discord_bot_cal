@@ -7,7 +7,7 @@ import * as etc from '../config/etc'
  * ボイスチャンネルの状態が変わった際に、キャルの自動入退出をする
  * @param oldState 状態遷移前の情報
  * @param newState 状態遷移後の情報
- * @param client bot(キャル)のclient
+ * @param client botのClient情報
  */
 export const VoiceStateUpdate = (
   oldState: Discord.VoiceState,
@@ -31,7 +31,7 @@ export const VoiceStateUpdate = (
  * vcのログを#ログに出力する
  * @param oldState 状態遷移前の情報
  * @param newState 状態遷移後の情報
- * @param client bot(キャル)のclient
+ * @param client botのClient情報
  */
 const sendVCLog = (oldState: Discord.VoiceState, newState: Discord.VoiceState, client: Discord.Client) => {
   // サルモネラ菌のサーバーじゃなければ終了
@@ -173,7 +173,7 @@ const streamingSndMute = (member: Option<Discord.GuildMember>): string => {
 /**
  * ボイスチャンネルにキャルしか残っていない場合、またはbotしか居ない場合キャルを切断する
  * @param channel 退出前のチャンネル
- * @param client bot(キャル)のclient
+ * @param client botのClient情報
  */
 const oldStateChannel = async (channel: Discord.VoiceChannel, client: Discord.Client) => {
   // VCから退出する
@@ -197,7 +197,7 @@ const oldStateChannel = async (channel: Discord.VoiceChannel, client: Discord.Cl
  * イベントが発生したチャンネルにキャルを入出させる。
  * botしか居ない場合、または宿屋の場合入出しない
  * @param channel 状態遷移後にイベントがあったチャンネル
- * @param client bot(キャル)のclient
+ * @param client botのClient情報
  */
 const newStateChannel = async (channel: Discord.VoiceChannel, client: Discord.Client) => {
   // 宿屋の場合はキャルを接続させない
