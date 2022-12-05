@@ -169,8 +169,8 @@ export const Play = async (status: Option<CalStatus>, vc: Discord.VoiceConnectio
   const connect = await vc.voice?.channel?.join()
 
   // 1つ目の音声ファイルをダウンロード
-  const res1 = await fetch(status?.url ?? '').then(res => res.arrayBuffer())
-  fs.writeFileSync(`./tmp1.mp3`, Buffer.from(res1), 'binary')
+  const res = await fetch(status?.url ?? '').then(res => res.arrayBuffer())
+  fs.writeFileSync(`./tmp.mp3`, Buffer.from(res), 'binary')
 
   // urlから再生させるために`./tmp.mp3`を更新
   let tmp = './tmp.mp3'
