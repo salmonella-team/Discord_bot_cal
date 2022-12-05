@@ -1,47 +1,29 @@
 import * as Discord from 'discord.js'
-import Settings from 'const-settings'
 import Option from 'type-of-option'
 
 /**
- * vc用チャンネルの一覧を取得する
- * @param client bot(キャル)のclient
- * @return チャンネル一覧
+ * 指定のチャンネルからテキストだけをリストで返す
+ * @param client botのClient情報
+ * @param id チャンネルID
+ * @return テキストリスト
  */
-export const VcChannelList = async (client: Discord.Client): Promise<string[]> => {
-  // チャンネル一覧が書いてあるメッセージを取得
-  const channel = getTextChannel(Settings.VC_CHANNEL.ID, client)
-  const msg = await channel.messages.fetch(Settings.VC_CHANNEL.MESSAGE)
+export const FetchTextList = async (client: Discord.Client, id: string): Promise<string[]> => {
+  const channel = client.channels.cache.get(id) as Discord.TextChannel
+  const msgs = (await channel.messages.fetch()).map(m => m)
 
-  return msg.content.split('\n')
+  const list = await Promise.all(msgs.map(m => m.content.replace(/\`\`\`\n?/g, '')))
+  return list
+    .join('\n') // 複数のリストを結合
+    .split('\n') // 改行で分割
+    .filter(l => l) // 空の行を取り除く
 }
-
-/**
- * 寝落ちチャンネルの一覧を取得する
- * @param client bot(キャル)のclient
- * @return チャンネル一覧
- */
-export const AfkChannelList = async (client: Discord.Client): Promise<string[]> => {
-  // チャンネル一覧が書いてあるメッセージを取得
-  const channel = getTextChannel(Settings.AFK_CHANNEL.ID, client)
-  const msg = await channel.messages.fetch(Settings.AFK_CHANNEL.MESSAGE)
-
-  return msg.content.split('\n')
-}
-
-/**
- * 渡されたidのテキストチャンネルを取得
- * @param id チャンネルのid
- * @param client bot(キャル)のclient
- * @return テキストチャンネル
- */
-const getTextChannel = (id: string, client: Discord.Client): Discord.TextChannel =>
-  client.channels.cache.get(id) as Discord.TextChannel
 
 /**
  * メッセージからキャルの居るサーバーの接続しているvcを取得
- * @param msg DiscordからのMessage
- * @param client bot(キャル)のclient
+ * @param msg DiscordのMessage情報
+ * @param client botのClient情報
  * @return vcの一覧
  */
-export const GetVcWithCal = (msg: Discord.Message, client: Discord.Client): Option<Discord.VoiceConnection> =>
-  client.voice?.connections.map(v => v).find(v => v.channel.guild.id === msg.guild?.id)
+export const GetVcWithCal = (msg: Discord.Message, client: Discord.Client): Option<Discord.VoiceConnection> => {
+  return client.voice?.connections.map(v => v).find(v => v.channel.guild.id === msg.guild?.id)
+}

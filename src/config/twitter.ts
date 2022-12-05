@@ -39,7 +39,7 @@ export const Post = async () => {
 /**
  * 渡されたidのテキストチャンネルを取得
  * @param id チャンネルのid
- * @param client bot(キャル)のclient
+ * @param client botのClient情報
  * @return テキストチャンネル
  */
 const getTextChannel = (id: string): Discord.TextChannel => {

@@ -23,8 +23,8 @@ const voice: Voice = {
 
 /**
  * 入力された文字を読み上げる処理、先頭にenが付いていたら英語で日本語を喋る
- * @param msg DiscordからのMessage
- * @param client bot(キャル)のclient
+ * @param msg DiscordのMessage情報
+ * @param client botのClient情報
  * @return 読み上げた文字の内容
  */
 export const Read = async (msg: Discord.Message, client: Discord.Client) => {
@@ -33,7 +33,7 @@ export const Read = async (msg: Discord.Message, client: Discord.Client) => {
 
   // 読み上げするチャンネル以外では喋らない
   const channel = msg.channel as Discord.TextChannel
-  if (!(await etc.VcChannelList(client)).some((c: string) => c === channel?.name)) return
+  if (!(await etc.FetchTextList(client, Settings.VC_CHANNEL_ID)).some((c: string) => c === channel?.name)) return
 
   // キャルがvcに居ない場合は終了
   const vc = etc.GetVcWithCal(msg, client)
@@ -54,6 +54,9 @@ export const Read = async (msg: Discord.Message, client: Discord.Client) => {
 
   // 5文字以上の数字のみは読み上げない
   if (/^\d{5,}$/i.test(msg.content)) return
+
+  // 予めおはなしは消しておく
+  const cont = msg.content.replace(/^(おはなし|お話し|お話)/, '').trim()
 
   // 言語を判別
   const lang: any = ((str: string) => {
@@ -78,7 +81,7 @@ export const Read = async (msg: Discord.Message, client: Discord.Client) => {
       default:
         return 'ja-JP'
     }
-  })(msg.content.replace(/^(おはなし|お話し|お話)/, '').trim()) // 予めおはなしは消しておく
+  })(cont)
 
   // 入力された文字を読み上げられる形に整形
   const content = await aloudFormat(msg.content, msg, client)
@@ -107,12 +110,12 @@ export const Read = async (msg: Discord.Message, client: Discord.Client) => {
   const url = getAudioUrl(res.converted.slice(0, 200), {lang: lang})
 
   // 再生させる音声をキューに追加する
-  Add({content: content, url: url, volume: 0.3, flag: true}, vc)
+  Add({content: content, url: url, volume: 0.3}, vc)
 }
 
 /**
  * 現在流している音声を破棄して次の音声へ進める
- * @param msg DiscordからのMessage
+ * @param msg DiscordのMessage情報
  * @param vc 再生するボイスチャンネル
  */
 const skip = async (msg: Discord.Message, vc: Discord.VoiceConnection) => {
@@ -170,28 +173,7 @@ export const Play = async (status: Option<CalStatus>, vc: Discord.VoiceConnectio
   fs.writeFileSync(`./tmp1.mp3`, Buffer.from(res1), 'binary')
 
   // urlから再生させるために`./tmp.mp3`を更新
-  let tmp = './tmp1.mp3'
-
-  // 読み上げの場合は低い音声になるまでダウンロードする
-  if (status?.flag) {
-    //   // 10回超えたら諦めて音声を再生する
-    //   for (let i = 0; i < 10; i++) {
-    //     // 2つ目の音声ファイルをダウンロード
-    //     const res2 = await fetch(status?.url ?? '').then(res => res.arrayBuffer())
-    //     fs.writeFileSync(`./tmp2.mp3`, Buffer.from(res2), 'binary')
-    //     // 両方のファイルサイズを取得
-    //     const size1 = fs.statSync('./tmp1.mp3').size
-    //     const size2 = fs.statSync('./tmp2.mp3').size
-    //     // 小さい方を再生、サイズが同じならもう一度ダウンロード
-    //     if (size1 < size2) {
-    //       tmp = './tmp1.mp3'
-    //       break
-    //     } else if (size1 > size2) {
-    //       tmp = './tmp2.mp3'
-    //       break
-    //     }
-    //   }
-  }
+  let tmp = './tmp.mp3'
 
   // 音声を再生
   voice.dispatcher = connect?.play(fs.createReadStream(tmp), {volume: status?.volume})
@@ -218,15 +200,11 @@ export const Play = async (status: Option<CalStatus>, vc: Discord.VoiceConnectio
 /**
  * 入力された文字を読み上げられる形に整形する
  * @param content 整形する前の文字列
- * @param msg DiscordからのMessage
- * @param client bot(キャル)のclient
+ * @param msg DiscordのMessage情報
+ * @param client botのClient情報
  * @return 整形した後の文字列
  */
 const aloudFormat = async (content: string, msg: Discord.Message, client: Discord.Client): Promise<string> => {
-  // 履歴埋めの例外処理を書く
-  if (content.replace(/^(en|us|zh|cn|es|ru|de|it|vi|vn|gb|ja|jp)\s+/i, '').trim() === '履歴埋め')
-    return '君プリコネ上手いね？誰推し？てかアリーナやってる？履歴埋めってのがあってさ、一瞬！1回だけやってみない？大丈夫すぐやめれるし気持ちよくなれるよ'
-
   /**
    * 行末wをワラに変える
    * @param str 変換する文字列
@@ -235,7 +213,7 @@ const aloudFormat = async (content: string, msg: Discord.Message, client: Discor
   const replaceWara = (str: string): string => {
     let flag = false
     return str
-      .replace(/w{2,}/gi, 'w')
+      .replace(/(w|ｗ|Ｗ){2,}/gi, 'w')
       .split('')
       .reverse()
       .map(s => {
@@ -343,19 +321,12 @@ const aloudFormat = async (content: string, msg: Discord.Message, client: Discor
 /**
  * 特定の文字列の読みを修正する
  * @param content 修正する前の文字列
- * @param client bot(キャル)のclient
+ * @param client botのClient情報
  * @return 修正した後の文字列
  */
 const fixReading = async (content: string, client: Discord.Client): Promise<string> => {
-  // TL修正で使うチャンネルを取得
-  const channel = client.channels.cache.get(Settings.FIX_READING_ID) as Discord.TextChannel
-  const msgs = (await channel.messages.fetch()).map(m => m).reverse()
-
-  const list = await Promise.all(msgs.map(m => m.content.replace(/\`\`\`\n?/g, '')))
+  const list = await etc.FetchTextList(client, Settings.FIX_READING_ID)
   list
-    .join('\n') // 複数のリストを結合
-    .split('\n') // 改行で分割
-    .filter(l => l) // 空の行を取り除く
     .map(l => l.replace(/:\s*/, ':').split(':')) // `:`で分割
     .forEach(l => {
       content = content.replace(new RegExp(l[0], `${!l[2] ? 'i' : ''}g`), l[1])

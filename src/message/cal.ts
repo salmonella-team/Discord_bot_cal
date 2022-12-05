@@ -1,6 +1,6 @@
 import {ClientVoiceManager, Message, VoiceConnection, VoiceChannel} from 'discord.js'
 import Option from 'type-of-option'
-import {Mode, CalStatus} from '../config/type'
+import {CalStatus} from '../config/type'
 
 /**
  * 小数第一位を四捨五入して返す
@@ -11,9 +11,9 @@ const roundFloat = (n: number): number => Math.round(n * 10) / 10
 
 /**
  * キャルが接続しているボイスチャンネルと音量とModeをDiscordのメッセージへ送信する
- * @param msg DiscordからのMessage
+ * @param msg DiscordのMessage情報
  * @param voice clientのClientVoiceManager
- * @param status キャルのステータス
+ * @param Status キャルのステータス
  */
 export const ShowStatus = (msg: Message, voice: Option<ClientVoiceManager>, Status: CalStatus) => {
   const channel: Option<string> = voice?.connections
@@ -23,12 +23,12 @@ export const ShowStatus = (msg: Message, voice: Option<ClientVoiceManager>, Stat
     .map(v => v.name)
     .toString()
   const join = channel ? `${channel}に接続しているわ` : 'どこのボイスチャンネルにも接続してないわ'
-  msg.reply(`${join}\n音量は${roundFloat(Status.volume)}よ！${Status.mode ? '(DevMode)' : ''}`)
+  msg.reply(`${join}\n音量は${roundFloat(Status.volume)}よ！`)
 }
 
 /**
  * ClientVoiceManagerからVoiceConnectionを取得する
- * @param msg DiscordからのMessage
+ * @param msg DiscordのMessage情報
  * @param voice clientのClientVoiceManager
  * @return 取得したVoiceConnection
  */
@@ -37,7 +37,7 @@ const getVoiceConnection = (msg: Message, voice: Option<ClientVoiceManager>): Op
 
 /**
  * メッセージ送信者と同じボイスチャンネルにキャルを接続させ、接続状況をDiscordのメッセージへ送信する
- * @param msg DiscordからのMessage
+ * @param msg DiscordのMessage情報
  * @param voice clientのClientVoiceManager
  */
 export const JoinChannel = async (msg: Message, voice: Option<ClientVoiceManager>) => {
@@ -55,7 +55,7 @@ export const JoinChannel = async (msg: Message, voice: Option<ClientVoiceManager
 
 /**
  * キャルをボイスチャンネルから接続させ、切断状況をDiscordのメッセージへ送信する
- * @param msg DiscordからのMessage
+ * @param msg DiscordのMessage情報
  * @param voice clientのClientVoiceManager
  */
 export const Disconnect = (msg: Message, voice: Option<ClientVoiceManager>) => {
@@ -69,7 +69,7 @@ export const Disconnect = (msg: Message, voice: Option<ClientVoiceManager>) => {
 
 /**
  * キャルの音量を0.1上げて、音量をDiscordのメッセージへ送信する
- * @param msg DiscordからのMessage
+ * @param msg DiscordのMessage情報
  * @param volume キャルの音量
  * @return 変更した音量
  */
@@ -86,7 +86,7 @@ export const VolumeUp = (msg: Message, volume: number): number => {
 
 /**
  * キャルの音量を0.1下げて、音量をDiscordのメッセージへ送信する
- * @param msg DiscordからのMessage
+ * @param msg DiscordのMessage情報
  * @param volume キャルの音量
  * @return 変更した音量
  */
@@ -103,7 +103,7 @@ export const VolumeDown = (msg: Message, volume: number): number => {
 
 /**
  * キャルの音量を指定した音量にする
- * @param msg DiscordからのMessage
+ * @param msg DiscordのMessage情報
  * @param volume キャルの音量
  * @param content 指定する音量
  * @return 変更した音量
@@ -128,7 +128,7 @@ export const VolumeChange = (msg: Message, volume: number, content: string): num
 
 /**
  * キャルの音量をリセットする
- * @param msg DiscordからのMessage
+ * @param msg DiscordのMessage情報
  * @return 変更した音量
  */
 export const VolumeReset = (msg: Message): number => {
@@ -138,62 +138,20 @@ export const VolumeReset = (msg: Message): number => {
 
 /**
  * キャルのコマンド一覧をDiscordのメッセージへ送信する。
- * キャルの状態に応じて表示量も変化する
- * @param msg DiscordからのMessage
- * @param mode キャルのMode
+ * @param msg DiscordのMessage情報
  */
-export const Help = (msg: Message, mode: Option<Mode>) => {
-  const help = mode
-    ? `高度な魔法一覧よ！\`\`\`
+export const Help = (msg: Message) => {
+  const help = `魔法一覧よ！\`\`\`
 /cal        キャルの状態を表示
 /cal.in     キャルをボイスチャンネルに接続
 /cal.out    キャルをボイスチャンネルから切断
 /cal.up     キャルの声量を上げる
 /cal.down   キャルの声量を下げる
 /cal.volume <0.1~1.0> キャルの声量を指定の音量にする
-/cal.reset  キャルの音量をリセットする
+/cal.reset  キャルの音量をリセットする ※デフォルトは0.2
 /cal.help   キャルのコマンド一覧
-/cal.mode   キャルのモードを切り替える
-
-/yabai       ヤバいわよ！
-/yabai.desu  ヤバいですね☆
-/yabai.wayo  プリコネの年末年始はヤバいわよ！
-/yabai.yaba  ヤバいヤバいヤバいヤバいヤバいヤバいですね☆
-/yabai.full  プリコネの年末年始はヤバいわよ！(Full)
-/yabai.yabai ヤバいヤバいヤバいヤバいヤバいヤバい
-/yabai.slow  ヤバいヤバいヤバいヤバいヤバいヤバいですね☆(slow)
-/yabai.otwr  ヤバいヤバいヤバいヤバいヤバいヤバいですね☆(otwr)
-\`\`\`※\`.\`は\` \`で代用可能　例:\`/cal help\`
-`
-    : `魔法一覧よ！\`\`\`
-/cal        キャルの状態を表示
-/cal.in     キャルをボイスチャンネルに接続
-/cal.out    キャルをボイスチャンネルから切断
-/cal.up     キャルの声量を上げる
-/cal.down   キャルの声量を下げる
-/cal.volume <0.1~1.0> キャルの声量を指定の音量にする
-/cal.reset  キャルの音量をリセットする
-/cal.help   キャルのコマンド一覧
-
-/yabai      ヤバいわよ！
-/yabai.desu ヤバいですね☆
-/yabai.wayo プリコネの年末年始はヤバいわよ！
-/yabai.yaba ヤバいヤバいヤバいヤバいヤバいヤバいですね☆
 \`\`\`※\`.\`は\` \`で代用可能　例:\`/cal help\`
 `
 
   msg.reply(help)
-}
-
-/**
- * キャルのDevModeを切り替えて、Mode状態をDiscordのメッセージへ送信する。
- * @param msg DiscordからのMessage
- * @param mode キャルのMode
- * @return 変更したMode
- */
-export const SwitchMode = (msg: Message, mode: Mode): Mode => {
-  // ModeのOn・Offを切り替える
-  mode = ~mode
-  msg.reply(mode ? 'DevModeになったわよ！' : 'DevModeを解除したわ')
-  return mode
 }
