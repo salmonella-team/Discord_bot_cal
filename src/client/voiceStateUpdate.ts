@@ -17,13 +17,12 @@ export const VoiceStateUpdate = (
   // vcで喋るサーバー以外でキャルがvcに入らないようにする
   if ([Settings.SALMONELLA_ID, Settings.BEROBA_ID, Settings.EXCEED_ID].every(id => id !== oldState.guild.id)) return
 
-  // vcのログ出力する
   sendVCLog(oldState, newState, client)
 
-  // 入出前のチャンネルがあった場合、処理をする
+  // 入出前のチャンネル処理
   if (newState.channel) newStateChannel(newState.channel, client)
 
-  // 退出前のチャンネルがあった場合、処理をする
+  // 退出前のチャンネル処理
   if (oldState.channel) oldStateChannel(oldState.channel, client)
 }
 
@@ -35,49 +34,46 @@ export const VoiceStateUpdate = (
  */
 const sendVCLog = (oldState: Discord.VoiceState, newState: Discord.VoiceState, client: Discord.Client) => {
   // サルモネラ菌のサーバーじゃなければ終了
-  if (oldState.guild.id === Settings.SALMONELLA_ID) {
-    // botの場合は終了
-    if (oldState.member?.user.bot) return
+  if (oldState.guild.id !== Settings.SALMONELLA_ID) return
 
-    // #ログのチャンネル情報
-    const channel = client.channels.cache.get(Settings.VC_LOG_CHANNEL) as Discord.TextChannel
+  if (oldState.member?.user.bot) return
 
-    // 新旧のチャンネルが同じの場合、画面共有の開始・終了かミュートの切り替えをしている
-    if (oldState.channel?.id === newState.channel?.id) {
-      // botは画面共有やミュートをしないので省く
-      if (!oldState.member?.user.bot) {
-        const msg = streamingSndMute(oldState.member)
-        if (!msg) return
-        channel.send(msg), console.log(msg)
-        return
-      }
-    }
+  const channel = client.channels.cache.get(Settings.VC_LOG_CHANNEL) as Discord.TextChannel
 
-    // ニックネームを優先してユーザーネームを取得
-    const name = getUserName(oldState.member)
-
-    // チャンネルを入出した際の処理
-    if (newState.channel) {
-      // ロールを外す
-      newState.member?.roles.remove(Settings.STREAMING_ROLE)
-      newState.member?.roles.remove(Settings.VIDEO_ROLE)
-      // スピーカーミュート状態ならロールを付与する
-      if (newState.member?.voice.deaf) newState.member?.roles.add(Settings.DEAF_ROLE)
-
-      const msg = `${getCurrentDate()}\n${name} が \`${newState.channel.name}\` に入室しました`
+  // 新旧のチャンネルが同じの場合、画面共有の開始・終了かミュートの切り替えをしている
+  if (oldState.channel?.id === newState.channel?.id) {
+    // botは画面共有やミュートをしないので省く
+    if (!oldState.member?.user.bot) {
+      const msg = streamingSndMute(oldState.member)
+      if (!msg) return
       channel.send(msg), console.log(msg)
+      return
     }
+  }
 
-    // チャンネルから退出した際の処理
-    if (oldState.channel) {
-      // ロールを外す
-      oldState.member?.roles.remove(Settings.STREAMING_ROLE)
-      oldState.member?.roles.remove(Settings.VIDEO_ROLE)
-      oldState.member?.roles.remove(Settings.DEAF_ROLE)
+  // ニックネームを優先してユーザーネームを取得
+  const name = getUserName(oldState.member)
 
-      const msg = `${getCurrentDate()}\n${name} が \`${oldState.channel.name}\` から退出しました`
-      channel.send(msg), console.log(msg)
-    }
+  // チャンネルを入出した際の処理
+  if (newState.channel) {
+    newState.member?.roles.remove(Settings.STREAMING_ROLE)
+    newState.member?.roles.remove(Settings.VIDEO_ROLE)
+
+    // スピーカーミュート状態ならロールを付与する
+    if (newState.member?.voice.deaf) newState.member?.roles.add(Settings.DEAF_ROLE)
+
+    const msg = `${getCurrentDate()}\n${name} が \`${newState.channel.name}\` に入室しました`
+    channel.send(msg), console.log(msg)
+  }
+
+  // チャンネルから退出した際の処理
+  if (oldState.channel) {
+    oldState.member?.roles.remove(Settings.STREAMING_ROLE)
+    oldState.member?.roles.remove(Settings.VIDEO_ROLE)
+    oldState.member?.roles.remove(Settings.DEAF_ROLE)
+
+    const msg = `${getCurrentDate()}\n${name} が \`${oldState.channel.name}\` から退出しました`
+    channel.send(msg), console.log(msg)
   }
 }
 
@@ -176,17 +172,15 @@ const streamingSndMute = (member: Option<Discord.GuildMember>): string => {
  * @param client botのClient情報
  */
 const oldStateChannel = async (channel: Discord.VoiceChannel, client: Discord.Client) => {
-  // VCから退出する
+  // VCから退出
   const exitFromVC = () =>
     client.voice?.connections
       .map(v => v)
       .filter(v => v.channel === channel)[0]
       ?.disconnect()
 
-  // チャンネルにいるユーザ一覧を取得
   const users: Discord.User[] = channel.members.map(m => m.user)
 
-  // botしか居ない場合は退出する
   if (users.every(u => u.bot)) exitFromVC()
 
   // キャルしか居ない場合、切断する
@@ -201,7 +195,7 @@ const oldStateChannel = async (channel: Discord.VoiceChannel, client: Discord.Cl
  */
 const newStateChannel = async (channel: Discord.VoiceChannel, client: Discord.Client) => {
   // 宿屋の場合はキャルを接続させない
-  if ((await etc.AfkChannelList(client)).some((c: string) => c === channel.name)) return
+  if ((await etc.FetchTextList(client, Settings.AFK_CHANNEL_ID)).some((c: string) => c === channel.name)) return
 
   // 固定にキャルが居る場合キャルを移動させない
   const c = client.voice.connections.map(v => v.channel.name).find(n => /固定/.test(n))
@@ -210,7 +204,6 @@ const newStateChannel = async (channel: Discord.VoiceChannel, client: Discord.Cl
   const users: Discord.User[] = channel.members.map(m => m.user)
   if (users.every(u => u.bot)) return
 
-  // キャルをイベントがあったチャンネルに接続する
   await channel.join()
 }
 

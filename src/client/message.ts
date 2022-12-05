@@ -27,27 +27,23 @@ export const Status: CalStatus = {
 export const Message = async (msg: Discord.Message, client: Discord.Client) => {
   let comment: Option<string>
 
-  // プリコネの公式ツイートを投稿する
+  // プリコネの公式ツイートを投稿
   if (msg.content === 'tweet') {
     await twitter.Post()
   }
 
-  // 直前のメッセージを削除
   comment = await removeMessage(msg)
   if (comment) return console.log(comment)
 
-  // スペース、カンマ、コロン、イコールの場合でもコマンドが動くようにピリオドに変換する
+  // スペース、カンマ、コロン、イコールの場合でもコマンドが動くようにピリオドに変換
   const command: string = msg.content.replace(/ |\.|,|:|=/, '.')
 
-  // キャルに関するコマンドを実行
   comment = await calCommands(command, msg, client)
   if (comment) return console.log(comment)
 
-  // 音声再生のコマンドを実行
   comment = await speakCommands(command, msg, client)
   if (comment) return console.log(comment)
 
-  // 入力された文字を読み上げる処理
   await speak.Read(msg, client)
 }
 
@@ -60,9 +56,9 @@ export const Message = async (msg: Discord.Message, client: Discord.Client) => {
  * @return 実行したコマンドの結果
  */
 const calCommands = async (command: string, msg: Discord.Message, client: Discord.Client): Promise<Option<string>> => {
-  // 指定のチャンネル以外でキャルが動かないようにする
+  // 指定のチャンネル以外でキャルが動かないように
   const channel = msg.channel as Discord.TextChannel
-  if (!(await etc.VcChannelList(client)).some((c: string) => c === channel?.name)) return
+  if (!(await etc.FetchTextList(client, Settings.VC_CHANNEL_ID)).some((c: string) => c === channel?.name)) return
 
   switch (command.split(' ')[0]) {
     case '/cal':
@@ -127,9 +123,9 @@ const speakCommands = async (
   msg: Discord.Message,
   client: Discord.Client
 ): Promise<Option<string>> => {
-  // 指定のチャンネル以外でキャルが動かないようにする
+  // 指定のチャンネル以外でキャルが動かないように
   const channel = msg.channel as Discord.TextChannel
-  if (!(await etc.VcChannelList(client)).some((c: string) => c === channel?.name)) return
+  if (!(await etc.FetchTextList(client, Settings.VC_CHANNEL_ID)).some((c: string) => c === channel?.name)) return
 
   const value: Option<{
     url: string
@@ -471,14 +467,13 @@ const speakCommands = async (
     }
   })()
 
-  // コマンドがない場合終了
   if (!value) return
 
   // キャルがvcに居ない場合は終了
   const vc = etc.GetVcWithCal(msg, client)
   if (!vc) return
 
-  // 再生させる音声をキューに追加する
+  // 再生させる音声をキューに追加
   await speak.Add({content: value.content, url: `${Settings.URL.BASE}${value.url}`, volume: Status.volume}, vc)
   msg.reply(`${value.content} \:heavy_check_mark\:`)
 
@@ -516,7 +511,6 @@ const removeMessage = async (msg: Discord.Message): Promise<Option<string>> => {
         return ''
       }
 
-      // メッセージを削除
       const channel = msg.channel as Discord.TextChannel
       setTimeout(() => channel.bulkDelete(n + 1), 500)
 
