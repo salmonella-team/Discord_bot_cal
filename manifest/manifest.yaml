@@ -1,0 +1,54 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: discord-cal
+  namespace: discord-cal
+spec:
+  selector:
+    matchLabels:
+      app: discord-cal
+  template:
+    metadata:
+      labels:
+        app: discord-cal
+    spec:
+      containers:
+      - name: discord-cal
+        image: ghcr.io/salmonella-team/discord-bot-cal:latest
+        resources:
+          limits: 
+            memory: "128Mi"
+            cpu: "500m"
+        env:
+          - name: CAL_TOKEN
+            valueFrom:
+              secretKeyRef:
+                name: discord-cal-secret
+                key: CAL_TOKEN
+          - name: CONSUMER_KEY
+            valueFrom:
+              secretKeyRef:
+                name: discord-cal-secret
+                key: CONSUMER_KEY
+          - name: CONSUMER_SECRET
+            valueFrom:
+              secretKeyRef:
+                name: discord-cal-secret
+                key: CONSUMER_SECRET
+          - name: ACCESS_TOKEN_KEY
+            valueFrom:
+              secretKeyRef:
+                name: discord-cal-secret
+                key: ACCESS_TOKEN_KEY
+          - name: ACCESS_TOKEN_SECRET
+            valueFrom:
+              secretKeyRef:
+                name: discord-cal-secret
+                key: ACCESS_TOKEN_SECRET
+          - name: HIRAGANA_APIKEY
+            valueFrom:
+              secretKeyRef:
+                name: discord-cal-secret
+                key: HIRAGANA_APIKEY
+      imagePullSecrets:
+        - name: regcred
