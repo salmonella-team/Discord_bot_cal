@@ -5,7 +5,6 @@ import * as etc from '../config/etc'
 import {CalStatus} from '../config/type'
 import * as cal from '../message/cal'
 import * as speak from '../message/speak'
-import * as twitter from '../config/twitter'
 
 /**
  * キャルの状態を管理
@@ -16,7 +15,7 @@ import * as twitter from '../config/twitter'
 export const Status: CalStatus = {
   content: '',
   url: '',
-  volume: 0.2,
+  volume: 0.0,
 }
 
 /**
@@ -26,11 +25,6 @@ export const Status: CalStatus = {
  */
 export const Message = async (msg: Discord.Message, client: Discord.Client) => {
   let comment: Option<string>
-
-  // プリコネの公式ツイートを投稿
-  if (msg.content === 'tweet') {
-    await twitter.Post()
-  }
 
   comment = await removeMessage(msg)
   if (comment) return console.log(comment)
