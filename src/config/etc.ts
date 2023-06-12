@@ -1,5 +1,6 @@
 import * as Discord from 'discord.js'
 import Option from 'type-of-option'
+import Settings from 'const-settings'
 
 /**
  * 指定のチャンネルからテキストだけをリストで返す
@@ -26,4 +27,37 @@ export const FetchTextList = async (client: Discord.Client, id: string): Promise
  */
 export const GetVcWithCal = (msg: Discord.Message, client: Discord.Client): Option<Discord.VoiceConnection> => {
   return client.voice?.connections.map(v => v).find(v => v.channel.guild.id === msg.guild?.id)
+}
+
+/**
+ * ぽじめに通知する
+ * @param client botのClient情報
+ */
+export const NotifyZopime = async (client: Discord.Client) => {
+  // vcに入っている人一覧を取得
+  const vcList = await FetchSalmonellaVCChannel(client)
+  const users = vcList.map(vc => vc.members.map(v => v.user)).flat()
+
+  // ぽじめのidを取得
+  const pozimeId = users
+    .map(u => Settings.POZIME_ID_ARRAY.find((p: string) => p === u.id))
+    .filter(u => u)
+    .first()
+
+  // ぽじめがいない場合は終了
+  if (!pozimeId) return
+
+  // ttsに通知する
+  const channel = client.channels.cache.get(Settings.TTS_ID) as Discord.TextChannel
+  await channel?.send(`<@${pozimeId}> 今すぐブルアカやって`)
+  return
+}
+
+/**
+ * サルモネラのボイスチャンネル一覧を取得
+ * @param client botのClient情報
+ * @return VoiceChannel一覧
+ */
+const FetchSalmonellaVCChannel = async (client: Discord.Client): Promise<Discord.VoiceChannel[]> => {
+  return await Promise.all(Settings.SALMONELLA_VC_ID_ARRAY.map((id: string) => client.channels.fetch(id)))
 }
